@@ -1,1 +1,5 @@
-./thinkPhp/docker/mysql5.6/
+
+/.idea
+./idea.
+./docker/mysql5.6
+./htdocs/.DS_Store
