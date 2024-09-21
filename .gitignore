@@ -1,5 +1,5 @@
 
 /.idea
 ./idea.
-./docker/mysql5.6
+/docker/mysql5.6/data
 ./htdocs/.DS_Store
