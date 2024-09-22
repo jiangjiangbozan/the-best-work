@@ -1,24 +1,24 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import {UserService} from '../service/user.service';
+import {UserService} from '../../service/user.service';
 import { HttpClient } from '@angular/common/http';
 import { combineLatest } from 'rxjs';
+import { User } from '../../entity/user';
+
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class AppComponent implements OnInit {
+export class LoginComponent implements OnInit {
 
   title = '登陆';
 
-  isLogin = false;
+  @Output()
+  beLogin = new EventEmitter<any>()
 
-  user = {} as {
-    username: string,
-    password: string
-  };
+  user = {} as User;
 
   data = {} as {
     username: string,
@@ -50,12 +50,11 @@ export class AppComponent implements OnInit {
     this.userService.login(username, password).subscribe(user => {
       this.user = user;
       console.log(user);
+      this.beLogin.emit(this.user);
     },  (error)=> {
       console.log('失败', error);
     });
   }
- login(): void {
 
- }
 
 }
