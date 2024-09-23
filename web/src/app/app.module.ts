@@ -7,12 +7,16 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { IndexComponent } from './index/index.component';
+import { TemplateUpComponent } from './template-up/template-up.component';
+import { TemplateDownComponent } from './template-down/template-down.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    IndexComponent
+    IndexComponent,
+    TemplateUpComponent,
+    TemplateDownComponent
   ],
   imports: [
     BrowserModule,
