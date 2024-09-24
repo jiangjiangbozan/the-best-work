@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       console.log(user);
       this.beLogin.emit(this.user);
     },  (error)=> {
-      console.log('失败', error);
+      console.error('失败', error);
     });
   }
 

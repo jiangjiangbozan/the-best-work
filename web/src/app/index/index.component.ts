@@ -18,4 +18,9 @@ export class IndexComponent implements OnInit {
     console.log(user);
     this.isLogin = true;
   }
+
+  Logout(): void {
+    console.log('jieshou');
+    this.isLogin = false;
+  }
 }
