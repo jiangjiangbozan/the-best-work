@@ -6,13 +6,14 @@ import { NgModule } from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms'; 
-fdescribe('IndexComponent', () => {
+import { TemplateUpComponent } from '../template-up/template-up.component';
+describe('IndexComponent', () => {
   let component: IndexComponent;
   let fixture: ComponentFixture<IndexComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ IndexComponent, AppComponent, LoginComponent],
+      declarations: [ IndexComponent, AppComponent, LoginComponent,TemplateUpComponent],
       imports: [ HttpClientModule, FormsModule, ReactiveFormsModule]
     })
     .compileComponents();

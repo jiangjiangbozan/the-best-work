@@ -1,14 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import {HttpClientModule} from '@angular/common/http';
 import { TemplateUpComponent } from './template-up.component';
+import { ReactiveFormsModule } from '@angular/forms'; 
 
-describe('TemplateUpComponent', () => {
+fdescribe('TemplateUpComponent', () => {
   let component: TemplateUpComponent;
   let fixture: ComponentFixture<TemplateUpComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TemplateUpComponent ]
+      declarations: [ TemplateUpComponent ],
+      imports: [HttpClientModule, ReactiveFormsModule]
     })
     .compileComponents();
   });
