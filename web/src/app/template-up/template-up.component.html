@@ -1,7 +1,7 @@
 
 <div class="top-bar">
   <div class="title">课程管理系统</div>
-  <div class="name"></div>
+  <div class="name">{{user.username}}</div>
   <a class="logout" (click)="onLogout()">退出登录</a>
 </div>
 
@@ -9,7 +9,7 @@
   <div class="sidebar">
     <ul>
       <li>
-        <a>首页</a>
+        <a [routerLink]="''">首页</a>
       </li>
         <li>
           <a >用户管理</a>
@@ -24,7 +24,7 @@
           <a >学期管理</a>
         </li>
       <li>
-        <a>课程管理</a>
+        <a [routerLink]="'course_manage'">课程管理</a>
       </li>
       <li>
         <a>课表查询</a>

@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { IndexComponent } from './index/index.component';
 import { TemplateUpComponent } from './template-up/template-up.component';
 import { TemplateDownComponent } from './template-down/template-down.component';
+import { CourseManageComponent } from './course-manage/course-manage.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { TemplateDownComponent } from './template-down/template-down.component';
     LoginComponent,
     IndexComponent,
     TemplateUpComponent,
-    TemplateDownComponent
+    TemplateDownComponent,
+    CourseManageComponent
   ],
   imports: [
     BrowserModule,
