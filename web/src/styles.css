@@ -5,33 +5,47 @@ body, html {
     margin: 0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
-  /* 顶部导航栏样式 */
-  .top-bar {
-    height: 60px;
-    width :100%;
-    background-color: #ADD8E6; /* 浅蓝色 */
-    color: white;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    position: fixed;
-    z-index: 999;
-  }
-  .top-bar .title {
-    font-size: 18px;
-    font-weight: bold;
-  }
-  .top-bar .name {
-    margin-left : 80%;
-    cursor: pointer;
-    color: white;
-  }
-  .top-bar .logout {
-    margin-left: auto; /* 自动填充到右边 */
-    cursor: pointer;
-    color: white;
-  }
+/* 顶部导航栏样式 */
+.top-bar {
+  height: 60px;
+  width: 100%;
+  background-color: #ADD8E6; /* 浅蓝色 */
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: fixed;
+  z-index: 999;
+}
+
+.top-bar .title {
+  font-size: 24px; /* 可能需要调整大小以适应您的布局 */
+  font-weight: bold;
+}
+
+.top-bar .name {
+  margin-right: 10px; /* 将用户名推到退出登录按钮左侧 */
+  margin-left: auto; /* 保持与标题的间距 */
+  cursor: pointer;
+  color: white;
+}
+
+.top-bar .logout {
+  background-color: #007BFF; /* 调整为蓝色 */
+  color: white; /* 文字颜色为白色 */
+  border: none; /* 无边框 */
+  padding: 10px 20px; /* 添加一些内边距 */
+  border-radius: 5px; /* 圆角边框 */
+  font-size: 16px; /* 调整字体大小 */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* 添加过渡效果 */
+}
+
+.top-bar .logout:hover {
+  background-color: #0056b3; /* 鼠标悬停时改变背景颜色 */
+}
+
   /* 侧边导航栏样式 */
   .sidebar ul {
     list-style-type: none;
@@ -45,7 +59,7 @@ body, html {
     overflow: auto;
     cursor: pointer;
   }
-  
+
   .sidebar ul li a {
     display:block;
     color:#333;
@@ -57,7 +71,7 @@ body, html {
   .sidebar ul li a:hover {
     background-color: #E0E0E0;
   }
-  
+
   .footer {
     background-color: #ADD8E6;
     color: #333;
@@ -72,9 +86,7 @@ body, html {
   /* 主内容区域 */
   .main-content {
     margin-left:200px;
-    padding: 20px;
-    padding-top: 70px;
-    padding-bottom: 80px;
+    padding: 70px 20px 80px;
   }
   .main-content h2 {
     margin-top:20px;
@@ -108,7 +120,7 @@ body, html {
       /* 可选：添加过渡效果，当鼠标悬停时改变颜色或阴影 */
       transition: color 0.3s ease, text-shadow 0.3s ease;
   }
-  
+
   .special-heading:hover {
       /* 鼠标悬停时改变颜色，增强互动性 */
       color: #2980b9; /* 深一度的蓝色 */
@@ -167,7 +179,7 @@ body, html {
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
   }
-  
+
   .modal-content {
     display: flex;
     flex-direction: column;
@@ -181,7 +193,7 @@ body, html {
     width: 30%;
     position: relative; /* 添加相对定位，使关闭按钮能绝对定位 */
   }
-  
+
   .close {
     color: #aaa;
     position: absolute; /* 使用绝对定位 */
@@ -191,13 +203,13 @@ body, html {
     font-weight: bold;
     cursor: pointer;
   }
-  
+
   .close:hover,
   .close:focus {
     color: black;
     text-decoration: none;
   }
-  
+
   .alert {
     display: none;
     color: red;

@@ -1,8 +1,8 @@
 
 <div class="top-bar">
   <div class="title">课程管理系统</div>
-  <div class="name"></div>
-  <a class="logout" (click)="onLogout()">退出登录</a>
+  <div class="name">用户名</div>
+  <button class="logout" (click)="onLogout()">退出登录</button>
 </div>
 
 <div>
@@ -30,7 +30,7 @@
         <a>课表查询</a>
       </li>
       <li>
-        <a>个人中心</a>
+        <a routerLink="/index/profile">个人中心</a>
       </li>
     </ul>
   </div>

@@ -2,13 +2,21 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {User} from '../entity/user';
 import {Observable, throwError} from 'rxjs';
-import { catchError } from 'rxjs/operators';  
+import { catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
   constructor(private httpClient: HttpClient) { }
+
+  changePassword(currentPassword: string, newPassword: string, confirmNewPassword: string): Observable<any> {
+    return this.httpClient.post(`${'/api/index/profile'}/changePassword`, {
+      currentPassword,
+      newPassword,
+      confirmNewPassword
+    });
+  }
 
   login(username: string, password: string): Observable<User> {
     return this.httpClient.post<User>('/api/index/login', {username, password})
@@ -32,6 +40,6 @@ export class UserService {
     }else{
       errors = error.error;
     }
-    return throwError(errors); 
+    return throwError(errors);
   }
 }

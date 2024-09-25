@@ -1,0 +1,70 @@
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh; /* 如果需要整个视口高度 */
+}
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.login-form {
+  width: 500px; /* 稍微增大宽度 */
+  height: 400px;
+  background: #ffffff;
+  padding: 30px; /* 增大内边距 */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.login-form h2 {
+  margin-bottom: 20px;
+  color: #333333;
+}
+
+.form-group {
+  margin-bottom: 20px; /* 稍微增大间距 */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #666666;
+}
+
+.form-group .form-control {
+  width: 100%;
+  padding: 12px; /* 稍微增大内边距 */
+  font-size: 16px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 12px; /* 稍微增大内边距 */
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}

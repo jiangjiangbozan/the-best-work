@@ -1,0 +1,125 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4; /* 浅灰色背景 */
+  color: #333; /* 深灰色文字 */
+}
+
+.main-content {
+  padding: 20px;
+  background: #fff; /* 白色背景 */
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 轻微阴影 */
+  border-radius: 8px; /* 圆角边框 */
+  margin-top: 50px; /* 距离顶部一定距离 */
+  height: 600vh;
+}
+.special-heading {
+  color: #007bff; /* 蓝色标题 */
+  font-weight: bold;
+  margin-bottom: 50px;
+  margin-top: 100px; /* 增加这个值，标题就会向下移动更多 */
+  text-align: center;
+}
+
+.table {
+  margin-top: 20px;
+}
+
+.table th, .table td {
+  padding: 12px;
+  vertical-align: middle;
+}
+
+.table th {
+  background-color: #f8f9fa; /* 浅灰色表头 */
+  color: #333;
+  font-weight: bold;
+}
+.table-centered {
+  width: 80%; /* 例如，设置为80%的父容器宽度 */
+  max-width: 800px; /* 可选，限制最大宽度 */
+  height: 300px; /* 可选，设置固定高度，如果不需要固定高度可以省略 */
+  margin: 0 auto; /* 水平居中 */
+  border-collapse: collapse; /* 可选，使表格边框合并 */
+}
+.table-bordered {
+  border: 1px solid #ddd;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.05); /* 斑马线效果 */
+}
+.btn-primary {
+  background-color: #007bff; /* 蓝色按钮 */
+  border-color: #007bff;
+  transition: background-color 0.3s ease; /* 平滑过渡效果 */
+}
+
+.btn-primary:hover {
+  background-color: #0056b3; /* 鼠标悬停时的深色 */
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+.form-group input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box; /* 确保宽度包括padding和border */
+}
+
+.alert {
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 4px;
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+.modal {
+  display: block; /* 假设你使用Angular的*ngIf控制显示 */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-content h2 {
+  color: #333;
+}

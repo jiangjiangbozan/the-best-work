@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { IndexComponent } from './index/index.component';
 import { TemplateUpComponent } from './template-up/template-up.component';
 import { TemplateDownComponent } from './template-down/template-down.component';
+import { PersonalCenterComponent } from './personal-center/personal-center.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { TemplateDownComponent } from './template-down/template-down.component';
     LoginComponent,
     IndexComponent,
     TemplateUpComponent,
-    TemplateDownComponent
+    TemplateDownComponent,
+    PersonalCenterComponent
   ],
   imports: [
     BrowserModule,
