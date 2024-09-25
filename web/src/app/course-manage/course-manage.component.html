@@ -1,0 +1,93 @@
+<div class="main-content">
+    <div class="container mt-4 mb-4">
+      <div class="row justify-content-center my-3"> <!-- 添加垂直间距 -->
+        <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
+            <h2 class="display-4 special-heading">课程管理</h2>
+        </div>
+      </div>
+      <!-- 查询和增加按钮区域 -->
+      <form class="form-inline" method="GET">
+        <div class="form-group">
+          <label for="clazz_id">学校班级：</label>
+          <select class="form-control" style="width:auto" name="clazz_id" id="clazz_id">
+              <option value="">请选择学校班级</option><!-- 用来做占位符（下同） -->
+                <optgroup label="">
+                  <!-- 检查当前学校的ID是否在$groupClazz数组中 -->
+                    <option value="" >选项
+                    </option>
+                </optgroup>
+          </select>
+        </div>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <!-- 课程名称 -->
+        <div class="form-group">
+          <label for="course">课程名：</label>
+          <select class="form-control" style="width:auto" name="course" id="course">
+            <option selected disabled value="">请选择课程</option><!-- 用来做占位符（下同） -->
+              <optgroup label="">
+                  <option value="" >
+                  </option>
+              </optgroup>
+          </select>
+        </div>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <!-- 查询按钮 -->
+        <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
+        <a class="btn btn-primary" style="margin-left: auto;">增加</a>
+      </form>       
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <table class="table table-hover table-bordered">
+          <thead class="thead-light">
+              <tr class="info">
+                <th>序号</th>
+                <th>课名</th>
+                <th>学校</th>
+                <th>班级</th>
+                <th>周次</th>
+                <th>星期</th>
+                <th>节次</th>
+                <th>操作</th>
+              </tr>
+          </thead>                    
+          
+          <tr >
+            <td>1</td>
+            <td>高树</td>
+            <td>河工大</td>
+            <td>计234</td>
+            <td>第一周</td>
+            <td>星期一</td>
+            <td>第一节</td>         
+            <td>
+                <a class="btn btn-sm btn-danger">删除</a>
+                <a  class="btn btn-sm btn-primary">编辑</a>
+                <a class="btn btn-sm btn-info">添加到我的课程中</a>
+            </td>
+          </tr>
+        </table>
+      <!-- 分页组件开始 -->
+    
+      <!-- 分页组件结束 -->
+  </div>
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">新增用户</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- 表单内容... -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary">保存更改</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>

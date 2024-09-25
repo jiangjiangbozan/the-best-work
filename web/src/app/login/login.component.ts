@@ -48,11 +48,18 @@ export class LoginComponent implements OnInit {
     const username = this.formGroup.get('username')!!.value;
     const password = this.formGroup.get('password')!!.value;
     this.userService.login(username, password).subscribe(user => {
+
       this.user = user;
-      console.log(user);
+
+      sessionStorage.setItem('user', JSON.stringify(user)); 
+      const a = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')!) : null ;
+      console.log('a', a);
+
       this.beLogin.emit(this.user);
     },  (error)=> {
-      console.error('失败', error);
+
+      console.error('错误', error);
+    
     });
   }
 

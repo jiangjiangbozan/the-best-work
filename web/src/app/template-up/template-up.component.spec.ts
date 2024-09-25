@@ -3,7 +3,7 @@ import {HttpClientModule} from '@angular/common/http';
 import { TemplateUpComponent } from './template-up.component';
 import { ReactiveFormsModule } from '@angular/forms'; 
 
-fdescribe('TemplateUpComponent', () => {
+describe('TemplateUpComponent', () => {
   let component: TemplateUpComponent;
   let fixture: ComponentFixture<TemplateUpComponent>;
 
