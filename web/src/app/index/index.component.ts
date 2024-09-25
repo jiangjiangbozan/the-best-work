@@ -20,7 +20,6 @@ export class IndexComponent implements OnInit {
   }
 
   Logout(): void {
-    console.log('jieshou');
     this.isLogin = false;
   }
 }

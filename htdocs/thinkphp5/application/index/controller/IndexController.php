@@ -4,9 +4,10 @@ namespace app\index\controller;
 use app\common\model\User;
 use think\Request;
 use think\Db;
+use think\Controller;
 
 
-class Index
+class IndexController extends Controller
 {
     public function index() {
     }
