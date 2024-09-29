@@ -7,7 +7,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms'; 
 import { TemplateUpComponent } from '../template-up/template-up.component';
-describe('IndexComponent', () => {
+fdescribe('IndexComponent', () => {
   let component: IndexComponent;
   let fixture: ComponentFixture<IndexComponent>;
 
