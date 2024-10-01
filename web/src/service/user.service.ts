@@ -18,6 +18,13 @@ export class UserService {
       }));
   }
 
+  isLogin(): Observable<any> {
+    return this.httpClient.get<any>('api/index/isLogin');
+  }
+
+  logout(): Observable<any> {
+    return this.httpClient.get<any>('api/index/logout');
+  }
 
   private handleError(error: HttpErrorResponse): Observable<any> {
     let errors = {

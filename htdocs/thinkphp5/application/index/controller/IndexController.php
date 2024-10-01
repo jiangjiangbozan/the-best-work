@@ -25,11 +25,24 @@ class IndexController extends Controller
         }else if($user->password !== $password){
           return json(['error' => '用户名或密码不正确'], 401);
         }else{
+          session('id', $user->id);
           return json([
             'username' => $user->username, 
             'password' => $user->password
         ]);
         }
+    }
+
+    public function isLogin(){
+      if(session('id') !== null){
+        return json(['message' => '用户已登陆']);
+      }
+      return json(['error' => '当前无用户登陆'], 401);
+    }
+
+    public function logout(){
+      session('id', null);
+      return json(['message' => '用户已退出']);
     }
 }
 
