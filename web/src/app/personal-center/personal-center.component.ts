@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from "../../service/user.service";
+import { PersonalCenterService} from "../../service/personal-center.service";
 import {HttpClient} from "@angular/common/http";
+import {UserService} from "../../service/user.service";
 
 @Component({
   selector: 'app-personal-center',
@@ -9,7 +10,7 @@ import {HttpClient} from "@angular/common/http";
 })
 export class PersonalCenterComponent implements OnInit {
   user = {
-    name: '温',
+    name: '温靖靖',
     username: 'wen',
     role: 0,
     clazz: '计算机科学',
@@ -19,7 +20,7 @@ export class PersonalCenterComponent implements OnInit {
   alertMessage: string = '';
   userRole: string = '';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private UserService: UserService) {
     this.setUserRole();
   }
 

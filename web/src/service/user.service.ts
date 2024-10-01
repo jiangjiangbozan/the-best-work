@@ -10,14 +10,6 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  changePassword(currentPassword: string, newPassword: string, confirmNewPassword: string): Observable<any> {
-    return this.httpClient.post(`${'/api/index/profile'}/changePassword`, {
-      currentPassword,
-      newPassword,
-      confirmNewPassword
-    });
-  }
-
   login(username: string, password: string): Observable<User> {
     return this.httpClient.post<User>('/api/index/login', {username, password})
     .pipe(
@@ -41,5 +33,9 @@ export class UserService {
       errors = error.error;
     }
     return throwError(errors);
+  }
+
+  getUserData(): Observable<any> {
+    return this.httpClient.get('/api/users')
   }
 }

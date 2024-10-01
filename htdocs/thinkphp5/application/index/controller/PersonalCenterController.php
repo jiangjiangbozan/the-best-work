@@ -4,7 +4,6 @@ use think\Request;
 use think\Controller;
 use think\Db;
 use app\common\model\User;
-use app\common\validate\CourseValidate;
 
 class PersonalCenterController extends IndexController
 {
@@ -65,6 +64,31 @@ class PersonalCenterController extends IndexController
             }
         } else {
             return json(['status' => 'error', 'msg' => '请求方法错误']);
+        }
+    }
+
+    public function getUser($userId)
+    {
+        $user = User::find($userId);
+        if ($user) {
+            return response()->json($user);
+        } else {
+            return response()->json(['message' => '找不到用户'], 404);
+        }
+    }
+
+    public function updatePassword($userId, Request $request)
+    {
+        $user = User::find($userId);
+        if ($user && password_verify($request->input('old_password'), $user->password)) {
+            $user->password = password_hash($request->input('new_password'), PASSWORD_DEFAULT);
+            if ($user->save()) {
+                return response()->json(['message' => 'Password updated successfully']);
+            } else {
+                return response()->json(['message' => 'Failed to update password'], 500);
+            }
+        } else {
+            return response()->json(['message' => 'Invalid old password or user not found'], 400);
         }
     }
 
