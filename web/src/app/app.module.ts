@@ -10,7 +10,7 @@ import { IndexComponent } from './index/index.component';
 import { TemplateUpComponent } from './template-up/template-up.component';
 import { TemplateDownComponent } from './template-down/template-down.component';
 import { CourseManageComponent } from './course-manage/course-manage.component';
-
+import {RouterModule} from '@angular/router';
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,14 +18,14 @@ import { CourseManageComponent } from './course-manage/course-manage.component';
     IndexComponent,
     TemplateUpComponent,
     TemplateDownComponent,
-    CourseManageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [IndexComponent]

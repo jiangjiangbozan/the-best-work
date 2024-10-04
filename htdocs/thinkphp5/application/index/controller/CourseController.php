@@ -17,9 +17,9 @@ class CourseController extends Controller
         // 从解析后的数据中获取 user_id
         $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : 0;
 
-        $user = Course::where('user_id', $user_id)->select();
+        $courses = Course::where('user_id', $user_id)->select();
 
-        return json($user);
+        return json($courses);
     }
 
 }

@@ -6,7 +6,8 @@ import { AppComponent } from './app.component';
 const routes: Routes = [
   {
     path: 'course_manage',
-    component: CourseManageComponent
+    loadChildren: () => import('./course-manage/course-manage.module').then(m => m.CourseManageModule)
+    // component: CourseManageComponent
   },
   {
     path: '',

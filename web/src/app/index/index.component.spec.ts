@@ -14,7 +14,11 @@ fdescribe('IndexComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ IndexComponent, AppComponent, LoginComponent,TemplateUpComponent],
-      imports: [ HttpClientModule, FormsModule, ReactiveFormsModule]
+      imports: [ 
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule
+      ]
     })
     .compileComponents();
   });
