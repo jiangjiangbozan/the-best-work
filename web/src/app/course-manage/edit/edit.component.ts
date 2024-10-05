@@ -2,15 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { Course } from '../../../entity/course';
 import { CourseService } from 'src/service/course.service';
 import { SharedDataService } from 'src/service/shared-data.service';
-import { Router} from '@angular/router';
-import { Confirm } from 'notiflix';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Confirm} from 'notiflix';
 @Component({
-  selector: 'app-add',
-  templateUrl: './add.component.html',
-  styleUrls: ['./add.component.css']
+  selector: 'app-edit',
+  templateUrl: './edit.component.html',
+  styleUrls: ['./edit.component.css']
 })
-export class AddComponent implements OnInit {
+export class EditComponent implements OnInit {
+
   course = {
+    id:0,
     user_id: 0,
     name: '',
     date: 0,
@@ -20,27 +22,34 @@ export class AddComponent implements OnInit {
     semester_id: 0
   } as Course;
 
-  courseName = '';
   constructor(
     private sharedDataService: SharedDataService,
     private courseService: CourseService,
+    private activatedRoute:ActivatedRoute,
     private router:Router
   ) { }
 
   ngOnInit(): void {
     this.sharedDataService.currentId.subscribe((id) => {
       this.course.user_id = id;
-    })
+    });
+    //获取id
+    const id = this.activatedRoute.snapshot.params.id;
+    this.courseService.getCourse(id)
+    .subscribe(((course) => {
+      this.course = course;
+    }))
   }
 
-  onSubmit(){
+  onSubmit() {
     Confirm.show('请确认', '该操作不可逆', '确认', '取消',
       () => {
-        this.courseService.addCourse(this.course)
+        this.courseService.updateCourse(this.course)
           .subscribe(() => {
+            console.log('更新成功');
             this.router.navigate(['course_manage']);
-        });
+          });
       })
-   
   }
+
 }

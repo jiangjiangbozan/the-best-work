@@ -6,6 +6,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms'; 
 import {HttpClientModule} from '@angular/common/http';
+import { EditComponent } from './edit/edit.component';
 const routes: Routes = [
   {
     path: '',
@@ -15,11 +16,14 @@ const routes: Routes = [
     path: 'add',
     component: AddComponent
   },
-
+  {
+    path: 'edit/:id',
+    component: EditComponent
+  }
 ];
 
 @NgModule({
-  declarations: [CourseManageComponent, AddComponent],
+  declarations: [CourseManageComponent, AddComponent, EditComponent],
   imports: [
     CommonModule,
     FormsModule,

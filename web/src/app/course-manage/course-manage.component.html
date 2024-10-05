@@ -50,8 +50,8 @@
             <td>{{course.date}}</td>
             <td>{{course.section}}</td>         
             <td>
-                <a class="btn btn-sm btn-danger">删除</a>
-                <a  class="btn btn-sm btn-primary">编辑</a>
+                <a class="btn btn-sm btn-danger" (click)="onDelect(course.id)">删除</a>
+                <a  class="btn btn-sm btn-primary" [routerLink]="'edit/' + course.id">编辑</a>
             </td>
           </tr>
         </table>

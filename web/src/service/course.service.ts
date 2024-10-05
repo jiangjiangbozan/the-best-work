@@ -16,4 +16,16 @@ export class CourseService {
   addCourse(course: Course): Observable<any> {
     return this.httpClient.post<any>('/api/course/addCourse', {course})
   }
+
+  updateCourse(course: Course): Observable<any> {
+    return this.httpClient.post<any>('/api/course/updateCourse', {course})
+  }
+
+  getCourse(id: number): Observable<any> {
+    return this.httpClient.post<any>('/api/course/getCourse', {id})
+  }
+
+  delectCourse(id: number): Observable<any> {
+    return this.httpClient.post<any>('/api/course/delectCourse', {id})
+  }
 }
