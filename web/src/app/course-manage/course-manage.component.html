@@ -2,21 +2,26 @@
     <div class="container mt-4 mb-4">
       <div class="row justify-content-center my-3"> <!-- 添加垂直间距 -->
         <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
-            <h2 class="display-4 special-heading">课程管理</h2>
+            <h2 class="display-4 special-heading">我的课程</h2>
         </div>
       </div>
       <!-- 查询和增加按钮区域 -->
       <form class="form-inline" method="GET">
-        <!-- 课程名称 -->
+        <!-- 学期名称 -->
         <div class="form-group">
-          <label for="course">课程名：</label>
+          <label for="course">学期：</label>
           <select class="form-control" style="width:auto" name="course" id="course">
-            <option selected disabled value="">请选择课程</option><!-- 用来做占位符（下同） -->
+            <option selected disabled value="">请选择学期</option><!-- 用来做占位符（下同） -->
               <optgroup label="">
                   <option value="" >
                   </option>
               </optgroup>
           </select>
+        </div>
+        <!-- 课程名称 -->
+        <div class="form-group">
+          <label for="course">课程名：</label>
+          <input type="text" class="form-control" id="course.name" name="course.name" placeholder="请输入课程名称" [(ngModel)]="course.name">
         </div>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <!-- 查询按钮 -->

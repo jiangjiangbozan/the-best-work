@@ -13,12 +13,17 @@ export class CourseManageComponent implements OnInit {
   user_id = 0;
 
   courses = [{
-    name: '高数',
+    name: '',
     start_week: 1,
     end_week: 1,
     section: 1,
     date: 1
   }]; 
+
+  course = {
+  name: '' 
+  } as Course;
+
   constructor(private courseService: CourseService, private sharedDataService:SharedDataService) { 
   }
  
@@ -26,13 +31,9 @@ export class CourseManageComponent implements OnInit {
     this.sharedDataService.currentId.subscribe((id) => {
       this.user_id = id;
     })
-
-    console.log('user', this.user_id);
-    
     this.courseService.getCourses(this.user_id)
     .subscribe(data => {
       this.courses= data;
-      console.log(this.courses);
     })
   }
 }

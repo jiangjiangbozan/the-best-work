@@ -1,4 +1,51 @@
 <div class="main-content">
-    <p>add works!</p>
-</div>
+    <!-- 返回按钮 -->
+    <div class="row mt-5">
+      <div class="col-4 offset-4 border border-success p-2">
+        <form (ngSubmit)="onSubmit()">
+        <!-- 隐藏id传入后端 -->
+        <input style="display:none" type="text" class="form-control" id="name" name="id" placeholder="请输入姓名" value="{$Think.session.id}">
+            <div class="form-group">
+                <label for="course">课程名称：</label>
+                <input type="text" class="form-control" id="course" name="course" placeholder="请输入课程名称" [(ngModel)]="course.name">
+            </div>
+            <div class="form-group">
+                <label for="week">周次：</label>
+                <input style="width: 90px;" type="text" id="week" name="week" placeholder="起始周" [(ngModel)]="course.start_week">
+                            --           
+                <input style="width: 90px;" type="text" id="week" name="week" placeholder="结束周" [(ngModel)]="course.end_week">
+            </div>
+            <div class="form-group">
+                <label for="section">节次：</label>
+                <select class="custom-select mr-sm-2" id="section" name="section" [(ngModel)]="course.section">
+                    <option selected disabled value="">请选择课程节次</option>
+                    <option value="1">第一大节</option>
+                    <option value="2">第二大节</option>
+                    <option value="3">第三大节</option>
+                    <option value="4">第四大节</option>
+                    <option value="5">第五大节</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="day">星期：</label>
+                <select class="custom-select mr-sm-2" id="day" name="day" [(ngModel)]="course.date">
+                    <option selected disabled value="">请选择课程星期</option>
+                    <option value="1">星期一</option>
+                    <option value="2">星期二</option>
+                    <option value="3">星期三</option>
+                    <option value="4">星期四</option>
+                    <option value="5">星期五</option>
+                    <option value="5">星期六</option>
+                    <option value="5">星期日</option>
+                </select>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-10 text-center">
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </form> 
+        </div>
+    </div>      
+  </div>
 
