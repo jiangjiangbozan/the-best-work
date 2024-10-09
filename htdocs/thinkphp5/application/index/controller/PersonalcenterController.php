@@ -1,25 +1,26 @@
 <?php
 namespace app\index\controller;
-use think\Request;
-use think\Controller;
-use think\Db;
-use app\common\model\User;
 
-class PersonalCenterController extends IndexController
+use app\common\model\User;
+use think\Request;
+use think\Db;
+use think\Controller;
+
+class PersonalcenterController extends Controller
 {
-    public function index()
+    public function getUserInfo()
     {
         $id = session('id');
-        // $user = User::get($id);
-        $user = User::join('yunzhi_clazz','yunzhi_user.clazz_id = yunzhi_clazz.id')
-        ->join('yunzhi_school','yunzhi_clazz.school_id = yunzhi_school.id')
-        ->field('yunzhi_clazz.id as clazz_id, yunzhi_school.id as school_id, yunzhi_user.id as user_id, yunzhi_user.*, yunzhi_clazz.*, yunzhi_school.*')
-        ->where('yunzhi_user.id', 'like', '%' . $id . '%')
-        ->find();
-        $this->assign('user',$user);
-        return $this->fetch();
+        if ($id === null) {
+            return json(['error' => '用户未登录'], 401);
+        }
+        $user = User::find($id);
+        if ($user) {
+            return json($user);
+        } else {
+            return json(['error' => '找不到用户'], 404);
+        }
     }
-
 
     public function changePassword(Request $request)
     {
@@ -66,32 +67,4 @@ class PersonalCenterController extends IndexController
             return json(['status' => 'error', 'msg' => '请求方法错误']);
         }
     }
-
-    public function getUser($userId)
-    {
-        $user = User::find($userId);
-        if ($user) {
-            return response()->json($user);
-        } else {
-            return response()->json(['message' => '找不到用户'], 404);
-        }
-    }
-
-    public function updatePassword($userId, Request $request)
-    {
-        $user = User::find($userId);
-        if ($user && password_verify($request->input('old_password'), $user->password)) {
-            $user->password = password_hash($request->input('new_password'), PASSWORD_DEFAULT);
-            if ($user->save()) {
-                return response()->json(['message' => 'Password updated successfully']);
-            } else {
-                return response()->json(['message' => 'Failed to update password'], 500);
-            }
-        } else {
-            return response()->json(['message' => 'Invalid old password or user not found'], 400);
-        }
-    }
-
-
 }
-?>

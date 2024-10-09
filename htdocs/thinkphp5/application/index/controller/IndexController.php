@@ -10,6 +10,7 @@ use think\Controller;
 class IndexController extends Controller
 {
     public function index() {
+        return 1;
     }
 
     public function login() {
@@ -44,5 +45,18 @@ class IndexController extends Controller
       session('id', null);
       return json(['message' => '用户已退出']);
     }
+
+    public function getUser() {
+            $id = session('id');
+            if ($id === null) {
+                return json(['error' => '用户未登录'], 401);
+            }
+            $user = User::find($id);
+            if ($user) {
+                return json($user);
+            } else {
+                return json(['error' => '找不到用户'], 404);
+            }
+        }
 }
 

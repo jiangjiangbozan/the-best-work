@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { PersonalCenterService} from "../../service/personal-center.service";
+import {FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidatorFn} from '@angular/forms';
 import {HttpClient} from "@angular/common/http";
 import {UserService} from "../../service/user.service";
+import {User} from "../../entity/user";
 
 @Component({
   selector: 'app-personal-center',
@@ -9,24 +10,53 @@ import {UserService} from "../../service/user.service";
   styleUrls: ['./personal-center.component.css']
 })
 export class PersonalCenterComponent implements OnInit {
-  user = {
-    name: '温靖靖',
-    username: 'wen',
-    role: 0,
-    clazz: '计算机科学',
-    school: '河北工业大学'
-  };
   modalVisible = false;
   alertMessage: string = '';
   userRole: string = '';
+  passwordForm!: FormGroup;
+  user: any = {};
 
-  constructor(private http: HttpClient, private UserService: UserService) {
+  constructor(private http: HttpClient, private userService: UserService, private fb: FormBuilder) {
     this.setUserRole();
+    this.getUser();
   }
 
   ngOnInit(): void {
-        throw new Error('Method not implemented.');
+    this.loadUserProfile();
+    this.passwordForm = new FormGroup({
+      currentPassword: new FormControl('', [Validators.required]),
+      newPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+      confirmPassword: new FormControl('', [Validators.required])
+    }, { validators: this.checkPasswords });
+  }
+
+  checkPasswords: ValidatorFn = (control: AbstractControl): {[key: string]: any} | null => {
+    const newPassword = control.get('newPassword');
+    const confirmPassword = control.get('confirmPassword');
+
+    if (newPassword && confirmPassword) {
+      if (newPassword.value !== confirmPassword.value) {
+        return { notSame: true };
+      }
     }
+    return null;
+  };
+
+  getUser(): void {
+    this.userService.getUserInfo().subscribe(user => this.user = user);
+  }
+
+  loadUserProfile() {
+    this.userService.getUserInfo().subscribe(
+      data => {
+        this.user = data;
+        this.setUserRole();
+      },
+      error => {
+        console.error('Error loading user profile', error);
+      }
+    );
+  }
 
   setUserRole() {
     switch (this.user.role) {
@@ -51,26 +81,51 @@ export class PersonalCenterComponent implements OnInit {
     this.alertMessage = '';
   }
 
-  submitChange(form: any) {
-    if (form.invalid) {
+  submitChange(): void {
+    console.log('Password Form State:', this.passwordForm);
+    if (this.passwordForm.invalid) {
+      console.log('Form is invalid, checking individual controls...');
+      // 检查当前密码控件
+      if (this.passwordForm.get('currentPassword')?.invalid) {
+        console.log('Current Password control is invalid:', this.passwordForm.get('currentPassword'));
+        this.alertMessage = '请输入当前密码';
+        return;
+      }
+      // 检查新密码控件
+      if (this.passwordForm.get('newPassword')?.invalid) {
+        console.log('New Password control is invalid:', this.passwordForm.get('newPassword'));
+        this.alertMessage = '新密码至少6位';
+        return;
+      }
+      // 检查确认密码控件
+      if (this.passwordForm.get('confirmPassword')?.invalid) {
+        console.log('Confirm Password control is invalid:', this.passwordForm.get('confirmPassword'));
+        this.alertMessage = '新密码不一致';
+        return;
+      }
+      // 如果以上都没有问题，检查自定义验证器
+      if (this.passwordForm.errors?.notSame) {
+        console.log('Custom validator failed:', this.passwordForm.errors);
+        this.alertMessage = '新密码和确认密码不一致';
+        return;
+      }
+      // 如果这里都没有问题，可能是其他原因导致表单无效
+      this.alertMessage = '表单无效，请检查输入';
       return;
     }
 
     const formData = {
-      currentPassword: form.value.currentPassword,
-      newPassword: form.value.newPassword
+      currentPassword: this.passwordForm.value.currentPassword,
+      newPassword: this.passwordForm.value.newPassword
     };
 
-    this.http.post('/api/profile/changePassword', formData)
+    this.userService.changePassword(formData)
       .subscribe(
-        response  => {
-          // @ts-ignore
+        response => {
           if (response['status'] === 'success') {
-            // @ts-ignore
             this.alertMessage = response['msg'];
             this.modalVisible = false;
           } else {
-            // @ts-ignore
             this.alertMessage = response['msg'];
           }
         },

@@ -26,23 +26,31 @@ export class UserService {
     return this.httpClient.get<any>('api/index/logout');
   }
 
+  getUserInfo(): Observable<any> {
+    return this.httpClient.get('/api/personalCenter/getUserInfo');
+  }
+
+  changePassword(formData: any): Observable<any> {
+    return this.httpClient.post('/api/personalCenter/changePassword', formData)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   private handleError(error: HttpErrorResponse): Observable<any> {
     let errors = {
-      detail : '',
-      status : 500,
+      detail: '',
+      status: 500,
     };
-    if(!error.error){
+    if (!error.error) {
       errors.detail = error.message;
       errors.status = error.status;
-    }else if(error.status === 401){
+    } else if (error.status === 401) {
       errors.detail = '状态码为401的报错信息';
-    }else{
+    } else {
       errors = error.error;
     }
     return throwError(errors);
   }
 
-  getUserData(): Observable<any> {
-    return this.httpClient.get('/api/users')
-  }
 }

@@ -23,7 +23,7 @@
         </tr>
         <tr>
           <th scope="row">班级</th>
-          <td>{{ user.clazz }}</td>
+          <td>{{ user.clazz_id }}</td>
         </tr>
         <tr>
           <th scope="row">学校</th>
@@ -40,21 +40,33 @@
     <div class="modal-content">
       <span class="close" (click)="closeModal()">&times;</span>
       <h2>修改密码</h2>
-      <form #passwordForm="ngForm">
+      <form [formGroup]="passwordForm" (ngSubmit)="submitChange()">
         <div class="form-group">
           <label for="currentPassword">当前密码:</label>
-          <input type="password" id="currentPassword" name="currentPassword" ngModel required>
+          <input type="password" id="currentPassword" name="currentPassword" formControlName="currentPassword" required>
+          <div *ngIf="passwordForm?.get('currentPassword')?.invalid && passwordForm?.get('currentPassword')?.touched" class="alert alert-danger">
+            请输入当前密码
+          </div>
         </div>
         <div class="form-group">
           <label for="newPassword">新密码:</label>
-          <input type="password" id="newPassword" name="newPassword" ngModel required>
+          <input type="password" id="newPassword" name="newPassword" formControlName="newPassword" required>
+          <div *ngIf="passwordForm?.get('newPassword')?.invalid && passwordForm?.get('newPassword')?.touched" class="alert alert-danger">
+            新密码至少6位
+          </div>
         </div>
         <div class="form-group">
           <label for="confirmNewPassword">确认新密码:</label>
-          <input type="password" id="confirmNewPassword" name="confirmNewPassword" ngModel required>
+          <input type="password" id="confirmNewPassword" name="confirmNewPassword" formControlName="confirmPassword" required>
+          <div *ngIf="passwordForm?.get('confirmPassword')?.invalid && passwordForm?.get('confirmPassword')?.touched" class="alert alert-danger">
+            新密码不一致
+          </div>
+        </div>
+        <div *ngIf="passwordForm?.errors?.notSame" class="alert alert-danger">
+          新密码和确认密码不一致
         </div>
         <div id="passwordAlert" class="alert" *ngIf="alertMessage">{{ alertMessage }}</div>
-        <button type="button" (click)="submitChange(passwordForm)" class="btn btn-primary">确认修改</button>
+        <button type="submit" class="btn btn-primary">确认修改</button>
       </form>
     </div>
   </div>
