@@ -2,49 +2,40 @@
     <div class="container mt-4 mb-4">
       <div class="row justify-content-center my-3"> <!-- 添加垂直间距 -->
         <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
-            <h2 class="display-4 special-heading">课程管理</h2>
+            <h2 class="display-4 special-heading">我的课程</h2>
         </div>
       </div>
       <!-- 查询和增加按钮区域 -->
-      <form class="form-inline" method="GET">
+      <form class="form-inline" (ngSubmit)="onSubmit">
+        <!-- 学期名称 -->
         <div class="form-group">
-          <label for="clazz_id">学校班级：</label>
-          <select class="form-control" style="width:auto" name="clazz_id" id="clazz_id">
-              <option value="">请选择学校班级</option><!-- 用来做占位符（下同） -->
-                <optgroup label="">
-                  <!-- 检查当前学校的ID是否在$groupClazz数组中 -->
-                    <option value="" >选项
-                    </option>
-                </optgroup>
-          </select>
-        </div>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <!-- 课程名称 -->
-        <div class="form-group">
-          <label for="course">课程名：</label>
+          <label for="course">学期：</label>
           <select class="form-control" style="width:auto" name="course" id="course">
-            <option selected disabled value="">请选择课程</option><!-- 用来做占位符（下同） -->
+            <option selected disabled value="">请选择学期</option><!-- 用来做占位符（下同） -->
               <optgroup label="">
                   <option value="" >
                   </option>
               </optgroup>
           </select>
         </div>
+        <!-- 课程名称 -->
+        <div class="form-group">
+          <label for="course">课程名：</label>
+          <input type="text" class="form-control" id="course.name" name="course.name" placeholder="请输入课程名称" [(ngModel)]="course.name">
+        </div>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <!-- 查询按钮 -->
         <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
-        <a class="btn btn-primary" style="margin-left: auto;">增加</a>
+        <a class="btn btn-primary" style="margin-left: auto;" [routerLink]="'add'">增加</a>
       </form>       
     </div>
     <div class="row">
       <div class="col-md-12">
         <table class="table table-hover table-bordered">
-          <thead class="thead-light">
+          <thead  class="thead-light">
               <tr class="info">
                 <th>序号</th>
                 <th>课名</th>
-                <th>学校</th>
-                <th>班级</th>
                 <th>周次</th>
                 <th>星期</th>
                 <th>节次</th>
@@ -52,18 +43,15 @@
               </tr>
           </thead>                    
           
-          <tr >
-            <td>1</td>
-            <td>高树</td>
-            <td>河工大</td>
-            <td>计234</td>
-            <td>第一周</td>
-            <td>星期一</td>
-            <td>第一节</td>         
+          <tr *ngFor="let course of courses; index as index">
+            <td>{{index+1}}</td>
+            <td>{{course.name}}</td>
+            <td>{{course.start_week}}--{{course.end_week}}</td>
+            <td>{{course.date}}</td>
+            <td>{{course.section}}</td>         
             <td>
-                <a class="btn btn-sm btn-danger">删除</a>
-                <a  class="btn btn-sm btn-primary">编辑</a>
-                <a class="btn btn-sm btn-info">添加到我的课程中</a>
+                <a class="btn btn-sm btn-danger" (click)="onDelect(course.id)">删除</a>
+                <a  class="btn btn-sm btn-primary" [routerLink]="'edit/' + course.id">编辑</a>
             </td>
           </tr>
         </table>

@@ -36,7 +36,7 @@ class IndexController extends Controller
 
     public function isLogin(){
       if(session('id') !== null){
-        return json(['message' => '用户已登陆']);
+        return json(['id' => session('id')]);
       }
       return json(['error' => '当前无用户登陆'], 401);
     }

@@ -10,7 +10,10 @@ describe('TemplateUpComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ TemplateUpComponent ],
-      imports: [HttpClientModule, ReactiveFormsModule]
+      imports: [
+        HttpClientModule, 
+        ReactiveFormsModule
+      ]
     })
     .compileComponents();
   });
