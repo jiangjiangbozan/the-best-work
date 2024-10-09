@@ -1,0 +1,79 @@
+<div class="main-content">
+    <div class="mt-4 mb-4">
+      <div class="row justify-content-center my-5"> <!-- 添加垂直间距 -->
+        <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
+          <h2 class="display-4 special-heading">课表查询</h2>
+        </div>
+      </div>
+      <div>
+        <!-- 查询和增加按钮区域 -->
+        <form>
+          <div class="form-row">
+            <!-- 学校-班级 -->
+            <div class="form-group col-md-2">
+                学校-班级：
+                <select class="form-control" style="width:auto" name="clazz_id" id="clazz_id">
+                    <option selected disabled value="">请选择学校班级</option><!-- 用来做占位符（下同） -->
+                      <optgroup label="">
+                        <!-- 检查当前学校的ID是否在$groupClazz数组中 -->
+                          <option value="">
+                          </option>
+                      </optgroup>
+                </select>
+            </div>
+            <!-- 班级 -->
+            <!-- 班级 -->  
+            <div class="form-group col-md-2">    
+                周数：    
+                <select id="week_number" name="week_number" class="form-control">    
+                    <option value="">第1周</option>    
+                    <option value="">暂无相关信息</option>     
+                </select>    
+            </div>
+            
+            <!-- 提交按钮 -->
+            <div class="form-group col-md-2">                    
+              <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
+            </div>
+          </div>
+        </form>
+      </div>        
+    </div>
+    <table class="table">
+      <tr>
+        <th class="th">时间</th>
+              <th class="th">星期一<br>
+             
+              <th class="th">星期二<br>
+             
+              <th class="th">星期三<br>
+           
+              <th class="th">星期四<br>
+             
+              <th class="th">星期五<br>
+            
+              <th class="th">星期六<br>
+              
+              <th class="th">星期日<br>       
+      </tr>
+        <tr>
+          <th class="th">
+          </th>
+            <td class="td" id="monday-first">
+            </td>
+            <td class="td" id="monday-first">
+            </td>
+            <td class="td" id="monday-first">
+            </td>
+            <td class="td" id="monday-first">
+            </td>
+            <td class="td" id="monday-first">
+            </td>
+            <td class="td" id="monday-first">
+            </td>
+            <td class="td" id="monday-first">
+            </td>
+        </tr>
+
+      </table>
+  </div>
