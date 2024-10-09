@@ -12,6 +12,11 @@ const routes: Routes = [
   {
     path: '',
     component: AppComponent
+  },
+  {
+    path: 'timeTable',
+    loadChildren: () => import('./time-table/time-table.module').then(m => m.TimeTableModule)
+
   }
 ];
 

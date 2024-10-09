@@ -98,5 +98,14 @@ class CourseController extends Controller
         return json(['success' => '更新课程成功']);
     }
 
-    
+    public function  searchCourses() {
+        // 解析 JSON 数据
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $data = isset($parsedData['data']) ? $parsedData['data'] : [];
+        $Courses = Course::where('user_id', $data['id'])
+        ->where('name', 'like', '%' . $data['name'] . '%')
+        ->select();
+        return json($Courses);
+        var_dump($Courses);
+    }
 }

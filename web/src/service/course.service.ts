@@ -28,4 +28,11 @@ export class CourseService {
   delectCourse(id: number): Observable<any> {
     return this.httpClient.post<any>('/api/course/delectCourse', {id})
   }
+
+  searchCourses(data = {} as {
+    id: number,
+    name : string
+  }): Observable<any> {
+    return this.httpClient.post<any>('/api/course/searchCourses', {data})
+  }
 }
