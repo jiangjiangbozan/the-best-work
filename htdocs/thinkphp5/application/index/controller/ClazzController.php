@@ -16,4 +16,30 @@ class ClazzController extends Controller
         $clazz = User::with('clazz')->find($user_id); 
         return json($clazz->clazz->name);
     }
+
+    public function index(Request $request)
+        {
+            // 获取分页参数
+            $page = $request->param('page', 1, 'intval');
+            $size = $request->param('size', 10, 'intval');
+            $schoolId = $request->param('school_id', '');
+            $clazz = $request->param('clazz', '');
+
+            // 查询班级列表
+            $clazzes = model('Clazz')->where(function ($query) use ($schoolId, $clazz) {
+                $query->when($schoolId, function ($query) use ($schoolId) {
+                    $query->where('school_id', $schoolId);
+                })->when($clazz, function ($query) use ($clazz) {
+                    $query->where('clazz', 'like', '%' . $clazz . '%');
+                });
+            })->paginate($size, false, ['page' => $page]);
+
+            // 返回数据
+            return json([
+                'code' => 0,
+                'msg' => '',
+                'data' => $clazzes->items(),
+                'total' => $clazzes->total()
+            ]);
+        }
 }
