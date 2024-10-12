@@ -18,4 +18,24 @@ class SchoolController extends Controller
         $school = Clazz::with('school')->find($clazz_id);
         return json($school->school->name);
     }
+
+    public function index(Request $request)
+    {
+        // 获取分页参数
+        $page = $request->param('page', 1, 'intval');
+        $size = $request->param('size', 10, 'intval');
+        $schoolName = $request->param('school', '');
+
+        // 查询学校列表
+        $schools = model('School')->where('name', 'like', '%' . $schoolName . '%')
+                                  ->paginate($size, false, ['page' => $page]);
+
+        // 返回数据
+        return json([
+            'code' => 0,
+            'msg' => '',
+            'data' => $schools->items(),
+            'total' => $schools->total()
+        ]);
+    }
 }
