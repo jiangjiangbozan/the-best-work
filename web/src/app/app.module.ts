@@ -10,9 +10,10 @@ import { IndexComponent } from './index/index.component';
 import { TemplateUpComponent } from './template-up/template-up.component';
 import { TemplateDownComponent } from './template-down/template-down.component';
 import { PersonalCenterComponent } from './personal-center/personal-center.component';
-import { CourseManageComponent } from './course-manage/course-manage.component';
 import {RouterModule} from '@angular/router';
-import { UserComponent } from './user/user.component';
+import { ClazzManageComponent } from './clazz-manage/clazz-manage.component';
+import { SchoolManageComponent } from './school-manage/school-manage.component';
+import { SemesterManageComponent } from './semester-manage/semester-manage.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +21,10 @@ import { UserComponent } from './user/user.component';
     IndexComponent,
     TemplateUpComponent,
     TemplateDownComponent,
-    PersonalCenterComponent
+    PersonalCenterComponent,
+    ClazzManageComponent,
+    SchoolManageComponent,
+    SemesterManageComponent
   ],
   imports: [
     BrowserModule,
