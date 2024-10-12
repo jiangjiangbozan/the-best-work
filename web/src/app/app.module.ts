@@ -11,6 +11,7 @@ import { TemplateUpComponent } from './template-up/template-up.component';
 import { TemplateDownComponent } from './template-down/template-down.component';
 import { CourseManageComponent } from './course-manage/course-manage.component';
 import {RouterModule} from '@angular/router';
+import { UserComponent } from './user/user.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,6 +19,7 @@ import {RouterModule} from '@angular/router';
     IndexComponent,
     TemplateUpComponent,
     TemplateDownComponent,
+    UserComponent,
   ],
   imports: [
     BrowserModule,
