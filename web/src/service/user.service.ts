@@ -37,6 +37,10 @@ export class UserService {
       );
   }
 
+  getUsers(): Observable<any> {
+    return this.httpClient.get('/api/user/getUsers')
+  }
+
   private handleError(error: HttpErrorResponse): Observable<any> {
     let errors = {
       detail: '',

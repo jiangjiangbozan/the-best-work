@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CourseService } from '../../service/course.service';
 import { SharedDataService } from '../../service/shared-data.service';
-import { Course } from '../../entity/course';
 import { Confirm } from 'notiflix';
 @Component({
   selector: 'app-course-manage',
