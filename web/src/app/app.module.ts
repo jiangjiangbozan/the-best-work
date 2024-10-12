@@ -26,7 +26,6 @@ import { UserComponent } from './user/user.component';
     ClazzManageComponent,
     SchoolManageComponent,
     SemesterManageComponent,
-    UserComponent
   ],
   imports: [
     BrowserModule,
