@@ -2,16 +2,15 @@
 namespace app\common\model;
 use think\Model;
 
-class User extends Model
+class Semester extends Model
 {
     public function course()
     {
         return $this->hasMany('course');
     }
 
-    public function clazz()
+    public function school()
     {
-        return $this->belongsTo('clazz');
+        return $this->belongsTo('school');
     }
 }
-

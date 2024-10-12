@@ -7,34 +7,24 @@
       </div>
       <div>
         <!-- 查询和增加按钮区域 -->
-        <form>
-          <div class="form-row">
-            <!-- 学校-班级 -->
-            <div class="form-group col-md-2">
-                学校-班级：
-                <select class="form-control" style="width:auto" name="clazz_id" id="clazz_id">
-                    <option selected disabled value="">请选择学校班级</option><!-- 用来做占位符（下同） -->
-                      <optgroup label="">
-                        <!-- 检查当前学校的ID是否在$groupClazz数组中 -->
-                          <option value="">
-                          </option>
-                      </optgroup>
-                </select>
-            </div>
-            <!-- 班级 -->
-            <!-- 班级 -->  
-            <div class="form-group col-md-2">    
-                周数：    
-                <select id="week_number" name="week_number" class="form-control">    
-                    <option value="">第1周</option>    
-                    <option value="">暂无相关信息</option>     
-                </select>    
-            </div>
-            
-            <!-- 提交按钮 -->
-            <div class="form-group col-md-2">                    
-              <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
-            </div>
+        <form class="form-inline"  (ngSubmit)="onSubmit()" >
+          <!-- 学校-班级 -->
+          <div class="form-group col-md-2">
+              学校-班级：{{school_name}}-{{clazz_name}}
+          </div>
+          <!-- 学期 -->
+          <div class="form-group">    
+            <label for="course">学期：</label>
+            <select id="week" name="week" class="form-control" [(ngModel)]="data.semester_id">  
+              <ng-container *ngFor="let semester of semesters | keyvalue">    
+                <option [value]="semester.key">{{semester.value}}</option>    
+              </ng-container>  
+              <option *ngIf="data.semester_id === 0" [value]="0">当前暂无学期安排</option> 
+            </select>    
+          </div>
+          <!-- 提交按钮 -->
+          <div class="form-group col-md-2">                    
+            <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
           </div>
         </form>
       </div>        
@@ -42,38 +32,34 @@
     <table class="table">
       <tr>
         <th class="th">时间</th>
-              <th class="th">星期一<br>
-             
-              <th class="th">星期二<br>
-             
-              <th class="th">星期三<br>
-           
-              <th class="th">星期四<br>
-             
-              <th class="th">星期五<br>
-            
-              <th class="th">星期六<br>
-              
-              <th class="th">星期日<br>       
+          <th class="th">星期一<br>
+          <th class="th">星期二<br>
+          <th class="th">星期三<br>
+          <th class="th">星期四<br>
+          <th class="th">星期五<br>
+          <th class="th">星期六<br>
+          <th class="th">星期日<br>       
       </tr>
-        <tr>
-          <th class="th">
-          </th>
-            <td class="td" id="monday-first">
-            </td>
-            <td class="td" id="monday-first">
-            </td>
-            <td class="td" id="monday-first">
-            </td>
-            <td class="td" id="monday-first">
-            </td>
-            <td class="td" id="monday-first">
-            </td>
-            <td class="td" id="monday-first">
-            </td>
-            <td class="td" id="monday-first">
-            </td>
-        </tr>
-
-      </table>
+      <tr *ngFor="let section of sectionNumber">
+        <th class="th">
+          <ng-container [ngSwitch]="section">  
+            <p *ngSwitchCase="0">8:30 - 10:05</p>  
+            <p *ngSwitchCase="1">10:30 - 12:00</p>  
+            <p *ngSwitchCase="2">14:00 - 15:30</p>  
+            <p *ngSwitchCase="3">16:30 - 18:00</p>  
+            <p *ngSwitchCase="4">20:00 - 21:00</p>  
+          </ng-container>
+        </th>
+        <ng-container *ngFor="let date of dateNumber">  
+          <td style="height: 158px;" class="td" id="monday-first">
+            <ng-container *ngFor="let course of courses">  
+              <ng-container *ngIf="(course.date === date) && (course.section === section + 1)">  
+                <p>{{course.name}}</p>  
+                <p>{{course.start_week}}&nbsp;--&nbsp;{{course.end_week}}周</p>  
+              </ng-container>
+            </ng-container>
+          </td>
+        </ng-container>
+      </tr>
+    </table>
   </div>
