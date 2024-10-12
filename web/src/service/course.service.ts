@@ -35,4 +35,12 @@ export class CourseService {
   }): Observable<any> {
     return this.httpClient.post<any>('/api/course/searchCourses', {data})
   }
+
+  myCourses(data = {} as {
+    user_id: number,
+    week : number,
+    semester_id: number,
+  }): Observable<any> {
+    return this.httpClient.post<any>('/api/course/myCourses', {data})
+  }
 }
