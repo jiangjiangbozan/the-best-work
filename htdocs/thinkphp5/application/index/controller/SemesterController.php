@@ -47,4 +47,39 @@ class SemesterController extends Controller
         }
         return json(0);
     }
+
+    public function index(Request $request)
+        {
+            // 获取分页参数
+            $page = $request->param('currentPage', 1, 'intval');
+            $size = $request->param('pageSize', 10, 'intval');
+            $schoolId = $request->param('school_id', '');
+            $semester = $request->param('semester', '');
+
+            // 获取学校列表用于下拉选择
+            $schools = School::all();
+
+            // 查询学期列表
+            $query = Semester::with(['school'])
+                          ->where(function ($query) use ($schoolId, $semester) {
+                              if ($schoolId) {
+                                  $query->where('school_id', $schoolId);
+                              }
+                              if ($semester) {
+                                  $query->where('semester', 'like', "%{$semester}%");
+                              }
+                          })
+                          ->order('id', 'desc');
+
+            $semesters = $query->paginate($size, false, ['page' => $page]);
+
+            // 返回数据
+            return json([
+                'code' => 0,
+                'msg' => '',
+                'data' => $semesters->items(),
+                'total' => $semesters->total(),
+                'schools' => $schools
+            ]);
+        }
 }

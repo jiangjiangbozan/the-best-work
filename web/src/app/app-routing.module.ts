@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { PersonalCenterComponent } from "./personal-center/personal-center.component";
 import {CourseManageComponent} from "./course-manage/course-manage.component";
 import {AppComponent} from "./app.component";
+import {ClazzManageComponent} from "./clazz-manage/clazz-manage.component";
+import {SchoolManageComponent} from "./school-manage/school-manage.component";
+import {SemesterManageComponent} from "./semester-manage/semester-manage.component";
 
 const routes: Routes = [
   {
@@ -20,7 +23,15 @@ const routes: Routes = [
   {
     path: 'timeTable',
     loadChildren: () => import('./time-table/time-table.module').then(m => m.TimeTableModule)
-
+  },
+  {
+    path: 'index/clazz_manage', component: ClazzManageComponent
+  },
+  {
+    path: 'index/school_manage', component: SchoolManageComponent
+  },
+  {
+    path: 'index/semester_manage', component: SemesterManageComponent
   }
 ];
 
