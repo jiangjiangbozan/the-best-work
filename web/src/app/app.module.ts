@@ -9,6 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { IndexComponent } from './index/index.component';
 import { TemplateUpComponent } from './template-up/template-up.component';
 import { TemplateDownComponent } from './template-down/template-down.component';
+import { PersonalCenterComponent } from './personal-center/personal-center.component';
 import { CourseManageComponent } from './course-manage/course-manage.component';
 import {RouterModule} from '@angular/router';
 import { UserComponent } from './user/user.component';
@@ -20,6 +21,7 @@ import { UserComponent } from './user/user.component';
     TemplateUpComponent,
     TemplateDownComponent,
     UserComponent,
+    PersonalCenterComponent
   ],
   imports: [
     BrowserModule,
