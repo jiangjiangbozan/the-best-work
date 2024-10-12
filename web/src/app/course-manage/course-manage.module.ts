@@ -4,7 +4,7 @@ import { AddComponent } from './add/add.component';
 import { CourseManageComponent } from './course-manage.component';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms'; 
+import { ReactiveFormsModule } from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { EditComponent } from './edit/edit.component';
 const routes: Routes = [

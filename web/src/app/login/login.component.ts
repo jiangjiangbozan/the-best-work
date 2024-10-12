@@ -13,7 +13,7 @@ import { User } from '../../entity/user';
 })
 export class LoginComponent implements OnInit {
 
-  title = '登陆';
+  title = '登录';
 
   @Output()
   beLogin = new EventEmitter<any>()
