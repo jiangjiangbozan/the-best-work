@@ -28,14 +28,18 @@ export class CourseManageComponent implements OnInit {
     name: '' 
   };
 
-  constructor(private courseService: CourseService, private sharedDataService:SharedDataService) { 
+  constructor(
+    private courseService: CourseService, 
+    private sharedDataService:SharedDataService
+  ) { 
   }
  
   ngOnInit(): void {
     this.sharedDataService.currentId.subscribe((id) => {
       this.user_id = id;
       this.course.id = id;
-    })
+    });
+    
     this.courseService.getCourses(this.user_id)
     .subscribe(data => {
       this.courses= data;
@@ -57,7 +61,6 @@ export class CourseManageComponent implements OnInit {
    this.courseService.searchCourses(this.course)
    .subscribe((data) => {
     this.courses= data;
-    console.log('查询成功');
    })
   }
 }
