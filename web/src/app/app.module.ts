@@ -19,8 +19,7 @@ import {RouterModule} from '@angular/router';
     IndexComponent,
     TemplateUpComponent,
     TemplateDownComponent,
-    PersonalCenterComponent,
-    CourseManageComponent
+    PersonalCenterComponent
   ],
   imports: [
     BrowserModule,
