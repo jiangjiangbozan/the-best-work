@@ -14,7 +14,6 @@ import {RouterModule} from '@angular/router';
 import { ClazzManageComponent } from './clazz-manage/clazz-manage.component';
 import { SchoolManageComponent } from './school-manage/school-manage.component';
 import { SemesterManageComponent } from './semester-manage/semester-manage.component';
-import { UserComponent } from './user/user.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +24,7 @@ import { UserComponent } from './user/user.component';
     PersonalCenterComponent,
     ClazzManageComponent,
     SchoolManageComponent,
-    SemesterManageComponent,
+    SemesterManageComponent
   ],
   imports: [
     BrowserModule,

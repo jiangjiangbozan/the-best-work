@@ -3,7 +3,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../service/user.service';
 import { HttpClient } from '@angular/common/http';
 import { combineLatest } from 'rxjs';
-
+import { User } from 'src/entity/user';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
   user = {} as {
     username: string,
     password: string
-  };
+  } as User;
 
   data = {} as {
     username: string,

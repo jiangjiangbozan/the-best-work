@@ -2,10 +2,8 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../service/user.service';
 import { HttpClient } from '@angular/common/http';
-import { combineLatest } from 'rxjs';
 import { User } from '../../entity/user';
-
-
+import * as Notiflix from 'notiflix';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -30,8 +28,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private userService: UserService,
-              private httpClient: HttpClient) {
-  }
+              private httpClient: HttpClient
+            ) {}
 
   ngOnInit(): void {
     this.initFormGroup();
@@ -47,19 +45,13 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     const username = this.formGroup.get('username')!!.value;
     const password = this.formGroup.get('password')!!.value;
+    Notiflix.Loading.standard('登录中，请稍候');
     this.userService.login(username, password).subscribe(user => {
-
       this.user = user;
-
-      sessionStorage.setItem('user', JSON.stringify(user)); 
-      const a = sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user')!) : null ;
-      console.log('a', a);
-
       this.beLogin.emit(this.user);
+      Notiflix.Loading.remove()
     },  (error)=> {
-
       console.error('错误', error);
-    
     });
   }
 
