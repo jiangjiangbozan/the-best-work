@@ -9,8 +9,11 @@ export class CourseService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getCourses(user_id: number): Observable<any> {
-    return this.httpClient.post<any>('/api/course/getCourses', {user_id})
+  getCourses(data = {} as {
+    user_id: number,
+    semester_id: number,
+  }): Observable<any> {
+    return this.httpClient.post<any>('/api/course/getCourses', {data})
   }
 
   addCourse(course: Course): Observable<any> {

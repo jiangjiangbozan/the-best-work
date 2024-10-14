@@ -52,14 +52,25 @@
               </tr>
             </thead>
             <tbody>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
+                <tr *ngFor="let user of users; index as index">
+                    <td>{{index + 1}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.clazz_name}}</td>
+                    <td>{{user.school_name}}</td>
+                    <td>     
+                        <ng-container [ngSwitch]="user.status">  
+                            <p *ngSwitchCase="0">冻结</p>  
+                            <p *ngSwitchCase="1">活跃</p>   
+                        </ng-container>
+                    </td>
+                    <td>
+                        <ng-container [ngSwitch]="user.role">  
+                            <p *ngSwitchCase="0">学生</p>  
+                            <p *ngSwitchCase="1">管理员</p>   
+                            <p *ngSwitchCase="2">超级管理员</p>  
+                        </ng-container>
+                    </td>
                   <td>
                       <a class="btn btn-sm btn-danger">删除</a>
                       <a class="btn btn-sm btn-secondary">冻结</a>
@@ -75,6 +86,5 @@
         
           <!-- 分页组件结束 -->
       </div>
-
   </div>
 

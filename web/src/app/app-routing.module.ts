@@ -28,10 +28,6 @@ const routes: Routes = [
   {
     path: 'user',
     loadChildren: () => import('./user/user.module').then(m => m.UserModule)
-<<<<<<< HEAD
-
-=======
->>>>>>> bef97b271aa9296b6adffe5d205ebc0a49670176
   },
   {
     path: 'index/clazz_manage', component: ClazzManageComponent

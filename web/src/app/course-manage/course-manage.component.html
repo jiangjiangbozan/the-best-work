@@ -6,17 +6,16 @@
         </div>
       </div>
       <!-- 查询和增加按钮区域 -->
-      <form class="form-inline" (ngSubmit)="onSubmit">
+      <form class="form-inline" (ngSubmit)="onSubmit()">
         <!-- 学期名称 -->
-        <div class="form-group">
+        <div class="form-group">    
           <label for="course">学期：</label>
-          <select class="form-control" style="width:auto" name="course" id="course">
-            <option selected disabled value="">请选择学期</option><!-- 用来做占位符（下同） -->
-              <optgroup label="">
-                  <option value="" >
-                  </option>
-              </optgroup>
-          </select>
+          <select id="week" name="week" class="form-control" [(ngModel)]="course.semester_id">  
+            <ng-container *ngFor="let semester of semesters | keyvalue">    
+              <option [value]="semester.key">{{semester.value}}</option>    
+            </ng-container>  
+            <option *ngIf="data.semester_id === 0" [value]="0">当前暂无学期安排</option> 
+          </select>    
         </div>
         <!-- 课程名称 -->
         <div class="form-group">

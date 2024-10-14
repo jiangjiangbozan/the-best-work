@@ -13,5 +13,10 @@ class User extends Model
     {
         return $this->belongsTo('clazz');
     }
+
+    public function getUsers() {
+        $users = User::all();
+        var_dump($suers);
+    }
 }
 

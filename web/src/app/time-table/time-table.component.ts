@@ -48,6 +48,7 @@ export class TimeTableComponent implements OnInit {
     this.sharedDataService.currentSemesterId
     .subscribe((semester_id) => {
       this.data.semester_id = semester_id;
+      this.loadByCourses(this.data);
     });
     this.sharedDataService.currentClazzName
     .subscribe((clazz_name) => {
@@ -55,10 +56,9 @@ export class TimeTableComponent implements OnInit {
     });
     this.sharedDataService.currentSchoolName
     .subscribe((school_name) => {
-      console.log(school_name);
       this.school_name = school_name;
     })
-    this.loadByCourses(this.data);
+   
   }
 
   onSubmit() {

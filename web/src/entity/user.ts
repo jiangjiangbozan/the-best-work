@@ -1,4 +1,9 @@
 export interface User {
   username: string;
-  password: string;
+  password?: string;
+  name: string;
+  clazz_name : string;
+  school_name: string;
+  status: number;
+  role: number
 }
