@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {User} from '../entity/user';
-import {Observable, throwError} from 'rxjs';
+import {forkJoin, Observable, throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
@@ -28,6 +28,13 @@ export class UserService {
 
   getUserInfo(): Observable<any> {
     return this.httpClient.get('/api/personalCenter/getUserInfo');
+  }
+
+  getAllUserInfo(): Observable<any> {
+    return forkJoin({
+      userInfo: this.getUserInfo(),
+      userList: this.getUsers()
+    });
   }
 
   changePassword(formData: any): Observable<any> {

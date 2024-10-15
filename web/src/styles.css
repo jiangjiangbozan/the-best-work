@@ -220,3 +220,32 @@ body, html {
     color: #050000; /* 设置激活状态的颜色 */
     font-weight: bold; /* 可选：设置加粗或其他样式 */
   }
+  /* 调整 Notiflix 通知框的位置 */
+  .notiflix-container {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  /* 调整 Notiflix 通知框的大小 */
+  .notiflix-container .notiflix-message {
+    font-size: 18px !important;
+    padding: 20px !important;
+  }
+
+  /* 调整 Notiflix 通知框的背景颜色和其他样式 */
+  .notiflix-container .notiflix-message {
+    background-color: #f0f0f0 !important;
+    border-radius: 10px !important;
+  }
+
+  /* 调整 Notiflix 通知框的按钮 */
+  .notiflix-container .notiflix-button {
+    font-size: 16px !important;
+    padding: 10px 20px !important;
+    border-radius: 5px !important;
+  }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

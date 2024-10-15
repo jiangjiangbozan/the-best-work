@@ -9,14 +9,14 @@
       <form class="form-inline" (submit)="fetchTerms()">
         <div class="form-group">
           <label for="school">学校名称：</label>
-          <select id="school" name="school_id" [(ngModel)]="selectedSchoolId" class="form-control" style="width:auto">
+          <select id="school" name="school_id" class="form-control" style="width:auto">
             <option *ngFor="let school of schools" [value]="school.id">
               {{ school.school }}
             </option>
           </select>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <label for="term">学期：</label>
-          <input id="term" name="term" type="text" class="form-control" placeholder="学期..." [(ngModel)]="termFilter">
+          <input id="term" name="term" type="text" class="form-control" placeholder="学期...">
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
           <a routerLink="/term/add" class="btn btn-primary" style="margin-left: auto;">&nbsp;增加</a>
@@ -44,7 +44,7 @@
       <td>{{ term.start_time }}</td>
       <td>{{ term.end_time }}</td>
       <td>
-        <a class="btn btn-sm btn-primary" [routerLink]="['/term/edit', term.id]">
+        <a class="btn btn-sm btn-primary">
           &nbsp;编辑
         </a>&nbsp;
         <a class="btn btn-danger btn-sm" (click)="onDelete(term.id)">
