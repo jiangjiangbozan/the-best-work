@@ -12,4 +12,8 @@ export class ClazzService {
    getCurrentClazzName(user_id: number): Observable<string> {
     return this.httpClient.post<string>('api/clazz/getCurrentClazzName', {user_id});
   }
+  
+  getClazzAndSchool(user_id: number): Observable<[]> {
+    return this.httpClient.post<[]>('api/clazz/getClazzAndSchool', {user_id});
+  }
 }

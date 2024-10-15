@@ -9,26 +9,31 @@
       </div>
       <!-- 查询和增加按钮区域 -->
       <div class="d-flex justify-content-between align-items-center mb-3">
-        <form class="d-flex align-items-center my-search-form">
+        <form class="d-flex align-items-center my-search-form" (ngSubmit)="onSubmit()">
           <label for="clazz">学校班级：</label>
-          <select class="form-control" style="width:auto" name="clazz" id="clazz">
-            <option value="">所有学校班级</option>
-              <optgroup label="">
-                    <option value=""> </option>
-              </optgroup>
+          <select class="form-control" style="width:auto" name="clazz" id="clazz" [(ngModel)]="data.clazz_id">
+            <option value="0">所有学校班级</option>
+                <ng-container *ngFor="let school of schools"> 
+                    <optgroup label="{{school.name}}">
+                        <ng-container *ngFor="let clazz of clazzAndSchool">  
+                            <ng-container *ngIf="clazz.school_name === school.name">  
+                                 <option [value]="clazz.id">{{clazz.clazz_name}}</option>
+                            </ng-container>
+                        </ng-container>
+                    </optgroup>
+                </ng-container>
           </select>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <label for="role">角色：</label>
-          <select class="form-control" style="width:auto" name="role" id="role">
-            <option value="">所有角色</option>
-            <option value="1">学生</option>
-            <option value="2">管理员</option>
-            <option value="3">超级管理员</option>
+          <select class="form-control" style="width:auto" name="role" id="role" [(ngModel)]="data.role">
+            <option [value]="4">所有角色</option>
+            <option [value]="0">学生</option>
+            <option [value]="1">管理员</option>
+            <option [value]="2">超级管理员</option>
           </select>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <label for="name">姓名：</label>
-
-          <input name="name" style="width: 260px;" value="" class="form-control" type="search" placeholder="姓名..." aria-label="Search"> 
+          <input name="name" style="width: 260px;" value="" class="form-control" type="search" placeholder="姓名..." aria-label="Search" [(ngModel)]="data.name"> 
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
         </form>        
@@ -36,7 +41,6 @@
               增加
             </a>
           </div>
-          
           <!-- 用户列表表格 -->
           <table class="table table-striped">
             <thead>

@@ -12,4 +12,8 @@ export class SchoolService {
    getCurrentSchoolName(user_id: number): Observable<string> {
     return this.httpClient.post<string>('api/school/getCurrentSchoolName', {user_id});
   }
+  getSchools(): Observable<any[]> {
+    return this.httpClient.get<any[]>('api/school/getSchools');
+  }
+
 }

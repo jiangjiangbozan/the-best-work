@@ -19,6 +19,11 @@ class SchoolController extends Controller
         return json($school->school->name);
     }
 
+    public function getSchools() {
+        $schools = School::select();
+        return json($schools);
+    }
+
     public function index(Request $request)
     {
         // 获取分页参数
