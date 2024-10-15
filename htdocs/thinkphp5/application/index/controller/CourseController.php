@@ -108,13 +108,6 @@ class CourseController extends Controller
             'user_id' => $data['user_id'],
             'semester_id' => $data['semester_id']
             ])->select();
-
-            // $newCourses = [];
-            // foreach($courses as $course){
-            //     if($course['start_week'] <= $data['week'] && $course['end_week'] >= $data['week']){
-            //         $newCourses[] = $course;
-            //     }
-            // }
             return json($courses);
     }
 

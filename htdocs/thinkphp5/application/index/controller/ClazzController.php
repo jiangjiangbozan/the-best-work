@@ -2,6 +2,7 @@
 namespace app\index\controller;
 
 use app\common\model\Clazz;
+use app\common\model\School;
 use app\common\model\User;
 use think\Request;
 use think\Db;
@@ -15,6 +16,24 @@ class ClazzController extends Controller
         $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : 0;
         $clazz = User::with('clazz')->find($user_id); 
         return json($clazz->clazz->name);
+    }
+
+    public function getClazzAndSchool() {
+        $clazzes = Clazz::all();
+        $clazzAndSchools = array();
+
+        foreach($clazzes as $clazz) {
+            $clazzAndSchool = [];
+            $school = Clazz::with('school')->find($clazz->id);
+            $clazzAndSchool['clazz_name'] = $clazz->name; 
+            $clazzAndSchool['school_name'] = $school->school->name; 
+            $clazzAndSchool['id'] = $clazz->id; 
+            $clazzAndSchools[] = $clazzAndSchool;
+        }
+        // var_dump($clazzAndSchools);
+        return json($clazzAndSchools);
+    
+        
     }
 
     public function index(Request $request)

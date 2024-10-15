@@ -41,6 +41,14 @@ export class UserService {
     return this.httpClient.get('/api/user/getUsers')
   }
 
+  searchUsers(data = {
+    name: '',
+    clazz_id: 2,
+    role: 0
+  }): Observable<any> {
+    return this.httpClient.post('/api/user/searchUsers', {data})
+  }
+
   private handleError(error: HttpErrorResponse): Observable<any> {
     let errors = {
       detail: '',
