@@ -30,10 +30,6 @@ export class UserService {
     return this.httpClient.get('/api/personalCenter/getUserInfo');
   }
 
-  getUsers(): Observable<any> {
-    return this.httpClient.get<any[]>('/api/personalCenter/getUserList');
-  }
-
   getAllUserInfo(): Observable<any> {
     return forkJoin({
       userInfo: this.getUserInfo(),
@@ -48,17 +44,32 @@ export class UserService {
       );
   }
 
-  private handleError(error: HttpErrorResponse) {
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
+  getUsers(): Observable<any> {
+    return this.httpClient.get('/api/user/getUsers')
+  }
+
+  searchUsers(data = {
+    name: '',
+    clazz_id: 2,
+    role: 0
+  }): Observable<any> {
+    return this.httpClient.post('/api/user/searchUsers', {data})
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<any> {
+    let errors = {
+      detail: '',
+      status: 500,
+    };
+    if (!error.error) {
+      errors.detail = error.message;
+      errors.status = error.status;
+    } else if (error.status === 401) {
+      errors.detail = '状态码为401的报错信息';
     } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong.
-      console.error(`Backend returned code ${error.status}, body was:`, error.error);
+      errors = error.error;
     }
-    // Return an observable with a user-facing error message.
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+    return throwError(errors);
   }
 
 }

@@ -53,8 +53,11 @@ class CourseController extends Controller
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);
         // 从解析后的数据中获取 user_id
-        $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : 0;
-        $courses = Course::where('user_id', $user_id)->select();
+        $data = isset($parsedData['data']) ? $parsedData['data'] : [];
+        $courses = Course::where([
+            'user_id' => $data['user_id'],
+            'semester_id' => $data['semester_id']
+            ])->select();
         return json($courses);
     }
 
@@ -105,13 +108,6 @@ class CourseController extends Controller
             'user_id' => $data['user_id'],
             'semester_id' => $data['semester_id']
             ])->select();
-
-            // $newCourses = [];
-            // foreach($courses as $course){
-            //     if($course['start_week'] <= $data['week'] && $course['end_week'] >= $data['week']){
-            //         $newCourses[] = $course;
-            //     }
-            // }
             return json($courses);
     }
 
@@ -120,7 +116,10 @@ class CourseController extends Controller
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);
         $data = isset($parsedData['data']) ? $parsedData['data'] : [];
-        $Courses = Course::where('user_id', $data['id'])
+        $Courses = Course::where([
+            'user_id' => $data['id'],
+            'semester_id' => $data['semester_id']
+            ])
         ->where('name', 'like', '%' . $data['name'] . '%')
         ->select();
         return json($Courses);

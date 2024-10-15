@@ -1,0 +1,94 @@
+<div class="main-content">
+    <div class="container mt-5">
+      <div class="container">
+        <div class="row justify-content-center my-5"> <!-- 添加垂直间距 -->
+          <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
+            <h2 class="display-4 special-heading">用户管理</h2>
+          </div>
+        </div>
+      </div>
+      <!-- 查询和增加按钮区域 -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <form class="d-flex align-items-center my-search-form" (ngSubmit)="onSubmit()">
+          <label for="clazz">学校班级：</label>
+          <select class="form-control" style="width:auto" name="clazz" id="clazz" [(ngModel)]="data.clazz_id">
+            <option value="0">所有学校班级</option>
+                <ng-container *ngFor="let school of schools"> 
+                    <optgroup label="{{school.name}}">
+                        <ng-container *ngFor="let clazz of clazzAndSchool">  
+                            <ng-container *ngIf="clazz.school_name === school.name">  
+                                 <option [value]="clazz.id">{{clazz.clazz_name}}</option>
+                            </ng-container>
+                        </ng-container>
+                    </optgroup>
+                </ng-container>
+          </select>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <label for="role">角色：</label>
+          <select class="form-control" style="width:auto" name="role" id="role" [(ngModel)]="data.role">
+            <option [value]="4">所有角色</option>
+            <option [value]="0">学生</option>
+            <option [value]="1">管理员</option>
+            <option [value]="2">超级管理员</option>
+          </select>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <label for="name">姓名：</label>
+          <input name="name" style="width: 260px;" value="" class="form-control" type="search" placeholder="姓名..." aria-label="Search" [(ngModel)]="data.name"> 
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
+        </form>        
+            <a type="button" class="btn btn-primary" >
+              增加
+            </a>
+          </div>
+          <!-- 用户列表表格 -->
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">序号</th>
+                <th scope="col">姓名</th>
+                <th scope="col">用户名</th>
+                <th scope="col">班级</th>
+                <th scope="col">学校</th>
+                <th scope="col">状态</th>
+                <th scope="col">角色</th>
+                <th scope="col">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let user of users; index as index">
+                    <td>{{index + 1}}</td>
+                    <td>{{user.name}}</td>
+                    <td>{{user.username}}</td>
+                    <td>{{user.clazz_name}}</td>
+                    <td>{{user.school_name}}</td>
+                    <td>     
+                        <ng-container [ngSwitch]="user.status">  
+                            <p *ngSwitchCase="0">冻结</p>  
+                            <p *ngSwitchCase="1">活跃</p>   
+                        </ng-container>
+                    </td>
+                    <td>
+                        <ng-container [ngSwitch]="user.role">  
+                            <p *ngSwitchCase="0">学生</p>  
+                            <p *ngSwitchCase="1">管理员</p>   
+                            <p *ngSwitchCase="2">超级管理员</p>  
+                        </ng-container>
+                    </td>
+                  <td>
+                      <a class="btn btn-sm btn-danger">删除</a>
+                      <a class="btn btn-sm btn-secondary">冻结</a>
+                      <a class="btn btn-sm btn-success">活跃</a>
+                      <a class="btn btn-sm btn-primary">编辑</a>
+                      <a class="btn btn-sm btn-info">重置密码</a>
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+          
+          <!-- 分页组件开始 -->
+        
+          <!-- 分页组件结束 -->
+      </div>
+  </div>
+

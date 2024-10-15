@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CourseService } from '../../service/course.service';
 import { SharedDataService } from '../../service/shared-data.service';
-import { Course } from '../../entity/course';
 import { Confirm } from 'notiflix';
+import { Course } from 'src/entity/course';
 @Component({
   selector: 'app-course-manage',
   templateUrl: './course-manage.component.html',
@@ -12,7 +12,7 @@ export class CourseManageComponent implements OnInit {
 
   user_id = 0;
 
-  courses = [{
+  courses: Course[] = [{
     id: 0,
     user_id: 0,
     name: '',
@@ -20,14 +20,21 @@ export class CourseManageComponent implements OnInit {
     end_week: 1,
     section: 1,
     date: 1,
-    semester_id : 1
+    semester_id : 3
   }]; 
 
   course = {
     id: this.user_id,
-    name: '' 
+    name: '' ,
+    semester_id: 0
   };
 
+  data = {
+    user_id: 0,
+    semester_id: 0
+  };
+
+  semesters = Array();
   constructor(
     private courseService: CourseService, 
     private sharedDataService:SharedDataService
@@ -38,12 +45,21 @@ export class CourseManageComponent implements OnInit {
     this.sharedDataService.currentId.subscribe((id) => {
       this.user_id = id;
       this.course.id = id;
+      this.data.user_id = id;
     });
-    
-    this.courseService.getCourses(this.user_id)
-    .subscribe(data => {
-      this.courses= data;
-    })
+    this.sharedDataService.currentSemesterId
+    .subscribe((semester_id) => {
+      this.data.semester_id = semester_id;
+      this.course.semester_id = semester_id;
+      this.courseService.getCourses(this.data)
+      .subscribe(data => {
+        this.courses= data;
+      })
+    });
+    this.sharedDataService.currentSemesters
+    .subscribe((semesters) => {
+      this.semesters = semesters;
+    });
   }
 
   onDelect(id: number) {

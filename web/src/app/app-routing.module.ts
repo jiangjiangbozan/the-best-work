@@ -23,6 +23,11 @@ const routes: Routes = [
   {
     path: 'timeTable',
     loadChildren: () => import('./time-table/time-table.module').then(m => m.TimeTableModule)
+
+  },
+  {
+    path: 'user',
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule)
   },
   {
     path: 'index/clazz_manage', component: ClazzManageComponent

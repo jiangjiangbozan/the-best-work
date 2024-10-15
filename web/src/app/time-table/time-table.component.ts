@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../../service/course.service';
 import { SharedDataService } from '../../service/shared-data.service';
-import { Course } from '../../entity/course';
-import { Confirm } from 'notiflix';
-
+import * as Notiflix from 'notiflix';
+import { combineLatest } from 'rxjs';  
 @Component({
   selector: 'app-time-table',
   templateUrl: './time-table.component.html',
@@ -37,31 +36,26 @@ export class TimeTableComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.sharedDataService.currentId
-    .subscribe((id) => {
-      this.data.user_id = id;
-    });
-    this.sharedDataService.currentSemesters
-    .subscribe((semesters) => {
-      this.semesters = semesters;
-    });
-    this.sharedDataService.currentSemesterId
-    .subscribe((semester_id) => {
-      this.data.semester_id = semester_id;
-    });
-    this.sharedDataService.currentClazzName
-    .subscribe((clazz_name) => {
-      this.clazz_name = clazz_name;
-    });
-    this.sharedDataService.currentSchoolName
-    .subscribe((school_name) => {
-      console.log(school_name);
-      this.school_name = school_name;
-    })
+    Notiflix.Loading.standard('数据加载中，请稍候');
+    combineLatest([  
+      this.sharedDataService.currentId,  
+      this.sharedDataService.currentSemesters,  
+      this.sharedDataService.currentSemesterId,  
+      this.sharedDataService.currentClazzName,  
+      this.sharedDataService.currentSchoolName  
+    ]).subscribe(([id, semesters, semester_id, clazz_name, school_name]) => {  
+      this.data.user_id = id;  
+      this.semesters = semesters;  
+      this.data.semester_id = semester_id;  
+      this.clazz_name = clazz_name;  
+      this.school_name = school_name;  
+      // 所有数据都获取完毕后，关闭弹窗
+    }); 
     this.loadByCourses(this.data);
   }
 
   onSubmit() {
+    Notiflix.Loading.dots('数据加载中，请稍候');
     this.loadByCourses(this.data);
   }
 
@@ -77,6 +71,7 @@ export class TimeTableComponent implements OnInit {
     this.courseService.myCourses(data)
     .subscribe((courses) => {
       this.courses = courses;
+      Notiflix.Loading.remove();
     })
   }
 }

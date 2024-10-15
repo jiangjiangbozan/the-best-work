@@ -2,7 +2,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { User } from 'src/entity/user';
 import {UserService} from '../../service/user.service';
-
+import * as Notiflix from 'notiflix';
 @Component({
   selector: 'app-template-up',
   templateUrl: './template-up.component.html',
@@ -20,8 +20,10 @@ export class TemplateUpComponent implements OnInit {
   }
 
   onLogout(): void {
+    Notiflix.Loading.standard('请稍候');
     this.userService.logout().subscribe(() => {
       this.beLogout.emit();
+      Notiflix.Loading.remove();
     })
   }
 
