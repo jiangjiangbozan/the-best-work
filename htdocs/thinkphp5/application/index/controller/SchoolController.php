@@ -9,6 +9,38 @@ use think\Controller;
 
 class SchoolController extends Controller
 {
+    public function add(Request $request)
+    {
+        // 获取原始的 POST 数据
+        $postData = file_get_contents('php://input');
+
+        // 将 JSON 数据解析为 PHP 对象或数组
+        $data = json_decode($postData, true);
+
+        // 获取 'name' 字段，确保它存在
+        if (isset($data['name'])) {
+            $name = trim($data['name']);
+
+            // 实例化模型
+            $school = new School();
+
+            // 填充数据
+            $school->name =$name;
+
+            // 保存到数据库
+            if ($school->save()) {
+                return json(['status' => 'success', 'message' => 'School added successfully']);
+            } else {
+                // 如果保存失败，获取错误信息
+                $error =$school->getError();
+                return json(['status' => 'error', 'message' => 'Failed to add school: ' . $error], 500);
+            }
+        } else {
+            // 如果 'name' 字段不存在，返回错误
+            return json(['status' => 'error', 'message' => 'Name field is missing'], 400);
+        }
+    }
+
     public function getCurrentSchoolName() {
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);
@@ -27,15 +59,64 @@ class SchoolController extends Controller
         $schoolName = $request->param('school', '');
 
         // 查询学校列表
-        $schools = model('School')->where('name', 'like', '%' . $schoolName . '%')
-                                  ->paginate($size, false, ['page' => $page]);
+        $schools = School::where('name', 'like', '%' . $schoolName . '%')
+                         ->paginate($size, false, ['page' => $page]);
+
+        // 使用 toArray() 方法获取分页数据
+        $schoolsData = $schools->toArray();
 
         // 返回数据
         return json([
             'code' => 0,
             'msg' => '',
-            'data' => $schools->items(),
-            'total' => $schools->total()
+            'data' => $schoolsData['data'],
+            'total' => $schoolsData['total']
         ]);
+    }
+
+    public function checkNameExists()
+    {
+        // 获取原始的 POST 数据
+        $postData = file_get_contents('php://input');
+
+        // 将 JSON 数据解析为 PHP 对象或数组
+        $data = json_decode($postData, true);
+
+        if (!isset($data['name'])) {
+            return json(['exists' => false, 'error' => '缺少必要的参数']);
+        }
+
+        $name = $data['name'];
+        $exists = Db::name('school')->where('name', $name)->find();
+
+        if ($exists) {
+            return json(['exists' => true]);
+        } else {
+            return json(['exists' => false]);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        $id = $request->param('id');
+        // 确保请求方法是 DELETE
+        if ($request->isDelete()) {
+            // 实例化模型
+            $school = School::find($id);
+
+            // 检查学校是否存在
+            if ($school) {
+                // 删除学校
+                if ($school->delete()) {
+                    return json(['status' => 'success', 'message' => 'School deleted successfully']);
+                } else {
+                    return json(['status' => 'error', 'message' => 'Failed to delete school'], 500);
+                }
+            } else {
+                return json(['status' => 'error', 'message' => 'School not found'], 404);
+            }
+        } else {
+            return json(['status' => 'error', 'message' => 'Invalid request method'], 405);
+        }
     }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidatorFn} from '@angular/forms';
 import {HttpClient} from "@angular/common/http";
 import {UserService} from "../../service/user.service";
-import {User} from "../../entity/user";
+import {SharedDataService} from "../../service/shared-data.service";
 
 @Component({
   selector: 'app-personal-center',
@@ -15,19 +15,33 @@ export class PersonalCenterComponent implements OnInit {
   userRole: string = '';
   passwordForm!: FormGroup;
   user: any = {};
+  users: any = [];
+  clazz_name = '';
+  school_name = '';
 
-  constructor(private http: HttpClient, private userService: UserService, private fb: FormBuilder) {
+  constructor(private http: HttpClient, private userService: UserService, private fb: FormBuilder, private share: SharedDataService) {
     this.setUserRole();
     this.getUser();
+    this.passwordForm = this.fb.group({
+      currentPassword: ['', [Validators.required]],
+      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]]
+    }, { validators: this.checkPasswords });
   }
 
   ngOnInit(): void {
     this.loadUserProfile();
-    this.passwordForm = new FormGroup({
-      currentPassword: new FormControl('', [Validators.required]),
-      newPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      confirmPassword: new FormControl('', [Validators.required])
-    }, { validators: this.checkPasswords });
+    this.share.currentClazzName.subscribe((clazz_name) => {
+      this.clazz_name= clazz_name;
+    });
+    this.share.currentSchoolName.subscribe((school_name) => {
+      this.school_name = school_name;
+    })
+    // this.passwordForm = new FormGroup({
+    //   currentPassword: new FormControl('', [Validators.required]),
+    //   newPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    //   confirmPassword: new FormControl('', [Validators.required])
+    // }, { validators: this.checkPasswords });
   }
 
   checkPasswords: ValidatorFn = (control: AbstractControl): {[key: string]: any} | null => {
@@ -43,7 +57,22 @@ export class PersonalCenterComponent implements OnInit {
   };
 
   getUser(): void {
-    this.userService.getUserInfo().subscribe(user => this.user = user);
+    this.userService.getAllUserInfo().subscribe(response => {
+        // 从响应中提取用户列表
+        if (response && response.userList && response.userList.data) {
+          const userList = response.userList.data;
+          this.users = userList; // 假设 this.users 是一个数组，用于存储用户列表
+        } else {
+          console.error('Invalid response format:', response);
+          this.users = []; // 或者处理错误情况，比如显示错误消息
+        }
+      },
+      error => {
+        console.error('Error fetching user info:', error);
+        // 可以在这里添加额外的错误处理逻辑，比如显示错误消息给用户
+        this.users = []; // 清空用户列表或显示错误状态
+      }
+    );
   }
 
   loadUserProfile() {
@@ -114,9 +143,11 @@ export class PersonalCenterComponent implements OnInit {
       return;
     }
 
+    // 如果表单有效，则继续提交逻辑
     const formData = {
       currentPassword: this.passwordForm.value.currentPassword,
-      newPassword: this.passwordForm.value.newPassword
+      newPassword: this.passwordForm.value.newPassword,
+      confirmNewPassword: this.passwordForm.value.confirmPassword
     };
 
     this.userService.changePassword(formData)

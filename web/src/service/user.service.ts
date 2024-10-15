@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {User} from '../entity/user';
-import {Observable, throwError} from 'rxjs';
+import {forkJoin, Observable, throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
@@ -30,6 +30,17 @@ export class UserService {
     return this.httpClient.get('/api/personalCenter/getUserInfo');
   }
 
+  getUsers(): Observable<any> {
+    return this.httpClient.get<any[]>('/api/personalCenter/getUserList');
+  }
+
+  getAllUserInfo(): Observable<any> {
+    return forkJoin({
+      userInfo: this.getUserInfo(),
+      userList: this.getUsers()
+    });
+  }
+
   changePassword(formData: any): Observable<any> {
     return this.httpClient.post('/api/personalCenter/changePassword', formData)
       .pipe(
@@ -37,20 +48,17 @@ export class UserService {
       );
   }
 
-  private handleError(error: HttpErrorResponse): Observable<any> {
-    let errors = {
-      detail: '',
-      status: 500,
-    };
-    if (!error.error) {
-      errors.detail = error.message;
-      errors.status = error.status;
-    } else if (error.status === 401) {
-      errors.detail = '状态码为401的报错信息';
+  private handleError(error: HttpErrorResponse) {
+    if (error.error instanceof ErrorEvent) {
+      // A client-side or network error occurred. Handle it accordingly.
+      console.error('An error occurred:', error.error.message);
     } else {
-      errors = error.error;
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(`Backend returned code ${error.status}, body was:`, error.error);
     }
-    return throwError(errors);
+    // Return an observable with a user-facing error message.
+    return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 
 }

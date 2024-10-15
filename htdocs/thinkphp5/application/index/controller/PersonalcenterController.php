@@ -28,7 +28,7 @@ class PersonalcenterController extends Controller
             $postData = $request->post();
 
             // 验证所有字段是否填写
-            if (empty($postData['currentPassword']) || empty($postData['newPassword']) || empty($postData['confirmNewPassword'])) {
+            if (empty($postData['currentPassword']) || empty($postData['newPassword']) || empty($postData['confirmPassword'])) {
                 return json(['status' => 'error', 'msg' => '请完整填写表格']);
             }
 
@@ -41,7 +41,7 @@ class PersonalcenterController extends Controller
             }
 
             // 验证两次输入的新密码是否一致
-            if ($postData['newPassword'] !== $postData['confirmNewPassword']) {
+            if ($postData['newPassword'] !== $postData['confirmPassword']) {
                 return json(['status' => 'error', 'msg' => '两次输入的新密码不一致']);
             }
 
@@ -66,5 +66,11 @@ class PersonalcenterController extends Controller
         } else {
             return json(['status' => 'error', 'msg' => '请求方法错误']);
         }
+    }
+
+    public function getUserList()
+    {
+            $users = User::getUserWithClazz();
+            return $users;
     }
 }

@@ -11,9 +11,11 @@ import { TemplateUpComponent } from './template-up/template-up.component';
 import { TemplateDownComponent } from './template-down/template-down.component';
 import { PersonalCenterComponent } from './personal-center/personal-center.component';
 import {RouterModule} from '@angular/router';
-import { ClazzManageComponent } from './clazz-manage/clazz-manage.component';
-import { SchoolManageComponent } from './school-manage/school-manage.component';
-import { SemesterManageComponent } from './semester-manage/semester-manage.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatDialogModule} from "@angular/material/dialog";
+import {SchoolManageModule} from "./school-manage/school-manage.module";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,10 +23,7 @@ import { SemesterManageComponent } from './semester-manage/semester-manage.compo
     IndexComponent,
     TemplateUpComponent,
     TemplateDownComponent,
-    PersonalCenterComponent,
-    ClazzManageComponent,
-    SchoolManageComponent,
-    SemesterManageComponent
+    PersonalCenterComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +31,11 @@ import { SemesterManageComponent } from './semester-manage/semester-manage.compo
     ReactiveFormsModule,
     HttpClientModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    NoopAnimationsModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    SchoolManageModule
   ],
   providers: [],
   bootstrap: [IndexComponent]

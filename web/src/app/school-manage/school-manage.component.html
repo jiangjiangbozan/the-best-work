@@ -9,10 +9,10 @@
       <form class="form-inline" (submit)="fetchSchools()">
         <div class="form-group">
           <label for="school">学校名称：</label>
-          <input id="school" name="school" type="text" class="form-control" placeholder="学校名称..." [(ngModel)]="schoolFilter">
+          <input id="school" name="school" type="text" class="form-control" placeholder="学校名称...">
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
-          <a routerLink="/school/add" class="btn btn-primary" style="margin-left: auto;">&nbsp;增加</a>
+            <a (click)="openAddSchoolDialog()" class="btn btn-primary" style="margin-left: 30px">&nbsp;增加</a>
         </div>
       </form>
     </div>
@@ -28,16 +28,14 @@
     </thead>
     <tbody>
     <tr *ngFor="let school of schools; let i = index">
-      <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-      <td>{{ school.school }}</td>
-      <td>
-        <a class="btn btn-sm btn-primary" [routerLink]="['/school/edit', school.id]">
-          &nbsp;编辑
-        </a>&nbsp;
-        <a class="btn btn-danger btn-sm" (click)="onDelete(school.id)">
-          &nbsp;删除
-        </a>
-      </td>
+        <!-- 显示分页后的行号 -->
+        <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+        <!-- 显示学校名称，假设属性名为name -->
+        <td>{{ school.name }}</td>
+        <td>
+            <a class="btn btn-sm btn-primary">编辑</a>&nbsp;
+          <app-delete [schoolId]="school.id" (onDeleteSuccess)="fetchSchools()"></app-delete>
+        </td>
     </tr>
     </tbody>
   </table>
