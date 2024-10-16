@@ -50,8 +50,8 @@ export class LoginComponent implements OnInit {
       this.user = user;
       this.beLogin.emit(this.user);
       Notiflix.Loading.remove()
-    },  (error)=> {
-      console.error('错误', error);
+    },(error) => {
+      Notiflix.Loading.remove();
     });
   }
 

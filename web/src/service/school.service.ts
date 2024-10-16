@@ -57,4 +57,9 @@ export class SchoolService {
     return this.httpClient.post<CheckSchoolResponse>('/api/school/checkNameExists', body)
       .pipe(map(response => response)); // 不需要额外转换
   }
+
+
+  getSchoolNames(): Observable<any> {
+    return this.httpClient.get<any>('api/school/getSchools');
+  }
 }
