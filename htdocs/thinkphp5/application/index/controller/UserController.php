@@ -11,6 +11,19 @@ use think\Controller;
 
 class UserController extends Controller
 {
+
+    public function addUser() {
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $data = isset($parsedData['user']) ? $parsedData['user'] : [];
+        $user = new User();
+        $user->username = $data['username'];
+        $user->clazz_id = $data['clazz_id'];
+        $user->role = $data['role'];
+        $user->name = $data['name'];
+        $user->password = 123;
+        $user->save();
+    }
+
     public function getUsers() {
         $users = User::all();
         $usersData = [];

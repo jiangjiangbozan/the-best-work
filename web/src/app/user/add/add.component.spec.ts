@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ClazzSelectorComponent } from '../clazz-selector/clazz-selector.component';
 import { AddComponent } from './add.component';
 
 describe('AddComponent', () => {
@@ -8,7 +8,12 @@ describe('AddComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddComponent ]
+      declarations: [ 
+        AddComponent,
+        ClazzSelectorComponent
+       ],
+       imports: [       
+      ]
     })
     .compileComponents();
   });

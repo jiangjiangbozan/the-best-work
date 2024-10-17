@@ -4,7 +4,8 @@ import { UserComponent } from './user.component';
 import {RouterModule, Routes} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AddComponent } from './add/add.component'; 
+import { AddComponent } from './add/add.component';
+import { ClazzSelectorComponent } from './clazz-selector/clazz-selector.component'; 
 
 const routes: Routes = [
   {
@@ -20,7 +21,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     UserComponent,
-    AddComponent
+    AddComponent,
+    ClazzSelectorComponent
   ],
   imports: [
     CommonModule,

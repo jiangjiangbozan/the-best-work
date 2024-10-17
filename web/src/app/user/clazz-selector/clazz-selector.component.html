@@ -1,0 +1,14 @@
+<div class="form-group">
+   <label for="clazz">学校班级：</label>
+    <select class="form-control" style="width:auto" name="clazz" id="clazz" [formControl]="clazz_id">
+        <ng-container *ngFor="let school of schools"> 
+            <optgroup label="{{school.name}}">
+                <ng-container *ngFor="let clazz of clazzAndSchool">  
+                    <ng-container *ngIf="clazz.school_name === school.name">  
+                        <option [value]="clazz.id">{{clazz.clazz_name}}</option>
+                    </ng-container>
+                </ng-container>
+            </optgroup>
+        </ng-container>
+    </select>
+</div>

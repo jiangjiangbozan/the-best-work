@@ -1,4 +1,5 @@
 <div class="main-content">
+    
     <div class="container mt-5">
       <!-- 返回按钮 -->
       <div class="row justify-content-center my-5"> <!-- 添加垂直间距 -->
@@ -6,35 +7,26 @@
           <h2 class="display-4 special-heading">新增用户</h2>
         </div>
       </div>
-      <form class="needs-validation" >
+      <form class="needs-validation"  (ngSubmit)="onSubmit()" [formGroup]="formGroup">
           <div class="form-group">
             <label for="name">姓名</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="请输入姓名" value="">
+            <input type="text" class="form-control" id="name" name="name" placeholder="请输入姓名" formControlName="name">
             <div class="invalid-feedback">请输入姓名</div>
           </div>
           <div class="form-group">
             <label for="username">用户名</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名" value="">
+            <input type="text" class="form-control" id="username" name="username" placeholder="请输入用户名" formControlName="username">
             <div class="invalid-feedback">请输入用户名</div>
           </div>
-          <div class="form-group">
-            <label for="school">学校班级</label>
-            <select class="form-control" name="clazz" id="clazz">
-                <optgroup label="">
-                    <option value=""></option>
-                </optgroup>
-            </select>
-              <div class="invalid-feedback">请选择学校和班级</div>
-          </div>
+         <app-clazz-selector formControlName="clazz_id"></app-clazz-selector>
           <div class="form-group">
             <label for="role">角色：</label>
-            <select class="form-control" name="role" id="role">
-                <option value="1">学生</option>
-                <option value="2">管理员</option>
-          </select>
-          
+            <select class="form-control" name="role" id="role" formControlName="role">
+                <option [value]="1">学生</option>
+                <option [value]="2">管理员</option>
+            </select>
           </div>
-        <button type="submit" class="btn btn-primary">添加用户</button>
+        <button type="submit" class="btn btn-primary" [disabled]="formGroup.invalid">添加用户</button>
       </form>
     </div>
    </div>
