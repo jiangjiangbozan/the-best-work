@@ -50,6 +50,8 @@ export class TimeTableComponent implements OnInit {
       this.clazz_name = clazz_name;  
       this.school_name = school_name;  
       // 所有数据都获取完毕后，关闭弹窗
+    },(error) => {
+      Notiflix.Loading.remove();
     }); 
     this.loadByCourses(this.data);
   }

@@ -56,6 +56,15 @@ export class UserService {
     return this.httpClient.post('/api/user/searchUsers', {data})
   }
 
+  addUser(user: {
+    name: string,
+    username: string,
+    clazz_id: number,
+    role: number
+  }): Observable<any> {
+    return this.httpClient.put<any>('/api/user/addUser', {user})
+  }
+
   private handleError(error: HttpErrorResponse): Observable<any> {
     let errors = {
       detail: '',

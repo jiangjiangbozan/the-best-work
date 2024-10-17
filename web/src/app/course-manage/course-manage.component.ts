@@ -3,6 +3,7 @@ import { CourseService } from '../../service/course.service';
 import { SharedDataService } from '../../service/shared-data.service';
 import { Confirm } from 'notiflix';
 import { Course } from 'src/entity/course';
+import * as Notiflix from 'notiflix';
 @Component({
   selector: 'app-course-manage',
   templateUrl: './course-manage.component.html',
@@ -42,6 +43,7 @@ export class CourseManageComponent implements OnInit {
   }
  
   ngOnInit(): void {
+    Notiflix.Loading.standard('数据加载中，请稍候');
     this.sharedDataService.currentId.subscribe((id) => {
       this.user_id = id;
       this.course.id = id;
@@ -54,6 +56,8 @@ export class CourseManageComponent implements OnInit {
       this.courseService.getCourses(this.data)
       .subscribe(data => {
         this.courses= data;
+      },(error) => {
+        Notiflix.Loading.remove();
       })
     });
     this.sharedDataService.currentSemesters
