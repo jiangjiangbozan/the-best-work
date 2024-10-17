@@ -36,10 +36,9 @@ export class SchoolService {
     const params = new URLSearchParams();
     params.set('page', page.toString());
     params.set('size', size.toString());
-    params.set('school', schoolName);
 
     // @ts-ignore
-    return this.httpClient.get<SchoolsResponse>('api/school/index', {params});
+    return this.httpClient.get<SchoolsResponse>(`api/school/index?${params.toString()}`, {params});
   }
 
   addSchool(schoolData: { name: string }): Observable<any> {
@@ -57,4 +56,18 @@ export class SchoolService {
     return this.httpClient.post<CheckSchoolResponse>('/api/school/checkNameExists', body)
       .pipe(map(response => response)); // 不需要额外转换
   }
+
+  searchSchools(name: string, page: number = 1, size: number = 10): Observable<{ schools: School[] }> {
+    const params = new URLSearchParams();
+    params.set('name', name);
+    params.set('page', page.toString());
+    params.set('size', size.toString());
+
+    return this.httpClient.get<{ schools: School[] }>(`/api/school/searchSchools?${params.toString()}`);
+  }
+
+  updateSchool(schoolId: number, updatedSchool: any): Observable<any> {
+    return this.httpClient.put(`/api/school/updateSchool?id=${schoolId}`, updatedSchool);
+  }
+
 }

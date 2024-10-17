@@ -4,7 +4,7 @@ import { UserService } from 'src/service/user.service';
 import { User } from 'src/entity/user';
 import * as Notiflix from 'notiflix';
 import { ClazzService } from 'src/service/clazz.service';
-import { combineLatest } from 'rxjs';  
+import { combineLatest } from 'rxjs';
 import { SchoolService } from 'src/service/school.service';
 @Component({
   selector: 'app-user',
@@ -45,13 +45,14 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     Notiflix.Loading.standard('数据加载中，请稍候');
-    combineLatest([  
-      this.sharedDataService.currentId, 
+    combineLatest([
+      this.sharedDataService.currentId,
       this.userService.getUsers(),
       this.schoolService.getSchools()
-    ]).subscribe(([id, users, schools]) => {  
-      this.user_id = id;  
+    ]).subscribe(([id, users, schools]) => {
+      this.user_id = id;
       this.users = users;
+      // @ts-ignore
       this.schools = schools;
       this.clazzService.getClazzAndSchool(this.user_id)
       .subscribe((ClazzAndSchool) => {
@@ -59,7 +60,7 @@ export class UserComponent implements OnInit {
         // 所有数据都获取完毕后，关闭弹窗
         Notiflix.Loading.remove();
       })
-    }); 
+    });
   }
 
   onSubmit() {

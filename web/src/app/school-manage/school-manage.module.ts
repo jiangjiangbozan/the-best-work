@@ -4,13 +4,14 @@ import { EditComponent } from './edit/edit.component';
 import { DeleteComponent } from './delete/delete.component';
 import { SearchComponent } from './search/search.component';
 import { AddSchoolPopupComponent } from './add-school-popup/add-school-popup.component';
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {SchoolManageComponent} from "./school-manage.component";
 import {RouterModule} from "@angular/router";
+import { PaginationComponent } from './pagination/pagination.component';
 
 
 
@@ -20,7 +21,8 @@ import {RouterModule} from "@angular/router";
     DeleteComponent,
     SearchComponent,
     AddSchoolPopupComponent,
-    SchoolManageComponent
+    SchoolManageComponent,
+    PaginationComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +31,8 @@ import {RouterModule} from "@angular/router";
     MatButtonModule,
     MatDialogModule,
     MatFormFieldModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ]
 })
 export class SchoolManageModule { }

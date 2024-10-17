@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {SchoolService} from "../../service/school.service";
 import {MatDialog} from "@angular/material/dialog";
 import { AddSchoolPopupComponent } from "./add-school-popup/add-school-popup.component";
 import * as Notiflix from "notiflix";
+import {EditComponent} from "./edit/edit.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 interface School {
   id: number;
@@ -28,11 +29,18 @@ export class SchoolManageComponent implements OnInit {
   currentPage: number = 1; // 当前页码
   totalItems: number = 0; // 总记录数（从后端获取）
   totalPages: number = 1; // 总页数（计算得出）
+  searchResults: any[] = [];
 
-  constructor(private http: HttpClient, private schoolService: SchoolService, public dialog: MatDialog) {}
+
+  constructor(private schoolService: SchoolService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.fetchSchools();
+    this.route.queryParams.subscribe(params => {
+      this.currentPage = params['page'] || 1;
+      this.pageSize = params['size'] || 10;
+      this.fetchSchools();
+    });
   }
 
   fetchSchools(): void {
@@ -44,14 +52,14 @@ export class SchoolManageComponent implements OnInit {
     }
 
     this.schoolService.getSchools(this.currentPage, this.pageSize, this.schoolFilter).subscribe(
-        (response: SchoolsResponse) => {
-          this.schools = response.data;
-          this.totalItems = response.total;
-          this.totalPages = Math.ceil(this.totalItems / this.pageSize);
-        },
-        error => {
-          console.error('Error fetching schools:', error);
-        }
+      (response: SchoolsResponse) => {
+        this.schools = response.data; // 更新学校列表
+        this.totalItems = response.total;
+        this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+      },
+      error => {
+        console.error('Error fetching schools:', error);
+      }
     );
   }
 
@@ -103,22 +111,73 @@ export class SchoolManageComponent implements OnInit {
     });
   }
 
-  onChangePage(page: number): void {
-    this.currentPage = page;
-    this.fetchSchools();
+  openEditSchoolDialog(school: any): void {
+    const dialogRef = this.dialog.open(EditComponent, {
+      width: '250px',
+      data: { school: school }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        Notiflix.Loading.standard('正在更新学校信息...');
+
+        this.schoolService.updateSchool(school.id, result).subscribe(
+          () => {
+            Notiflix.Loading.remove();
+            Notiflix.Notify.success('学校信息更新成功！');
+            this.fetchSchools(); // 更新成功后刷新学校列表
+          },
+          error => {
+            Notiflix.Loading.remove();
+            console.error('Error updating school:', error);
+            Notiflix.Notify.failure('更新学校信息失败，请重试！');
+          }
+        );
+      } else {
+        Notiflix.Loading.remove(); // 用户取消对话框时移除加载提示
+      }
+    });
   }
 
-  onPageSizeChange(event: any): void {
-    this.pageSize = parseInt(event.target.innerText.trim().replace(' 条', ''), 10);
-    this.fetchSchools();
+  onSearchComplete(schools: any[]): void {
+    console.log('Received search results:', schools);
+    this.searchResults = schools;
+    this.currentPage = 1;
+    this.updateSchoolsFromSearchResults();
+    this.displaySearchResults();
   }
 
-  getPageNumbers(): number[] {
-    const pages = [];
-    for (let i = 1; i <= this.totalPages; i++) {
-      pages.push(i);
+  updateSchoolsFromSearchResults(): void {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.schools = this.searchResults.slice(startIndex, endIndex);
+    this.totalItems = this.searchResults.length;
+    this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+    this.changeDetectorRef.detectChanges();
+  }
+
+  displaySearchResults(): void {
+    console.log('Before slicing, search results length:', this.searchResults.length);
+    if (this.searchResults.length > 0) {
+      this.schools = this.searchResults.slice(0, this.pageSize);
+      console.log('After slicing, schools length:', this.schools.length);
+      this.totalItems = this.searchResults.length;
+      this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+      console.log('Total pages:', this.totalPages);
     }
-    return pages;
+  }
+
+  handlePageChange(event: { page: number, pageSize: number }): void {
+    this.currentPage = event.page;
+    this.pageSize = event.pageSize;
+    // 触发页面重新加载
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { page: this.currentPage, size: this.pageSize },
+      queryParamsHandling: 'merge' // 或者 'preserve'
+    }).then(() => {
+      this.fetchSchools(); // 可选：重新加载数据
+    });
   }
 
 }

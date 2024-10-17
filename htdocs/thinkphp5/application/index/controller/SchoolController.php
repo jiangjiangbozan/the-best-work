@@ -25,15 +25,15 @@ class SchoolController extends Controller
             $school = new School();
 
             // 填充数据
-            $school->name =$name;
+            $school->name = $name;
 
             // 保存到数据库
             if ($school->save()) {
                 return json(['status' => 'success', 'message' => 'School added successfully']);
             } else {
                 // 如果保存失败，获取错误信息
-                $error =$school->getError();
-                return json(['status' => 'error', 'message' => 'Failed to add school: ' . $error], 500);
+                $error = $school->getError();
+                return json(['status' => 'error', 'message' => 'Failed to add school: '. $error], 500);
             }
         } else {
             // 如果 'name' 字段不存在，返回错误
@@ -41,17 +41,19 @@ class SchoolController extends Controller
         }
     }
 
-    public function getCurrentSchoolName() {
+    public function getCurrentSchoolName()
+    {
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);
-        $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : 0;
-        $clazz = User::with('clazz')->find($user_id); 
+        $user_id = isset($parsedData['user_id'])? $parsedData['user_id'] : 0;
+        $clazz = User::with('clazz')->find($user_id);
         $clazz_id = $clazz->clazz->id;
         $school = Clazz::with('school')->find($clazz_id);
         return json($school->school->name);
     }
 
-    public function getSchools() {
+    public function getSchools()
+    {
         $schools = School::select();
         return json($schools);
     }
@@ -64,8 +66,8 @@ class SchoolController extends Controller
         $schoolName = $request->param('school', '');
 
         // 查询学校列表
-        $schools = School::where('name', 'like', '%' . $schoolName . '%')
-                         ->paginate($size, false, ['page' => $page]);
+        $schools = School::where('name', 'like', '%'. $schoolName. '%')
+            ->paginate($size, false, ['page' => $page]);
 
         // 使用 toArray() 方法获取分页数据
         $schoolsData = $schools->toArray();
@@ -122,6 +124,63 @@ class SchoolController extends Controller
             }
         } else {
             return json(['status' => 'error', 'message' => 'Invalid request method'], 405);
+        }
+    }
+
+    public function searchSchools(Request $request)
+    {
+        $name = $request->param('name');
+        $page = $request->param('page', 1, 'intval');
+        $size = $request->param('size', 10, 'intval');
+
+        if ($name) {
+            $offset = ($page - 1) * $size;
+            $schools = Db::name('school')
+                ->where('name', 'like', '%'. $name. '%')
+                ->limit($offset, $size)
+                ->select();
+
+            $schoolArray = json_decode(json_encode($schools), true);
+
+            $result = [];
+            foreach ($schoolArray as $school) {
+                $result[] = [
+                    'id' => $school['id'],
+                    'name' => $school['name']
+                ];
+            }
+
+            $total = Db::name('school')->where('name', 'like', '%'. $name. '%')->count();
+
+            return json(['schools' => $result, 'total' => $total]);
+        } else {
+            return json(['schools' => [], 'total' => 0]);
+        }
+    }
+
+    public function updateSchool(Request $request)
+    {
+        $postData = file_get_contents('php://input');
+        $data = json_decode($postData, true);
+
+        $id = $request->param('id');
+
+        if (!isset($data['name'])) {
+            return json(['success' => false, 'message' => '缺少必要的参数']);
+        }
+
+        $name = $data['name'];
+
+        $school = Db::name('school')->find($id);
+
+        if (!$school) {
+            return json(['success' => false, 'message' => '学校不存在']);
+        }
+
+        if (Db::name('school')->where('id', $id)->update(['name' => $name])) {
+            return json(['success' => true, 'message' => '更新成功']);
+        } else {
+            return json(['success' => false, 'message' => '更新失败']);
         }
     }
 }
