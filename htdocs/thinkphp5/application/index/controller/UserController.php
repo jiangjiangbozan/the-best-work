@@ -29,6 +29,13 @@ class UserController extends Controller
         
     }
 
+    public function deleteUser() {
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : [];
+    
+        $user = User::where('id', $user_id)->find();
+        $user->delete();
+    }
     public function getUsers() {
         $users = User::all();
         $usersData = [];
@@ -39,6 +46,7 @@ class UserController extends Controller
             $clazz_name = $clazz->clazz->name;
             $school_name = $school->school->name;
             $usersData[] = new UserData(
+                $user->id,
                 $user->username, 
                 $user->name,
                 $clazz_name,

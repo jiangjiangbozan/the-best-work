@@ -65,6 +65,10 @@ export class UserService {
     return this.httpClient.put<any>('/api/user/addUser', {user})
   }
 
+  deleteUser(user_id: number): Observable<any> {
+    return this.httpClient.put('/api/user/deleteUser/',{user_id})
+  }
+
   private handleError(error: HttpErrorResponse): Observable<any> {
     let errors = {
       detail: '',
