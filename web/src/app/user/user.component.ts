@@ -48,16 +48,17 @@ export class UserComponent implements OnInit {
     combineLatest([
       this.sharedDataService.currentId,
       this.userService.getUsers(),
-      this.schoolService.getSchools()
+      this.schoolService.getSchoolNames()
     ]).subscribe(([id, users, schools]) => {
       this.user_id = id;
       this.users = users;
-      // @ts-ignore
       this.schools = schools;
       this.clazzService.getClazzAndSchool(this.user_id)
       .subscribe((ClazzAndSchool) => {
         this.clazzAndSchool = ClazzAndSchool;
         // 所有数据都获取完毕后，关闭弹窗
+        Notiflix.Loading.remove();
+      },(error) => {
         Notiflix.Loading.remove();
       })
     });
@@ -68,6 +69,8 @@ export class UserComponent implements OnInit {
     this.userService.searchUsers(this.data)
     .subscribe((users) => {
       this.users = users;
+      Notiflix.Loading.remove();
+    },(error) => {
       Notiflix.Loading.remove();
     })
   }

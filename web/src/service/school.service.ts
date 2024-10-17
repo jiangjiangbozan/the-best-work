@@ -70,4 +70,8 @@ export class SchoolService {
     return this.httpClient.put(`/api/school/updateSchool?id=${schoolId}`, updatedSchool);
   }
 
+  getSchoolNames(): Observable<any> {
+    return this.httpClient.get<any>('api/school/getSchools');
+  }
+
 }
