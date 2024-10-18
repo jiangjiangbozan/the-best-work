@@ -13,6 +13,15 @@ import { SchoolService } from 'src/service/school.service';
 })
 export class UserComponent implements OnInit {
 
+  pageData ={ 
+    size : 5,
+    tolalElementsOfData : 0,
+    currentPage: 2,
+    totalPages:2,
+    first:true,
+    last: false
+  }
+ pages = [1,2];
   user_id: number = 0;
   users : User[] = [{
     id:0,
@@ -48,11 +57,15 @@ export class UserComponent implements OnInit {
     Notiflix.Loading.standard('数据加载中，请稍候');
     combineLatest([  
       this.sharedDataService.currentId, 
-      this.userService.getUsers(),
+      this.userService.getUsers({
+        currentPage: this.pageData.currentPage,
+        size: this.pageData.size
+      }),
       this.schoolService.getSchoolNames()
-    ]).subscribe(([id, users, schools]) => {  
+    ]).subscribe(([id, pageData, schools]) => {  
       this.user_id = id;  
-      this.users = users;
+      this.users = pageData.users;
+      this.definePageData(pageData.tolalElementsOfData);
       this.schools = schools;
       this.clazzService.getClazzAndSchool(this.user_id)
       .subscribe((ClazzAndSchool) => {
@@ -84,6 +97,33 @@ export class UserComponent implements OnInit {
     })
   }
 
+  definePageData(tolalElementsOfData: number) {
+    this.pageData.tolalElementsOfData = tolalElementsOfData;
+    this.pageData.totalPages = Math.ceil(this.pageData.tolalElementsOfData / this.pageData.size);
+    if(this.pageData.currentPage === 1){
+      this.pageData.first = true;
+    }else{
+      this.pageData.first = false;
+    }
+
+    if(this.pageData.currentPage === this.pageData.totalPages){
+      this.pageData.last = true;
+    }else{
+      this.pageData.last = false;
+    }
+  }
+
+  loadByPage(currentPage: number) {
+    this.userService.getUsers({
+      currentPage: this.pageData.currentPage,
+      size: this.pageData.size
+    }).subscribe((pageData) => {
+      this.definePageData(pageData.tolalElementsOfData);
+      this.users = pageData.users;
+      Notiflix.Loading.remove();
+    })
+  }
+
   onDelect(user_id: number) {
     Notiflix.Loading.standard('删除用户数据中，请稍候');
     this.userService.deleteUser(user_id)
@@ -98,5 +138,22 @@ export class UserComponent implements OnInit {
     },(error) => {
       Notiflix.Loading.remove();
     })
+  }
+  onPage(currentPage: number){
+    Notiflix.Loading.standard('数据加载中，请稍候');
+    this.pageData.currentPage = currentPage;
+    this.loadByPage(currentPage);
+  }
+
+  frontPage() {
+    Notiflix.Loading.standard('数据加载中，请稍候');
+    this.pageData.currentPage = this.pageData.currentPage - 1;
+    this.loadByPage(this.pageData.currentPage);
+  }
+
+  nextPage() {
+    Notiflix.Loading.standard('数据加载中，请稍候');
+    this.pageData.currentPage = this.pageData.currentPage + 1;
+    this.loadByPage(this.pageData.currentPage);
   }
 }

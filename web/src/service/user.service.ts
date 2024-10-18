@@ -44,8 +44,11 @@ export class UserService {
       );
   }
 
-  getUsers(): Observable<any> {
-    return this.httpClient.get('/api/user/getUsers')
+  getUsers(pageData?: {
+    currentPage: number,
+    size: number
+  }): Observable<any> {
+    return this.httpClient.post('/api/user/getUsers', {pageData})
   }
   getUser(user_id: number): Observable<any> {
     return this.httpClient.post('/api/user/getUser', {user_id})

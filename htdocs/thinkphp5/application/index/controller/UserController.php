@@ -57,7 +57,16 @@ class UserController extends Controller
     }
 
     public function getUsers() {
-        $users = User::all();
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $pageData = isset($parsedData['pageData']) ? $parsedData['pageData'] : [];
+        if(empty($pageData)){
+            $users = User::all();
+        }else{
+            $size = $pageData['size'];
+            $currentPage = $pageData['currentPage'];
+            $offset = ($currentPage - 1) * $size;
+            $users = User::limit($offset, $size)->select();
+        }
         $usersData = [];
         foreach($users as $user){
             $clazz = User::with('clazz')->find($user->id); 
@@ -74,8 +83,12 @@ class UserController extends Controller
                 $user->status,
                 $user->role
             );
+            $tolalElementsOfData = count(User::all());
         }
-      return json($usersData);
+      return json([
+        'users' => $usersData,
+        'tolalElementsOfData' => $tolalElementsOfData
+      ]);
     }
 
     public function updateUser() {
