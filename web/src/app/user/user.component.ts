@@ -15,6 +15,7 @@ export class UserComponent implements OnInit {
 
   user_id: number = 0;
   users : User[] = [{
+    id:0,
     username: 'root',
     name: 'root',
     clazz_name : '',
@@ -70,6 +71,22 @@ export class UserComponent implements OnInit {
     .subscribe((users) => {
       this.users = users;
       Notiflix.Loading.remove();
+    },(error) => {
+      Notiflix.Loading.remove();
+    })
+  }
+
+  onDelect(user_id: number) {
+    Notiflix.Loading.standard('删除用户数据中，请稍候');
+    this.userService.deleteUser(user_id)
+    .subscribe(() => {
+      this.ngOnInit();  
+      Notiflix.Loading.remove();
+      Notiflix.Report.success(
+        '删除用户成功',
+        '"',
+        '好的'
+      );
     },(error) => {
       Notiflix.Loading.remove();
     })

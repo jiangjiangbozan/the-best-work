@@ -47,6 +47,9 @@ export class UserService {
   getUsers(): Observable<any> {
     return this.httpClient.get('/api/user/getUsers')
   }
+  getUser(user_id: number): Observable<any> {
+    return this.httpClient.post('/api/user/getUser', {user_id})
+  }
 
   searchUsers(data = {
     name: '',
@@ -65,6 +68,19 @@ export class UserService {
     return this.httpClient.put<any>('/api/user/addUser', {user})
   }
 
+  deleteUser(user_id: number): Observable<any> {
+    return this.httpClient.put('/api/user/deleteUser/',{user_id})
+  }
+
+  updateUser(user = {
+    id: 0,
+    username :  '',
+    name: '',
+    clazz_id: 0,
+    role : 0
+  }): Observable<any> {
+    return this.httpClient.put('/api/user/updateUser/',{user})
+  }
   private handleError(error: HttpErrorResponse): Observable<any> {
     let errors = {
       detail: '',

@@ -26,7 +26,25 @@ class UserController extends Controller
             $user->password = 123;
             $user->save();
         }
-        
+    }
+
+    public function deleteUser() {
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : [];
+        $user = User::where('id', $user_id)->find();
+        $user->delete();
+    }
+
+    public function getUser() {
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : [];
+        $user = User::find($user_id);
+        return json([
+            'username' => $user->username,
+            'name' => $user->name,
+            'clazz_id' => $user->clazz_id,
+            'role' => $user->role
+        ]);
     }
 
     public function getUsers() {
@@ -39,6 +57,7 @@ class UserController extends Controller
             $clazz_name = $clazz->clazz->name;
             $school_name = $school->school->name;
             $usersData[] = new UserData(
+                $user->id,
                 $user->username, 
                 $user->name,
                 $clazz_name,
@@ -48,6 +67,24 @@ class UserController extends Controller
             );
         }
       return json($usersData);
+    }
+
+    public function updateUser() {
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $userData = isset($parsedData['user']) ? $parsedData['user'] : [];
+        $user = User::get($userData['id']);
+        $sameUsernameUsers = User::where('username', $userData['username'])->select();
+        if(count($sameUsernameUsers) !== 1) {
+            return json(['error' => '用户名重复'], 401);
+        }else{
+            $user->username = $userData['username'];
+            $user->name = $userData['name'];
+            $user->clazz_id = $userData['clazz_id'];
+            $user->role = $userData['role'];
+            $user->save();
+            
+        }
+
     }
 
     public function searchUsers() {
