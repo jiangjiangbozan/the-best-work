@@ -28,6 +28,15 @@ class UserController extends Controller
         }
     }
 
+    public function changeStatus() {
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : [];
+        $changeStatus = isset($parsedData['changeStatus']) ? $parsedData['changeStatus'] : [];
+        $user = User::find($user_id);
+        $user->status = $changeStatus;
+        $user->save();
+    }
+     
     public function deleteUser() {
         $parsedData = json_decode(Request::instance()->getContent(), true);
         $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : [];
