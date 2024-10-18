@@ -77,8 +77,10 @@
                     </td>
                   <td>
                       <a class="btn btn-sm btn-danger" (click)="onDelect(user.id)">删除</a>
-                      <a class="btn btn-sm btn-secondary">冻结</a>
-                      <a class="btn btn-sm btn-success">活跃</a>
+                      <ng-container [ngSwitch]="user.status">  
+                        <a class="btn btn-sm btn-secondary" *ngSwitchCase="1" (click)="changeStatus(user.id, 0)">冻结</a>  
+                        <a class="btn btn-sm btn-success" *ngSwitchCase="0" (click)="changeStatus(user.id, 1)">活跃</a>   
+                      </ng-container>
                       <a class="btn btn-sm btn-primary" [routerLink]="'edit/' + user.id">编辑</a>
                       <a class="btn btn-sm btn-info">重置密码</a>
                   </td>

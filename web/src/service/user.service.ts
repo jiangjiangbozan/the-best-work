@@ -72,6 +72,10 @@ export class UserService {
     return this.httpClient.put('/api/user/deleteUser/',{user_id})
   }
 
+  
+  changeStatus(user_id: number, changeStatus: number): Observable<any> {
+    return this.httpClient.put('/api/user/changeStatus/',{user_id, changeStatus})
+  }
   updateUser(user = {
     id: 0,
     username :  '',

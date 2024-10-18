@@ -65,6 +65,14 @@ export class UserComponent implements OnInit {
     }); 
   }
 
+  changeStatus(user_id:number, changeStauts: number) {
+    Notiflix.Loading.standard('数据加载中，请稍候');
+    this.userService.changeStatus(user_id, changeStauts)
+    .subscribe(() => {
+      Notiflix.Loading.remove();
+      this.ngOnInit();
+    })
+  }
   onSubmit() {
     Notiflix.Loading.standard('数据加载中，请稍候');
     this.userService.searchUsers(this.data)
