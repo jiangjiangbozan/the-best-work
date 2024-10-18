@@ -56,6 +56,7 @@ export class CourseManageComponent implements OnInit {
       this.courseService.getCourses(this.data)
       .subscribe(data => {
         this.courses= data;
+        Notiflix.Loading.remove();
       },(error) => {
         Notiflix.Loading.remove();
       })
