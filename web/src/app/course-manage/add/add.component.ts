@@ -4,6 +4,7 @@ import { CourseService } from 'src/service/course.service';
 import { SharedDataService } from 'src/service/shared-data.service';
 import { Router} from '@angular/router';
 import { Confirm } from 'notiflix';
+import * as Notiflix from 'notiflix';
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
@@ -30,6 +31,10 @@ export class AddComponent implements OnInit {
   ngOnInit(): void {
     this.sharedDataService.currentId.subscribe((id) => {
       this.course.user_id = id;
+    });
+    this.sharedDataService.currentSemesterId.subscribe((semester_id) => {
+      this.course.semester_id =semester_id;
+      console.log(semester_id);
     })
   }
 
@@ -39,6 +44,13 @@ export class AddComponent implements OnInit {
         this.courseService.addCourse(this.course)
           .subscribe(() => {
             this.router.navigate(['course_manage']);
+        },(error) => {
+          console.log(error.error.error);
+          Notiflix.Report.failure(
+            '更新用户失败',
+            error.error.error,
+            '好的'
+          );
         });
       })
    
