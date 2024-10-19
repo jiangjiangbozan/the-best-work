@@ -21,8 +21,8 @@
           <div class="form-group">
             <label for="role">角色：</label>
             <select class="form-control" name="role" id="role" formControlName="role">
-                <option [value]="1">学生</option>
-                <option [value]="2">管理员</option>
+                <option [value]="0">学生</option>
+                <option [value]="1">管理员</option>
             </select>
           </div>
         <button type="submit" class="btn btn-primary" [disabled]="formGroup.invalid">添加用户</button>

@@ -26,6 +26,11 @@ export class UserService {
     return this.httpClient.get<any>('api/index/logout');
   }
 
+
+  getUserRole(): Observable<any> {
+    return this.httpClient.get('/api/index/getUserRole');
+  }
+
   getUserInfo(): Observable<any> {
     return this.httpClient.get('/api/personalCenter/getUserInfo');
   }
@@ -50,6 +55,7 @@ export class UserService {
   }): Observable<any> {
     return this.httpClient.post('/api/user/getUsers', {pageData})
   }
+
   getUser(user_id: number): Observable<any> {
     return this.httpClient.post('/api/user/getUser', {user_id})
   }
