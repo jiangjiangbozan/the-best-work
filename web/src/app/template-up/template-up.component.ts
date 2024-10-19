@@ -3,6 +3,7 @@ import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import { User } from 'src/entity/user';
 import {UserService} from '../../service/user.service';
 import * as Notiflix from 'notiflix';
+import { SharedDataService } from 'src/service/shared-data.service';
 @Component({
   selector: 'app-template-up',
   templateUrl: './template-up.component.html',
@@ -12,11 +13,21 @@ export class TemplateUpComponent implements OnInit {
   @Output()
   beLogout = new EventEmitter<any>();
 
-  user = JSON.parse(sessionStorage.getItem('user')!) as User;
-
-  constructor(private userService: UserService) { }
+  user_name = 'root';
+  user_id = 0;
+  constructor(
+    private userService: UserService,
+    private sharedDataService: SharedDataService
+  ) { }
 
   ngOnInit(): void {
+    this.sharedDataService.currentId.subscribe((user_id) => {
+      this.user_id = user_id;
+      this.userService.getUser(this.user_id).subscribe((user) => {
+
+        this.user_name = user['name'];
+      })
+    })
   }
 
   onLogout(): void {

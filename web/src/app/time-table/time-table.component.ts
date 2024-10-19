@@ -36,7 +36,7 @@ export class TimeTableComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+
     combineLatest([  
       this.sharedDataService.currentId,  
       this.sharedDataService.currentSemesters,  
@@ -50,6 +50,7 @@ export class TimeTableComponent implements OnInit {
       this.clazz_name = clazz_name;  
       this.school_name = school_name;  
       // 所有数据都获取完毕后，关闭弹窗
+      Notiflix.Loading.remove();
     },(error) => {
       Notiflix.Loading.remove();
     }); 

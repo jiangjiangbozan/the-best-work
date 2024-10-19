@@ -58,5 +58,12 @@ class IndexController extends Controller
                 return json(['error' => '找不到用户'], 404);
             }
         }
+
+    public function getUserRole() {
+      //获取当前登录用户信息
+      $user = User::get(session('id'));
+      $role = $user->role;
+      return json($role);
+    }
 }
 

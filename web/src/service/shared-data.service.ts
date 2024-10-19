@@ -8,8 +8,10 @@ export class SharedDataService {
   private semestersSource = new BehaviorSubject<Array<any>>([]);  
   private semesterIdSource = new BehaviorSubject<number>(0);  
   private idSource = new BehaviorSubject<number>(0); 
+  private roleSource = new BehaviorSubject<number>(0); 
   private clazzNameSource = new BehaviorSubject<string>(''); 
   private schoolNameSource = new BehaviorSubject<string>(''); 
+  currentRole = this.roleSource.asObservable();  
   currentId = this.idSource.asObservable();  
   currentSemesters= this.semestersSource.asObservable(); 
   currentSemesterId = this.semesterIdSource.asObservable();
@@ -37,8 +39,13 @@ export class SharedDataService {
     this.clazzNameSource.next(clazz_name);
   }
 
-    //设置当前用户班级
-    setSchool(school_name: string) {
-      this.schoolNameSource.next(school_name);
-    }
+  //设置当前用户班级
+  setSchool(school_name: string) {
+    this.schoolNameSource.next(school_name);
+  }
+
+   //设置当前用户权限
+   setRole(role: number) {
+    this.roleSource.next(role);
+  }
 }

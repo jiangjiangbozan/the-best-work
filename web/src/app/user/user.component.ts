@@ -23,6 +23,7 @@ export class UserComponent implements OnInit {
   }
  pages = [1,2];
   user_id: number = 0;
+  user_role = 0;
   users : User[] = [{
     id:0,
     username: 'root',
@@ -61,8 +62,9 @@ export class UserComponent implements OnInit {
         currentPage: this.pageData.currentPage,
         size: this.pageData.size
       }),
-      this.schoolService.getSchoolNames()
-    ]).subscribe(([id, pageData, schools]) => {  
+      this.schoolService.getSchoolNames(),
+      this.sharedDataService.currentRole,
+    ]).subscribe(([id, pageData, schools, role]) => {  
       this.user_id = id;  
       this.users = pageData.users;
       this.definePageData(pageData.tolalElementsOfData);
@@ -72,10 +74,12 @@ export class UserComponent implements OnInit {
         this.clazzAndSchool = ClazzAndSchool;
         // 所有数据都获取完毕后，关闭弹窗
         Notiflix.Loading.remove();
-      },(error) => {
+      });
+      this.user_role = role;
+    },(error) => {
         Notiflix.Loading.remove();
-      })
-    }); 
+    });
+
   }
 
   changeStatus(user_id:number, changeStauts: number) {
@@ -105,7 +109,6 @@ export class UserComponent implements OnInit {
     }else{
       this.pageData.first = false;
     }
-
     if(this.pageData.currentPage === this.pageData.totalPages){
       this.pageData.last = true;
     }else{
