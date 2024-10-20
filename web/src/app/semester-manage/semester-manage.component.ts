@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-
+import { SemesterService } from 'src/service/semester.service';
+import { Semester } from 'src/entity/semester';
+import { SchoolService } from 'src/service/school.service';
+import { combineLatest } from 'rxjs';  
+import * as Notiflix from 'notiflix';
 @Component({
   selector: 'app-semester-manage',
   templateUrl: './semester-manage.component.html',
@@ -8,69 +12,95 @@ import {HttpClient} from "@angular/common/http";
 })
 export class SemesterManageComponent implements OnInit {
 
-  terms: any[] = []; // 学期列表
-  schools: any[] = []; // 学校列表
-  selectedSchoolId: string = ''; // 选中的学校ID
-  termFilter: string = ''; // 学期过滤器
-  pageSize: number = 10; // 每页显示的记录数
-  currentPage: number = 1; // 当前页码
-  totalItems: number = 0; // 总记录数
-  totalPages: number = 10;
-
-  constructor(private http: HttpClient) { }
+  semesters : Semester[] = [];
+  pageData ={ 
+    size : 5,
+    tolalElementsOfData : 0,
+    currentPage: 1,
+    totalPages:2,
+    first:true,
+    last: false
+  } 
+  schools = [{
+    name:'',
+    id: 0
+  }];
+  data = {
+    school_id: 0,
+    semester_name: '',
+    currentPage: this.pageData.currentPage,
+    size: this.pageData.size
+  }
+  pages: number[] =[];
+  constructor(
+    private http: HttpClient,
+    private semesterService: SemesterService,
+    private schoolService: SchoolService,
+  ) { }
 
   ngOnInit(): void {
-    this.fetchTerms();
-    this.fetchSchools();
+    Notiflix.Loading.standard('数据加载中，请稍候');
+    combineLatest([
+      this.schoolService.getSchoolNames(),
+    ]).subscribe(([schools]) => {
+      this.schools =schools;
+   
+    })
+    this.loadByPage(this.pageData.currentPage);
+
   }
 
-  fetchTerms(): void {
-    let url = `api/terms?page=${this.currentPage}&pageSize=${this.pageSize}`;
+  onSubmit() {
+    Notiflix.Loading.standard('数据加载中，请稍候');
+    this.pageData.currentPage = this.pageData.currentPage;
+    this.loadByPage(this.pageData.currentPage);
+  }
 
-    if (this.selectedSchoolId) {
-      url += `&school_id=${this.selectedSchoolId}`;
+
+  onPage(currentPage: number){
+    Notiflix.Loading.standard('数据加载中，请稍候');
+    this.pageData.currentPage = currentPage;
+    this.loadByPage(currentPage);
+  }
+
+  frontPage() {
+    Notiflix.Loading.standard('数据加载中，请稍候');
+    this.pageData.currentPage = this.pageData.currentPage - 1;
+    this.loadByPage(this.pageData.currentPage);
+  }
+
+  nextPage() {
+    Notiflix.Loading.standard('数据加载中，请稍候');
+    this.pageData.currentPage = this.pageData.currentPage + 1;
+    this.loadByPage(this.pageData.currentPage);
+  }
+
+  loadByPage(currentPage: number) {
+    this.data.currentPage = currentPage;
+    this.semesterService.searchSemsters(this.data)
+    .subscribe((data) => {
+      this.definePageData(data.tolalElementsOfData);
+      this.semesters = data.semesters;
+      Notiflix.Loading.remove();
+    })
+     
+  }
+  definePageData(tolalElementsOfData: number) {
+    let begin = 1;
+    this.pageData.tolalElementsOfData = tolalElementsOfData;
+    this.pageData.totalPages = Math.ceil(this.pageData.tolalElementsOfData / this.pageData.size);
+    for (let i = 1; i <=  this.pageData.totalPages; i++, begin++) {
+      this.pages.push(begin);
     }
-
-    if (this.termFilter) {
-      url += `&term=${this.termFilter}`;
+    if(this.pageData.currentPage === 1){
+      this.pageData.first = true;
+    }else{
+      this.pageData.first = false;
     }
-
-    this.http.get<any>(url).subscribe(response => {
-      this.terms = response.data;
-      this.totalItems = response.total;
-    });
-  }
-
-  fetchSchools(): void {
-    this.http.get<any>('api/schools').subscribe(response => {
-      this.schools = [{ id: '', school: '所有学校' }].concat(response);
-    });
-  }
-
-  onChangePage(page: number): void {
-    this.currentPage = page;
-    this.fetchTerms();
-  }
-
-  onPageSizeChange(event: any): void {
-    this.pageSize = parseInt(event.target.value, 10);
-    this.fetchTerms();
-  }
-
-  getPageNumbers(): number[] {
-    const pages = [];
-    for (let i = 1; i <= Math.ceil(this.totalItems / this.pageSize); i++) {
-      pages.push(i);
-    }
-    return pages;
-  }
-
-  onDelete(id: number): void {
-    if (confirm('确定要删除这个学期吗?')) {
-      this.http.delete(`api/term/${id}`).subscribe(() => {
-        this.fetchTerms();
-      });
+    if(this.pageData.currentPage === this.pageData.totalPages){
+      this.pageData.last = true;
+    }else{
+      this.pageData.last = false;
     }
   }
-
 }

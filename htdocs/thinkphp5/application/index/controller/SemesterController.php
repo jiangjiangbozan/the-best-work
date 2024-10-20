@@ -2,6 +2,7 @@
 namespace app\index\controller;
 
 use app\common\model\Semester;
+use app\common\model\SemesterData;
 use app\common\model\Clazz;
 use app\common\model\School;
 use app\common\model\User;
@@ -11,6 +12,23 @@ use think\Controller;
 
 class SemesterController extends Controller
 {
+    public function getAllSemsters() {
+
+        $Semesters = Semester::all();
+        $allSemesters = [];
+        foreach($Semesters as $Semester) {
+            $Semester = Semester::with('school')->find($Semester['id']);
+            $allSemesters[] = new SemesterData(
+                $Semester->id,
+                $Semester->name,
+                $Semester->start_time,
+                $Semester->end_time,
+                $Semester->school->name
+            );
+        }
+        return json($allSemesters);
+    }
+
     public function getSemsters() {
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);
@@ -81,5 +99,38 @@ class SemesterController extends Controller
                 'total' => $semesters->total(),
                 'schools' => $schools
             ]);
+        }
+
+        public function searchSemsters() {
+            $parsedData = json_decode(Request::instance()->getContent(), true);
+            $data = isset($parsedData['data']) ? $parsedData['data'] : 0;
+            $query = [];
+            if((int)$data['school_id'] !== 0){
+                $query['school_id'] = $data['school_id'];
+            };
+            $size = $data['size'];
+            $currentPage = $data['currentPage'];
+            $offset = ($currentPage - 1) * $size;
+            $semesters = Semester::where('name', 'like', '%' . $data['semester_name'] . '%')
+                ->where($query)
+                ->limit($offset, $size)
+                ->select();
+                $semestersData = [];
+                foreach($semesters as $Semester) {
+                    $Semester = Semester::with('school')->find($Semester['id']);
+                    $semestersData[] = new SemesterData(
+                        $Semester->id,
+                        $Semester->name,
+                        $Semester->start_time,
+                        $Semester->end_time,
+                        $Semester->school->name
+                    );
+                }
+                $tolalElementsOfData = count($semesters);
+                // var_dump($query);
+                return json([
+                    'semesters' => $semestersData,
+                    'tolalElementsOfData' => $tolalElementsOfData
+                  ]);
         }
 }

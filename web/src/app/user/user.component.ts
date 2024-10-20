@@ -16,12 +16,12 @@ export class UserComponent implements OnInit {
   pageData ={ 
     size : 5,
     tolalElementsOfData : 0,
-    currentPage: 2,
+    currentPage: 1,
     totalPages:2,
     first:true,
     last: false
   }
- pages = [1,2];
+ pages : number[] =[];
   user_id: number = 0;
   user_role = 0;
   users : User[] = [{
@@ -36,7 +36,9 @@ export class UserComponent implements OnInit {
   data = {
     name: '',
     clazz_id: 0,
-    role: 4
+    role: 4,
+    currentPage: this.pageData.currentPage,
+    size : this.pageData.size,
   };
   clazzAndSchool = [{
     school_name: '',
@@ -93,8 +95,9 @@ export class UserComponent implements OnInit {
   onSubmit() {
     Notiflix.Loading.standard('数据加载中，请稍候');
     this.userService.searchUsers(this.data)
-    .subscribe((users) => {
-      this.users = users;
+    .subscribe((data) => {
+      this.users = data.users;
+      this.definePageData(data.tolalElementsOfData);
       Notiflix.Loading.remove();
     },(error) => {
       Notiflix.Loading.remove();
@@ -102,8 +105,12 @@ export class UserComponent implements OnInit {
   }
 
   definePageData(tolalElementsOfData: number) {
+    let begin = 1;
     this.pageData.tolalElementsOfData = tolalElementsOfData;
     this.pageData.totalPages = Math.ceil(this.pageData.tolalElementsOfData / this.pageData.size);
+    for (let i = 1; i <=  this.pageData.totalPages; i++, begin++) {
+      this.pages.push(begin);
+    }
     if(this.pageData.currentPage === 1){
       this.pageData.first = true;
     }else{

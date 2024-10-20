@@ -63,7 +63,9 @@ export class UserService {
   searchUsers(data = {
     name: '',
     clazz_id: 2,
-    role: 0
+    role: 0,
+    currentPage: 1,
+    size: 5
   }): Observable<any> {
     return this.httpClient.post('/api/user/searchUsers', {data})
   }

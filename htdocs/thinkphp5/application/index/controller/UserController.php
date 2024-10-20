@@ -119,8 +119,13 @@ class UserController extends Controller
         if($data['clazz_id'] !== '0' && $data['clazz_id'] !== 0){
             $query['clazz_id'] = $data['clazz_id'];
         };
+        $size = $data['size'];
+        $currentPage = $data['currentPage'];
+        $offset = ($currentPage - 1) * $size;
         $users = User::where('name', 'like', '%' . $data['name'] . '%')
-            ->where($query)->select();
+            ->where($query)
+            ->limit($offset, $size)
+            ->select();
             $usersData = [];
             foreach($users as $user){
                 $clazz = User::with('clazz')->find($user->id); 
@@ -137,7 +142,11 @@ class UserController extends Controller
                     $user->role
                 );
             }
+            $tolalElementsOfData = count($users);
             // var_dump($query);
-            return json($usersData);
+            return json([
+                'users' => $usersData,
+                'tolalElementsOfData' => $tolalElementsOfData
+              ]);
     }
 }
