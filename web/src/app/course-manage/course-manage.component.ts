@@ -22,7 +22,7 @@ export class CourseManageComponent implements OnInit {
     section: 1,
     date: 1,
     semester_id : 3
-  }]; 
+  }];
 
   course = {
     id: this.user_id,
@@ -37,11 +37,11 @@ export class CourseManageComponent implements OnInit {
 
   semesters = Array();
   constructor(
-    private courseService: CourseService, 
+    private courseService: CourseService,
     private sharedDataService:SharedDataService
-  ) { 
+  ) {
   }
- 
+
   ngOnInit(): void {
     Notiflix.Loading.standard('数据加载中，请稍候');
     this.sharedDataService.currentId.subscribe((id) => {
@@ -56,6 +56,7 @@ export class CourseManageComponent implements OnInit {
       this.courseService.getCourses(this.data)
       .subscribe(data => {
         this.courses= data;
+        Notiflix.Loading.remove();
       },(error) => {
         Notiflix.Loading.remove();
       })
@@ -63,6 +64,8 @@ export class CourseManageComponent implements OnInit {
     this.sharedDataService.currentSemesters
     .subscribe((semesters) => {
       this.semesters = semesters;
+    },(error) => {
+      Notiflix.Loading.remove();
     });
   }
 

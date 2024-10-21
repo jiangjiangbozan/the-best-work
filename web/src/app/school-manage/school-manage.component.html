@@ -8,7 +8,7 @@
       </div>
       <form class="form-inline" (submit)="fetchSchools()">
         <div class="form-group">
-          <app-search (onSearchComplete)="onSearchComplete($event)"></app-search>
+          <app-search (onSearchComplete)="searchSchools()"></app-search>
           <a (click)="openAddSchoolDialog()" class="btn btn-primary" style="margin-left: 20px">&nbsp;增加</a>
         </div>
       </form>

@@ -15,6 +15,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDialogModule} from "@angular/material/dialog";
 import {SchoolManageModule} from "./school-manage/school-manage.module";
+import {ClazzManageComponent} from "./clazz-manage/clazz-manage.component";
+import {ClazzManageModule} from "./clazz-manage/clazz-manage.module";
 
 @NgModule({
   declarations: [
@@ -35,7 +37,8 @@ import {SchoolManageModule} from "./school-manage/school-manage.module";
     NoopAnimationsModule,
     MatFormFieldModule,
     MatDialogModule,
-    SchoolManageModule
+    SchoolManageModule,
+    ClazzManageModule
   ],
   providers: [],
   bootstrap: [IndexComponent]

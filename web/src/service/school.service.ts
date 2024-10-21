@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {Observable, throwError} from 'rxjs';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {HttpClient} from '@angular/common/http';
 import {map} from "rxjs/operators";
 
 interface School {
@@ -74,4 +74,7 @@ export class SchoolService {
     return this.httpClient.get<any>('api/school/getSchools');
   }
 
+  getSchool(): Observable<SchoolsResponse> {
+    return this.httpClient.get<SchoolsResponse>('api/school/getSchools');
+  }
 }

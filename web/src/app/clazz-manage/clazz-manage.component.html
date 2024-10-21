@@ -12,7 +12,7 @@
           <select id="schoolSelect" name="school_id" class="form-control" (change)="onChangeSchool($event)">
             <option value="">所有学校</option>
             <option *ngFor="let school of schools" [value]="school.id" [selected]="school.id === selectedSchoolId">
-              {{ school.school }}
+              {{ school.name }}
             </option>
           </select>
           &nbsp;&nbsp;&nbsp;&nbsp;
@@ -20,7 +20,7 @@
           <input id="clazzInput" name="clazz" type="text" class="form-control" placeholder="班级名称...">
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button type="submit" class="btn btn-outline-success">查询</button>
-          <a routerLink="/clazz/add" class="btn btn-primary" style="margin-left: auto;">增加</a>
+          <a (click)="openAddClazzDialog()" class="btn btn-primary" style="margin-left: 20px;">增加</a>
         </div>
       </form>
     </div>
@@ -38,8 +38,8 @@
     <tbody>
     <tr *ngFor="let clazz of clazzes; let i = index">
       <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-      <td>{{ clazz.school }}</td>
-      <td>{{ clazz.clazz }}</td>
+      <td>{{ clazz.schoolName }}</td>
+      <td>{{ clazz.name }}</td>
       <td>
         <a class="btn btn-sm btn-primary">
           <i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑
