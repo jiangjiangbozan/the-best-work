@@ -26,6 +26,11 @@ export class UserService {
     return this.httpClient.get<any>('api/index/logout');
   }
 
+
+  getUserRole(): Observable<any> {
+    return this.httpClient.get('/api/index/getUserRole');
+  }
+
   getUserInfo(): Observable<any> {
     return this.httpClient.get('/api/personalCenter/getUserInfo');
   }
@@ -44,14 +49,23 @@ export class UserService {
       );
   }
 
-  getUsers(): Observable<any> {
-    return this.httpClient.get('/api/user/getUsers')
+  getUsers(pageData?: {
+    currentPage: number,
+    size: number
+  }): Observable<any> {
+    return this.httpClient.post('/api/user/getUsers', {pageData})
+  }
+
+  getUser(user_id: number): Observable<any> {
+    return this.httpClient.post('/api/user/getUser', {user_id})
   }
 
   searchUsers(data = {
     name: '',
     clazz_id: 2,
-    role: 0
+    role: 0,
+    currentPage: 1,
+    size: 5
   }): Observable<any> {
     return this.httpClient.post('/api/user/searchUsers', {data})
   }
@@ -65,6 +79,23 @@ export class UserService {
     return this.httpClient.put<any>('/api/user/addUser', {user})
   }
 
+  deleteUser(user_id: number): Observable<any> {
+    return this.httpClient.put('/api/user/deleteUser/',{user_id})
+  }
+
+  
+  changeStatus(user_id: number, changeStatus: number): Observable<any> {
+    return this.httpClient.put('/api/user/changeStatus/',{user_id, changeStatus})
+  }
+  updateUser(user = {
+    id: 0,
+    username :  '',
+    name: '',
+    clazz_id: 0,
+    role : 0
+  }): Observable<any> {
+    return this.httpClient.put('/api/user/updateUser/',{user})
+  }
   private handleError(error: HttpErrorResponse): Observable<any> {
     let errors = {
       detail: '',

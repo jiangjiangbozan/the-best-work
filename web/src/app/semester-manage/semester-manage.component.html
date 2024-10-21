@@ -6,20 +6,23 @@
           <h2 class="display-4 special-heading">学期管理</h2>
         </div>
       </div>
-      <form class="form-inline" (submit)="fetchTerms()">
+      <form class="form-inline" (submit)="onSubmit()">
         <div class="form-group">
           <label for="school">学校名称：</label>
-          <select id="school" name="school_id" class="form-control" style="width:auto">
-            <option *ngFor="let school of schools" [value]="school.id">
-              {{ school.school }}
-            </option>
+          <select id="school" name="school_id" class="form-control" style="width:auto" [(ngModel)]="data.school_id">
+            <option value="0">所有学校班级</option>
+            <ng-container *ngFor="let school of schools"> 
+              <option >
+                {{school.name}}
+              </option>
+            </ng-container>
           </select>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <label for="term">学期：</label>
-          <input id="term" name="term" type="text" class="form-control" placeholder="学期...">
+          <input id="term" name="term" type="text" class="form-control" placeholder="学期..." [(ngModel)]="data.semester_name">
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
-          <a routerLink="/term/add" class="btn btn-primary" style="margin-left: auto;">&nbsp;增加</a>
+          <a class="btn btn-primary" style="margin-left: auto;">&nbsp;增加</a>
         </div>
       </form>
     </div>
@@ -37,46 +40,32 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let term of terms; let i = index">
-      <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-      <td>{{ term.school.school }}</td>
-      <td>{{ term.term }}</td>
-      <td>{{ term.start_time }}</td>
-      <td>{{ term.end_time }}</td>
-      <td>
-        <a class="btn btn-sm btn-primary">
-          &nbsp;编辑
-        </a>&nbsp;
-        <a class="btn btn-danger btn-sm" (click)="onDelete(term.id)">
-          &nbsp;删除
-        </a>
-      </td>
-    </tr>
+      <tr *ngFor="let semester of semesters; index as index">
+        <td>{{index + 1}}</td>
+        <td>{{semester.school_name}}</td>
+        <td>{{semester.name}}</td>
+        <td>{{semester.start_time}}</td>
+        <td>{{semester.end_time}}</td> 
+        <td>
+          <a class="btn btn-sm btn-primary">
+            &nbsp;编辑
+          </a>&nbsp;
+          <a class="btn btn-danger btn-sm">
+            &nbsp;删除
+          </a>
+        </td>
+      </tr>
     </tbody>
   </table>
-  <nav aria-label="Page navigation example">
-    <ul class="pagination">
-      <li class="page-item dropdown">
-        <a class="dropdown-toggle dropdown-item" href="#" id="pageSizeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{ pageSize }} 条
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pageSizeDropdown">
-          <a class="dropdown-item" href="#" (click)="onPageSizeChange($event)">5 条</a>
-          <a class="dropdown-item" href="#" (click)="onPageSizeChange($event)">10 条</a>
-          <a class="dropdown-item" href="#" (click)="onPageSizeChange($event)">20 条</a>
-        </div>
-      </li>
-      <li class="page-item"><a class="page-link" href="#" (click)="onChangePage(1)">首页</a></li>
-      <li class="page-item" *ngIf="currentPage > 1">
-        <a class="page-link" href="#" (click)="onChangePage(currentPage - 1)">上一页</a>
-      </li>
-      <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="currentPage === page">
-        <a class="page-link" href="#" (click)="onChangePage(page)">{{ page }}</a>
-      </li>
-      <li class="page-item" *ngIf="currentPage < totalPages">
-        <a class="page-link" href="#" (click)="onChangePage(currentPage + 1)">下一页</a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#" (click)="onChangePage(totalPages)">尾页</a></li>
-    </ul>
-  </nav>
+          <!-- 分页组件开始 -->
+          <nav class="row justify-content-md-center" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
+            <ul class="pagination col-md-auto">
+              <li [ngClass]="{disabled: pageData.first}" class="page-item"><span class="page-link" (click)="frontPage()">上一页</span></li>
+              <li *ngFor="let p of pages" [ngClass]="{active: pageData.currentPage === p}" class="page-item">
+                <span class="page-link" (click)="onPage(p)">{{p}}</span>
+              </li>
+              <li [ngClass]="{disabled: pageData.last}" class="page-item"><span class="page-link" (click)="nextPage()">下一页</span></li>
+            </ul>
+          </nav>
+          <!-- 分页组件结束 -->
 </div>

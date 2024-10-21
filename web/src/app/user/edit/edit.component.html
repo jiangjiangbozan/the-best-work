@@ -1,9 +1,8 @@
 <div class="main-content">
     <div class="container mt-5">
-      <!-- 返回按钮 -->
       <div class="row justify-content-center my-5"> <!-- 添加垂直间距 -->
         <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
-          <h2 class="display-4 special-heading">新增用户</h2>
+          <h2 class="display-4 special-heading">编辑用户</h2>
         </div>
       </div>
       <form class="needs-validation"  (ngSubmit)="onSubmit()" [formGroup]="formGroup">
@@ -21,7 +20,7 @@
           <div class="form-group">
             <label for="role">角色：</label>
             <select class="form-control" name="role" id="role" formControlName="role">
-                <option [value]="0">学生</option>
+                <option [value]="0" [ngValue]="user.role">学生</option>
                 <option [value]="1">管理员</option>
             </select>
           </div>
@@ -29,3 +28,4 @@
       </form>
     </div>
 </div>
+

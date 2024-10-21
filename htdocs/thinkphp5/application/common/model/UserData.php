@@ -15,13 +15,15 @@ class UserData {
     // 构造函数，用于初始化对象属性  
 
     public function __construct(
-        $username='', 
-        $name='', 
+        $id = 0,
+        $username = '', 
+        $name = '', 
         $clazz_name = '', 
         $school_name = '', 
         $status = 1, 
         $role = 2
     ) {  
+        $this->id = $id;  
         $this->username = $username;  
         $this->name = $name;  
         $this->clazz_name = $clazz_name;  

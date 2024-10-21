@@ -49,6 +49,13 @@ export class AddComponent implements OnInit {
           '"',
           '好的'
         );
+      },(error) => {
+        Notiflix.Loading.remove();
+        Notiflix.Report.failure(
+          '添加用户失败',
+          '用户名重复',
+          '好的'
+        );
       })
   
   }

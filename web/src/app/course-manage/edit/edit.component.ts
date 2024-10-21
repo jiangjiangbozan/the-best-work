@@ -4,6 +4,7 @@ import { CourseService } from 'src/service/course.service';
 import { SharedDataService } from 'src/service/shared-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Confirm} from 'notiflix';
+import * as Notiflix from 'notiflix';
 @Component({
   selector: 'app-edit',
   templateUrl: './edit.component.html',
@@ -48,6 +49,13 @@ export class EditComponent implements OnInit {
           .subscribe(() => {
             console.log('更新成功');
             this.router.navigate(['course_manage']);
+          },(error) => {
+            console.log(error.error.error);
+            Notiflix.Report.failure(
+              '更新用户失败',
+              error.error.error,
+              '好的'
+            );
           });
       })
   }

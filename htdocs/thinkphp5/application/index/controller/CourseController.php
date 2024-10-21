@@ -12,6 +12,11 @@ class CourseController extends Controller
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);
         $course = isset($parsedData['course']) ? $parsedData['course'] : [];
+        if((int)$course['end_week'] < (int)$course['start_week']){
+            return json(['error' => '起始周大于结束周'], 401);
+        }else if((int)$course['end_week'] === 0 || (int)$course['start_week'] === 0) {
+            return json(['error' => '起始周或结束周不能设置为0'], 401);
+        }
         $newCourse = new Course;
         $newCourse->user_id = $course['user_id'];
         $newCourse->name = $course['name'];
@@ -30,11 +35,12 @@ class CourseController extends Controller
             foreach ($sameWeek as $courses) {
                 if ($course['end_week'] < $courses['start_week'] || $course['start_week'] > $courses['end_week']) {
                     continue;
-                }else {
+                }else{
                     return json(['error' => '课程日期选择失败'], 401);
                 }
               }
         }
+        // var_dump($course['semester_id']);
         $newCourse->save();
         return json(['success' => '新增课程成功']);
     }
@@ -75,31 +81,44 @@ class CourseController extends Controller
          // 解析 JSON 数据
          $parsedData = json_decode(Request::instance()->getContent(), true);
          $course = isset($parsedData['course']) ? $parsedData['course'] : [];
-         $newCourse = Course::where('id', $course['id'])->find();
-         $newCourse->name = $course['name'];
-         $newCourse->date = $course['date'];
-         $newCourse->start_week = $course['start_week'];
-         $newCourse->end_week = $course['end_week'];
-         $newCourse->section = $course['section'];
-         $newCourse->semester_id = $course['semester_id'];
+         if((int)$course['end_week'] < (int)$course['start_week']){
+            return json(['error' => '起始周大于结束周'], 401);
+        }else if((int)$course['end_week'] === 0 || (int)$course['start_week'] === 0) {
+            return json(['error' => '起始周或结束周不能设置为0'], 401);
+        }
+       
+        
          $sameWeek = Course::where([
             'date' => $course['date'],
             'section' => $course['section'],
             'user_id' => $course['user_id'],
             'semester_id' => $course['semester_id']
             ])->select();
+          
+          
         if(!empty($sameWeek)){
             foreach ($sameWeek as $courses) {
-                if ($course['end_week'] < $courses['start_week'] || $course['start_week'] > $courses['end_week']) {
-                    continue;
-                }else {
-                    return json(['error' => '课程日期更改失败'], 401);
+                    if (($course['end_week'] < $courses['start_week'] || $course['start_week'] > $courses['end_week']) && $courses['name'] === $course['name']) {
+                        continue;         
+                    }else if($course['id'] === $courses['id']){
+                        continue;
+                    }else{
+                        return json(['error' => '课程日期选择失败'], 401);
+                    }
                 }
-              }
-        }
-        $newCourse->save();
+            }
+        $Cour = Course::find($course['id']);
+        $Cour->name = $course['name'];
+        $Cour->date = $course['date'];
+        $Cour->start_week = $course['start_week'];
+        $Cour->end_week = $course['end_week'];
+        $Cour->section = $course['section'];
+        $Cour->semester_id = $course['semester_id'];
+        $Cour->save();
         return json(['success' => '更新课程成功']);
     }
+        
+    
 
     public function myCourses() {
         $parsedData = json_decode(Request::instance()->getContent(), true);

@@ -76,18 +76,30 @@
                         </ng-container>
                     </td>
                   <td>
-                      <a class="btn btn-sm btn-danger">删除</a>
-                      <a class="btn btn-sm btn-secondary">冻结</a>
-                      <a class="btn btn-sm btn-success">活跃</a>
-                      <a class="btn btn-sm btn-primary">编辑</a>
+                    <ng-container *ngIf="user.role < user_role">  
+                      <a class="btn btn-sm btn-danger" (click)="onDelect(user.id)">删除</a>
+                      <ng-container [ngSwitch]="user.status">  
+                        <a class="btn btn-sm btn-secondary" *ngSwitchCase="1" (click)="changeStatus(user.id, 0)">冻结</a>  
+                        <a class="btn btn-sm btn-success" *ngSwitchCase="0" (click)="changeStatus(user.id, 1)">活跃</a>   
+                      </ng-container>
+                      <a class="btn btn-sm btn-primary" [routerLink]="'edit/' + user.id">编辑</a>
                       <a class="btn btn-sm btn-info">重置密码</a>
+                    </ng-container>
                   </td>
                 </tr>
             </tbody>
           </table>
           
           <!-- 分页组件开始 -->
-        
+          <nav class="row justify-content-md-center" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
+            <ul class="pagination col-md-auto">
+              <li [ngClass]="{disabled: pageData.first}" class="page-item"><span class="page-link" (click)="frontPage()">上一页</span></li>
+              <li *ngFor="let p of pages" [ngClass]="{active: pageData.currentPage === p}" class="page-item">
+                <span class="page-link" (click)="onPage(p)">{{p}}</span>
+              </li>
+              <li [ngClass]="{disabled: pageData.last}" class="page-item"><span class="page-link" (click)="nextPage()">下一页</span></li>
+            </ul>
+          </nav>
           <!-- 分页组件结束 -->
       </div>
   </div>
