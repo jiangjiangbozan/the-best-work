@@ -38,6 +38,10 @@ const routes: Routes = [
   {
     path: 'semester_manage', 
     loadChildren: () => import('./semester-manage/semester-manage.module').then(m => m.SemesterManageModule)
+  },
+  {
+    path: 'schedule', 
+    loadChildren: () => import('./schedule/schedule.module').then(m => m.ScheduleModule)
   }
 ];
 

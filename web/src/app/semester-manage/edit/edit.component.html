@@ -22,6 +22,6 @@
         <label for="end_time">结束时间:</label>
         <input class="form-control datetimepicker-input" type="date" name="end_time" id="end_time" formControlName="end_time"/>
       </div>
-      <button type="submit" class="btn btn-primary">保存</button>
+      <button type="submit" class="btn btn-primary" [disabled]="formGroup.invalid">保存</button>
     </form>
   </div>

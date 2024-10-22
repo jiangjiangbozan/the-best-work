@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Notiflix from 'notiflix';
-import { FormControl, FormGroup} from '@angular/forms';
+import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { SemesterService } from 'src/service/semester.service';
 import { SharedDataService } from 'src/service/shared-data.service';
 @Component({
@@ -17,10 +17,10 @@ export class AddComponent implements OnInit {
     semester_name: '',
   };
   formGroup = new FormGroup({
-    school_id : new FormControl(),
-    semester_name : new FormControl(),
-    end_time : new FormControl(),
-    start_time : new FormControl(),
+    school_id : new FormControl(null, Validators.required),
+    semester_name : new FormControl('', Validators.required),
+    end_time : new FormControl('', Validators.required),
+    start_time : new FormControl('', Validators.required),
   });
   
   constructor(

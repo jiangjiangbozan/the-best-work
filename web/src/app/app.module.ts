@@ -15,6 +15,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDialogModule} from "@angular/material/dialog";
 import {SchoolManageModule} from "./school-manage/school-manage.module";
+import { ScheduleComponent } from './schedule/schedule.component';
 
 @NgModule({
   declarations: [

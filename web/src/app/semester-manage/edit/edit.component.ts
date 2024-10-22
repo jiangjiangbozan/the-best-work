@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as Notiflix from 'notiflix';
-import { FormControl, FormGroup} from '@angular/forms';
+import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { SemesterService } from 'src/service/semester.service';
 import { SharedDataService } from 'src/service/shared-data.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -19,10 +19,10 @@ export class EditComponent implements OnInit {
     semester_name: '',
   };
   formGroup = new FormGroup({
-    school_id : new FormControl(),
-    semester_name : new FormControl(),
-    end_time : new FormControl(),
-    start_time : new FormControl(),
+    school_id : new FormControl(null, Validators.required),
+    semester_name : new FormControl('', Validators.required),
+    end_time : new FormControl('', Validators.required),
+    start_time : new FormControl('', Validators.required),
   });
   
   constructor(
@@ -47,10 +47,10 @@ export class EditComponent implements OnInit {
   }
 
   onSubmit() {
-    this.data.end_time = this.formGroup.get('end_time')?.value,
-    this.data.start_time = this.formGroup.get('start_time')?.value,
-    this.data.semester_name = this.formGroup.get('semester_name')?.value,
-    this.data.school_id = this.formGroup.get('school_id')?.value
+    this.data.end_time = this.formGroup.get('end_time')?.value;
+    this.data.start_time = this.formGroup.get('start_time')?.value;
+    this.data.semester_name = this.formGroup.get('semester_name')?.value;
+    this.data.school_id = this.formGroup.get('school_id')?.value;
     this.semesterService.updateSemster(this.data)
     .subscribe(() => {
 
