@@ -12,8 +12,36 @@ use think\Controller;
 
 class SemesterController extends Controller
 {
-    public function getAllSemsters() {
+    public function addSemester() {
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $data = isset($parsedData['data']) ? $parsedData['data'] : [];
+        if(Semester::where('name', $data['semester_name'])->find()){
+            return json(['error' => '学期名重复'], 401);
+        };
+        if(strtotime($data['end_time']) < strtotime($data['start_time'])){
+            return json(['error' => '起始时间大于结束时间'], 401);
+        } 
 
+        $sameSemester = Semester::where('school_id', $data['school_id'])->select();
+        if(!empty($sameSemester)){
+            foreach ($sameSemester as $semester) {
+                if (strtotime($data['end_time']) < strtotime($semester['start_time']) || strtotime($data['start_time']) > strtotime($semester['end_time'])) {
+                    continue;
+                }else{
+                    return json(['error' => '学期日期选择失败'], 401);
+                }
+              }
+        }
+        $semester = new Semester();
+        $semester->start_time = $data['start_time'];
+        $semester->name = $data['semester_name'];
+        $semester->school_id = $data['school_id'];
+        $semester->end_time = $data['end_time'];
+        $semester->save();
+    }
+
+
+    public function getAllSemsters() {
         $Semesters = Semester::all();
         $allSemesters = [];
         foreach($Semesters as $Semester) {
@@ -43,6 +71,15 @@ class SemesterController extends Controller
             $semesters[$sem->id] = $sem->name;
         }
         return json($semesters);
+    }
+
+    public function getSemster() {
+        // 解析 JSON 数据
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $semester_id = isset($parsedData['semester_id']) ? $parsedData['semester_id'] : 0;
+        $semester = Semester::get($semester_id);
+
+        return json($semester);
     }
 
     public function getCurrentSemesterId() {
@@ -132,5 +169,38 @@ class SemesterController extends Controller
                     'semesters' => $semestersData,
                     'tolalElementsOfData' => $tolalElementsOfData
                   ]);
+        }
+
+
+        
+
+        public function updateSemster() {
+            $parsedData = json_decode(Request::instance()->getContent(), true);
+            $data = isset($parsedData['data']) ? $parsedData['data'] : [];
+            $Semester =Semester::where('name', $data['semester_name'])->find();
+            if(!empty($Semester) && ($data['id'] !== $Semester->id)){
+                return json(['error' => '学期名重复'], 401);
+            };
+
+            if(strtotime($data['end_time']) < strtotime($data['start_time'])){
+                return json(['error' => '起始时间大于结束时间'], 401);
+            };
+    
+            $sameSemester = Semester::where('school_id', $data['school_id'])->select();
+            if(!empty($sameSemester)){
+                foreach ($sameSemester as $semester) {
+                    if (strtotime($data['end_time']) < strtotime($semester['start_time']) || strtotime($data['start_time']) > strtotime($semester['end_time'])) {
+                        continue;
+                    }else{
+                        return json(['error' => '学期日期选择失败'], 401);
+                    }
+                  }
+            }
+            $semester = Semester::get($data['id']);
+            $semester->start_time = $data['start_time'];
+            $semester->name = $data['semester_name'];
+            $semester->school_id = $data['school_id'];
+            $semester->end_time = $data['end_time'];
+            $semester->save();
         }
 }

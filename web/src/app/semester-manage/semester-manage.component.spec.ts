@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { SemesterManageComponent } from './semester-manage.component';
+import { SchoolSelectorComponent } from './school-selector/school-selector.component';
 
 describe('SemesterManageComponent', () => {
   let component: SemesterManageComponent;
@@ -8,7 +9,10 @@ describe('SemesterManageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SemesterManageComponent ],
+      declarations: [ 
+        SemesterManageComponent,
+        SchoolSelectorComponent
+      ],
     })
     .compileComponents();
   });
