@@ -1,0 +1,27 @@
+<div class="main-content">
+    <div class="row justify-content-center my-3"> <!-- 添加垂直间距 -->
+      <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
+        <h2 class="display-4 special-heading">新增学期</h2>
+      </div>
+    </div>
+    <form style="padding: 33px 100px 0px 385px;" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <input type="hidden" name="id" value="" />
+        <label for="term">学期名称:</label>
+        <input class="form-control" type="text" name="term" id="term" formControlName="semester_name"/>
+        <small style="margin-left: 50px;" class="form-text text-muted"  >例:2023-2024年春</small>
+      </div>
+      <div class="form-group">
+        <app-school-selector formControlName="school_id"></app-school-selector>
+      </div>
+      <div class="form-group">
+        <label for="start_time">开学时间:</label>
+        <input class="form-control datetimepicker-input" type="date" name="start_time" id="start_time"  formControlName="start_time"/>
+      </div>
+      <div class="form-group">
+        <label for="end_time">结束时间:</label>
+        <input class="form-control datetimepicker-input" type="date" name="end_time" id="end_time" formControlName="end_time"/>
+      </div>
+      <button type="submit" class="btn btn-primary">保存</button>
+    </form>
+  </div>

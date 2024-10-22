@@ -34,13 +34,14 @@ export class IndexComponent implements OnInit {
         this.semesterService.getSemsters(this.user_id),
         this.semesterService.getCurrentSemesterId(this.user_id),
         this.clazzService.getCurrentClazzName(this.user_id),
-        this.schoolService.getCurrentSchoolName(this.user_id),
+        this.schoolService.getCurrentSchool(this.user_id),
         this.userService.getUserRole()
-      ]).subscribe(([semesters, semester_id, clazz_name, school_name, role]) => {  
+      ]).subscribe(([semesters, semester_id, clazz_name, data, role]) => {  
         this.sharedDataService.setSemsters(semesters);
         this.sharedDataService.setCurrentSemsterId(semester_id);
         this.sharedDataService.setClazz(clazz_name);
-        this.sharedDataService.setSchool(school_name);
+        this.sharedDataService.setSchool(data.school_name);
+        this.sharedDataService.setSchoolId(data.id);
         this.sharedDataService.setRole(role);
         Notiflix.Loading.remove();
       });

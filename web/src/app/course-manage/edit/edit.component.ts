@@ -39,7 +39,10 @@ export class EditComponent implements OnInit {
     this.courseService.getCourse(id)
     .subscribe(((course) => {
       this.course = course;
-    }))
+    }));
+    this.sharedDataService.currentSemesterId.subscribe((semester_id) => {
+      this.course.semester_id = semester_id;
+    })
   }
 
   onSubmit() {
