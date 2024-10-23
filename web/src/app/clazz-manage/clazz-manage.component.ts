@@ -7,6 +7,7 @@ import * as Notiflix from "notiflix";
 import {AddComponent} from "./add/add.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ClazzService} from "../../service/clazz.service";
+import {EditComponent} from "./edit/edit.component";
 
 interface School {
   id: string;
@@ -40,7 +41,7 @@ export class ClazzManageComponent implements OnInit {
   totalItems: number = 0;
   loading: boolean = false;
   error: string | null = null;
-  totalPages: number = 10;
+  totalPages: number = 1;
 
   constructor(private http: HttpClient, private router: Router, private dialog: MatDialog, private clazzService: ClazzService,) {
     this.router.events.subscribe(event => {
@@ -51,6 +52,7 @@ export class ClazzManageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadSchools();
     this.loadData();
   }
 
@@ -77,7 +79,7 @@ export class ClazzManageComponent implements OnInit {
                 (response) => {
                   Notiflix.Loading.remove();
                   console.log('School added successfully:', response);
-                  this.fetchSchools(); // 成功添加后刷新列表
+                  this.fetchClazzes(); // 成功添加后刷新列表
                   Notiflix.Notify.success('班级添加成功！');
                 },
                 (error) => {
@@ -96,6 +98,22 @@ export class ClazzManageComponent implements OnInit {
         );
       } else {
         Notiflix.Loading.remove();
+      }
+    });
+  }
+
+  openEditClazzDialog(clazz: Classroom): void {
+    console.log('openEditClazzDialog', clazz);
+    const dialogRef = this.dialog.open(EditComponent, {
+      width: '300px',
+      data: {
+        clazz
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.fetchClazzes(); // 成功编辑后刷新列表
       }
     });
   }
@@ -132,16 +150,39 @@ export class ClazzManageComponent implements OnInit {
       );
   }
 
+  // 加载学校列表
+  loadSchools(): void {
+    this.http.get<School[]>('/api/school/getSchools')
+      .pipe(
+        catchError(error => {
+          console.error('加载学校列表失败:', error);
+          Notiflix.Notify.failure('加载学校列表失败，请稍后再试。');
+          return of([]); // 返回空数组以避免错误中断流
+        })
+      )
+      .subscribe(schools => {
+        this.schools = schools;
+      });
+  }
+
+  // 处理查询
+  handleQuery(): void {
+    this.fetchClazzes();
+  }
+
+  // 加载班级数据，现在接受学校和班级名称作为参数
   fetchClazzes(): void {
     const url = `api/clazz/index`;
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('page', this.currentPage.toString())
       .set('size', this.pageSize.toString());
+
     if (this.selectedSchoolId) {
-      params.append('school_id', this.selectedSchoolId);
+      params = params.append('school_id', this.selectedSchoolId);
     }
+
     if (this.clazzFilter) {
-      params.append('name', this.clazzFilter);
+      params = params.append('clazz', this.clazzFilter);
     }
 
     this.http.get<ClassroomResponse>(url, { params })
@@ -149,10 +190,11 @@ export class ClazzManageComponent implements OnInit {
         tap(response => {
           this.clazzes = response.data;
           this.totalItems = response.total;
+          this.totalPages = Math.ceil(response.total / this.pageSize);
         }),
         catchError(error => {
-          console.error('班级数据加载失败:', error);
-          Notiflix.Notify.failure('班级数据加载失败，请稍后再试。');
+          console.error('加载班级数据失败:', error);
+          Notiflix.Notify.failure('加载班级数据失败，请稍后再试。');
           return of({ data: [], total: 0 }); // 返回空数据以避免错误中断流
         })
       )
@@ -162,26 +204,9 @@ export class ClazzManageComponent implements OnInit {
   onChangeSchool(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.selectedSchoolId = select.value;
+    // 清除班级名称过滤器，因为选择了新的学校
+    this.clazzFilter = '';
     this.fetchClazzes();
-  }
-
-  onChangePage(page: number): void {
-    this.currentPage = page;
-    this.fetchClazzes();
-  }
-
-  onPageSizeChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.pageSize = parseInt(input.value, 10);
-    this.fetchClazzes();
-  }
-
-  getPageNumbers(): number[] {
-    const pages = [];
-    for (let i = 1; i <= Math.ceil(this.totalItems / this.pageSize); i++) {
-      pages.push(i);
-    }
-    return pages;
   }
 
   onDelete(id: number): void {
@@ -198,5 +223,11 @@ export class ClazzManageComponent implements OnInit {
           this.fetchClazzes();
         });
     }
+  }
+
+  handlePageChange(event: { page: number, pageSize: number }): void {
+    this.currentPage = event.page;
+    this.pageSize = event.pageSize;
+    this.fetchClazzes();
   }
 }

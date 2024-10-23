@@ -6,7 +6,7 @@
           <h2 class="display-4 special-heading">班级管理</h2>
         </div>
       </div>
-      <form class="form-inline" (submit)="fetchClazzes()">
+      <form class="form-inline" (ngSubmit)="false"> <!-- 禁用默认的表单提交行为 -->
         <label for="schoolSelect">学校名称：</label>
         <div class="form-group">
           <select id="schoolSelect" name="school_id" class="form-control" (change)="onChangeSchool($event)">
@@ -17,9 +17,9 @@
           </select>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <label for="clazzInput">班级名称：</label>
-          <input id="clazzInput" name="clazz" type="text" class="form-control" placeholder="班级名称...">
+          <input id="clazzInput" name="clazz" type="text" class="form-control" [(ngModel)]="clazzFilter" placeholder="请输入班级名称...">
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <button type="submit" class="btn btn-outline-success">查询</button>
+          <button type="button" class="btn btn-outline-success" (click)="handleQuery()">查询</button>
           <a (click)="openAddClazzDialog()" class="btn btn-primary" style="margin-left: 20px;">增加</a>
         </div>
       </form>
@@ -41,39 +41,20 @@
       <td>{{ clazz.schoolName }}</td>
       <td>{{ clazz.name }}</td>
       <td>
-        <a class="btn btn-sm btn-primary">
-          <i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑
-        </a>&nbsp;
-        <a class="btn btn-danger btn-sm" (click)="onDelete(clazz.id)">
+        <button (click)="openEditClazzDialog(clazz)" class="btn btn-info">
+          编辑
+        </button>&nbsp;
+        <a class="btn btn-danger" (click)="onDelete(clazz.id)">
           <i class="glyphicon glyphicon-trash"></i>&nbsp;删除
         </a>
       </td>
     </tr>
     </tbody>
   </table>
-  <nav aria-label="Page navigation example">
-    <ul class="pagination">
-      <li class="page-item dropdown">
-        <a class="dropdown-toggle dropdown-item" href="#" id="pageSizeDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          {{ pageSize }} 条
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pageSizeDropdown">
-          <a class="dropdown-item" href="#" (click)="onPageSizeChange($event)">5 条</a>
-          <a class="dropdown-item" href="#" (click)="onPageSizeChange($event)">10 条</a>
-          <a class="dropdown-item" href="#" (click)="onPageSizeChange($event)">20 条</a>
-        </div>
-      </li>
-      <li class="page-item"><a class="page-link" href="#" (click)="onChangePage(1)">首页</a></li>
-      <li class="page-item" *ngIf="currentPage > 1">
-        <a class="page-link" href="#" (click)="onChangePage(currentPage - 1)">上一页</a>
-      </li>
-      <li class="page-item" *ngFor="let page of getPageNumbers()" [class.active]="currentPage === page">
-        <a class="page-link" href="#" (click)="onChangePage(page)">{{ page }}</a>
-      </li>
-      <li class="page-item" *ngIf="currentPage < totalPages">
-        <a class="page-link" href="#" (click)="onChangePage(currentPage + 1)">下一页</a>
-      </li>
-      <li class="page-item"><a class="page-link" href="#" (click)="onChangePage(totalPages)">尾页</a></li>
-    </ul>
-  </nav>
+  <app-pagination [currentPage]="currentPage"
+                  [pageSize]="pageSize"
+                  [totalPages]="totalPages"
+                  (pageChanged)="handlePageChange($event)"
+                  (fetch)="fetchSchools()">
+  </app-pagination>
 </div>

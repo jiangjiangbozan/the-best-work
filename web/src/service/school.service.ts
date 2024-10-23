@@ -74,7 +74,7 @@ export class SchoolService {
     return this.httpClient.get<any>('api/school/getSchools');
   }
 
-  getSchool(): Observable<SchoolsResponse> {
-    return this.httpClient.get<SchoolsResponse>('api/school/getSchools');
+  getSchool(): Observable<School[]> {
+    return this.httpClient.get<School[]>('api/school/getSchools');
   }
 }

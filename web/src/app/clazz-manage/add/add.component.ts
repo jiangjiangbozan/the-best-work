@@ -6,12 +6,6 @@ interface School {
   id: number;
   name: string;
 }
-
-interface SchoolsResponse {
-  data: School[];
-  total: number;
-}
-
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
@@ -22,34 +16,28 @@ export class AddComponent implements OnInit {
   schools: School[] = [];
   selectedSchoolId: string = '';
   clazzName: string = '';
-  dataLoaded = false;
 
   constructor(
     private schoolService: SchoolService, private dialogRef: MatDialogRef<AddComponent>, @Inject(MAT_DIALOG_DATA) public data: any // 接收数据
   ) { }
 
   ngOnInit(): void {
-    this.schoolService.getSchool().subscribe(
-      (response: SchoolsResponse) => {
-        console.log(response);
-        this.schools = response.data; // Default to empty array if undefined
-        console.log(this.schools);
-      },
-      (error) => {
-        console.error('Error fetching schools:', error);
-        this.schools = []; // Ensure schools is an empty array on error
-      }
-    );
+    this.schoolService.getSchool().subscribe((data: School[]) => {
+      this.schools = data;
+    });
   }
 
   onCancelClick(): void {
-    this.dialogRef.close({ schoolId: this.selectedSchoolId, name: this.clazzName });
+    this.dialogRef.close();
   }
 
   onSubmit(): void {
     if (!this.selectedSchoolId) {
-      // 显示错误提示
       alert('请选择学校！');
+      return;
+    }
+    if (!this.clazzName) {
+      alert('请输入班级名称！');
       return;
     }
     this.dialogRef.close({

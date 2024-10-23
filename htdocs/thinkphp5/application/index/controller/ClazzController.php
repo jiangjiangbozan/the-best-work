@@ -51,7 +51,7 @@ class ClazzController extends Controller
             }
 
             if (!empty($clazz)) {
-                $query = $query->where('name', 'like', "%{$clazz}%");
+                $query = $query->where('clazz.name', 'like', "%{$clazz}%");
             }
 
             // 分页查询
@@ -91,13 +91,13 @@ class ClazzController extends Controller
         }
 
         // 检查必要字段是否存在
-        if (!isset($data['school_id']) || !isset($data['name'])) {
+        if (!isset($data['schoolId']) || !isset($data['name'])) {
             return json(['status' => 'fail', 'error' => 'Missing required fields']);
         }
 
         // 插入数据到数据库
         $result = Db::name('clazz')->insert([
-            'school_id' => $data['school_id'],
+            'school_id' => $data['schoolId'],
             'name' => $data['name']
         ]);
 
@@ -133,24 +133,59 @@ class ClazzController extends Controller
         }
 
     public function checkNameExists()
-        {
-            // 获取原始的 POST 数据
-            $postData = file_get_contents('php://input');
+    {
+        // 获取原始的 POST 数据
+        $postData = file_get_contents('php://input');
 
-            // 将 JSON 数据解析为 PHP 对象或数组
-            $data = json_decode($postData, true);
+        // 将 JSON 数据解析为 PHP 对象或数组
+        $data = json_decode($postData, true);
 
-            if (!isset($data['name'])) {
-                return json(['exists' => false, 'error' => '缺少必要的参数']);
-            }
+        if (!isset($data['name'])) {
+            return json(['exists' => false, 'error' => '缺少必要的参数']);
+        }
 
-            $name = $data['name'];
-            $exists = Db::name('clazz')->where('name', $name)->find();
+        $name = $data['name'];
+        $exists = Db::name('clazz')->where('name', $name)->find();
 
-            if ($exists) {
-                return json(['exists' => true]);
+        if ($exists) {
+            return json(['exists' => true]);
+        } else {
+            return json(['exists' => false]);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        $postData = file_get_contents('php://input');
+        $data = json_decode($postData, true);
+
+        if (!$data || !isset($data['clazz'])) {
+            return json(['status' => 'fail', 'message' => '无效的数据格式！']);
+        }
+
+        $clazz = $data['clazz'];
+        $id = $clazz['id'];
+        $name = $clazz['name'];
+        $schoolId = $clazz['schoolId'];
+
+        // 执行数据库更新操作
+        $result = Db::name('clazz')
+            ->where('id', $id)
+            ->update(['name' => $name, 'school_id' => $schoolId]);
+
+        // 检查更新结果
+        if ($result) {
+            return json(['status' => 'success', 'message' => '班级信息更新成功！']);
+        } else {
+            // 尝试查找记录以确认是否存在
+            $existingClazz = Db::name('clazz')->find($id);
+            if ($existingClazz) {
+                // 记录存在但未更新，可能是因为字段值没有变化或其他数据库约束
+                return json(['status' => 'fail', 'message' => '尽管记录存在，但更新班级信息失败，请检查字段值和数据库约束！']);
             } else {
-                return json(['exists' => false]);
+                // 记录不存在
+                return json(['status' => 'fail', 'message' => '未找到要更新的班级记录，请检查ID是否正确！']);
             }
         }
+    }
 }

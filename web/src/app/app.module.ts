@@ -40,7 +40,6 @@ import {ClazzManageModule} from "./clazz-manage/clazz-manage.module";
     MatDialogModule,
     SchoolManageModule,
     ClazzManageModule,
-    SchoolManageModule,
     SemesterManageModule
   ],
   providers: [],

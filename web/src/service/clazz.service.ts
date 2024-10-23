@@ -25,8 +25,8 @@ export class ClazzService {
 
   constructor(private httpClient: HttpClient) { }
 
-   // 获取当前登陆用户班级信息
-   getCurrentClazzName(user_id: number): Observable<string> {
+  // 获取当前登陆用户班级信息
+  getCurrentClazzName(user_id: number): Observable<string> {
     return this.httpClient.post<string>('api/clazz/getCurrentClazzName', {user_id});
   }
 
@@ -43,5 +43,9 @@ export class ClazzService {
 
     return this.httpClient.post<CheckClazzResponse>('/api/clazz/checkNameExists', body)
       .pipe(map(response => response)); // 不需要额外转换
+  }
+
+  updateClazz(clazz: any): Observable<any> {
+    return this.httpClient.put(`/api/clazz/update`, clazz);
   }
 }

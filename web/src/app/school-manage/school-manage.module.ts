@@ -33,6 +33,7 @@ import { PaginationComponent } from './pagination/pagination.component';
     MatFormFieldModule,
     RouterModule,
     ReactiveFormsModule
-  ]
+  ],
+  exports: [PaginationComponent]
 })
 export class SchoolManageModule { }
