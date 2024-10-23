@@ -11,12 +11,14 @@ export class SharedDataService {
   private roleSource = new BehaviorSubject<number>(0); 
   private clazzNameSource = new BehaviorSubject<string>(''); 
   private schoolNameSource = new BehaviorSubject<string>(''); 
+  private schoolIdSource = new BehaviorSubject<number>(0); 
   currentRole = this.roleSource.asObservable();  
   currentId = this.idSource.asObservable();  
   currentSemesters= this.semestersSource.asObservable(); 
   currentSemesterId = this.semesterIdSource.asObservable();
   currentClazzName = this.clazzNameSource.asObservable();
   currentSchoolName = this.schoolNameSource.asObservable();
+  currentSchoolId = this.schoolIdSource.asObservable();
   constructor() { }
 
   //设置当前登陆用户的id 
@@ -48,4 +50,9 @@ export class SharedDataService {
    setRole(role: number) {
     this.roleSource.next(role);
   }
+
+     //设置当前用户权限
+     setSchoolId(schoolId: number) {
+      this.schoolIdSource.next(schoolId);
+    }
 }

@@ -5,12 +5,18 @@ import { Semester } from 'src/entity/semester';
 import { SchoolService } from 'src/service/school.service';
 import { combineLatest } from 'rxjs';  
 import * as Notiflix from 'notiflix';
+import { FormControl, FormGroup} from '@angular/forms';
 @Component({
   selector: 'app-semester-manage',
   templateUrl: './semester-manage.component.html',
   styleUrls: ['./semester-manage.component.css']
 })
 export class SemesterManageComponent implements OnInit {
+
+  formGroup = new FormGroup({
+    school_id : new FormControl(),
+    semester_name : new FormControl(),
+  });
 
   semesters : Semester[] = [];
   pageData ={ 
@@ -44,7 +50,6 @@ export class SemesterManageComponent implements OnInit {
       this.schoolService.getSchoolNames(),
     ]).subscribe(([schools]) => {
       this.schools =schools;
-   
     })
     this.loadByPage(this.pageData.currentPage);
 
@@ -77,6 +82,9 @@ export class SemesterManageComponent implements OnInit {
 
   loadByPage(currentPage: number) {
     this.data.currentPage = currentPage;
+    this.data.school_id = this.formGroup.get('school_id')?.value;
+    this.data.semester_name = this.formGroup.get('semester_name')?.value;
+    console.log(this.formGroup.get('school_id')?.value)
     this.semesterService.searchSemsters(this.data)
     .subscribe((data) => {
       this.definePageData(data.tolalElementsOfData);

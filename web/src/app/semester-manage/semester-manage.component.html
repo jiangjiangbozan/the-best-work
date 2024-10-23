@@ -6,23 +6,15 @@
           <h2 class="display-4 special-heading">学期管理</h2>
         </div>
       </div>
-      <form class="form-inline" (submit)="onSubmit()">
+      <form class="form-inline" (submit)="onSubmit()" [formGroup]="formGroup" >
         <div class="form-group">
-          <label for="school">学校名称：</label>
-          <select id="school" name="school_id" class="form-control" style="width:auto" [(ngModel)]="data.school_id">
-            <option value="0">所有学校班级</option>
-            <ng-container *ngFor="let school of schools"> 
-              <option >
-                {{school.name}}
-              </option>
-            </ng-container>
-          </select>
+          <app-school-selector formControlName="school_id"></app-school-selector>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <label for="term">学期：</label>
-          <input id="term" name="term" type="text" class="form-control" placeholder="学期..." [(ngModel)]="data.semester_name">
+          <input id="term" name="term" type="text" class="form-control" placeholder="学期..." formControlName="semester_name">
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
-          <a class="btn btn-primary" style="margin-left: auto;">&nbsp;增加</a>
+          <a class="btn btn-primary" style="margin-left: auto;" [routerLink]="'add'">&nbsp;增加</a>
         </div>
       </form>
     </div>
@@ -47,7 +39,7 @@
         <td>{{semester.start_time}}</td>
         <td>{{semester.end_time}}</td> 
         <td>
-          <a class="btn btn-sm btn-primary">
+          <a class="btn btn-sm btn-primary" [routerLink]="'edit/' + semester.id">
             &nbsp;编辑
           </a>&nbsp;
           <a class="btn btn-danger btn-sm">

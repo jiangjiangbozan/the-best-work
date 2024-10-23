@@ -41,15 +41,17 @@ class SchoolController extends Controller
         }
     }
 
-    public function getCurrentSchoolName()
-    {
+    public function getCurrentSchool() {
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);
-        $user_id = isset($parsedData['user_id'])? $parsedData['user_id'] : 0;
-        $clazz = User::with('clazz')->find($user_id);
+        $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : 0;
+        $clazz = User::with('clazz')->find($user_id); 
         $clazz_id = $clazz->clazz->id;
         $school = Clazz::with('school')->find($clazz_id);
-        return json($school->school->name);
+        return json([
+            'school_name' => $school->school->name,
+            'school_id' => $school->school->id
+        ]);
     }
 
     public function getSchools()

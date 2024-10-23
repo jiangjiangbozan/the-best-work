@@ -28,8 +28,8 @@ export class SchoolService {
   }
 
   // 获取当前登陆用户班级信息
-  getCurrentSchoolName(user_id: number): Observable<string> {
-    return this.httpClient.post<string>('api/school/getCurrentSchoolName', {user_id});
+  getCurrentSchool(user_id: number): Observable<any> {
+    return this.httpClient.post<any>('api/school/getCurrentSchool', {user_id});
   }
 
   getSchools(page: number = 1, size: number = 10, schoolName: string = ''): Observable<SchoolsResponse> {

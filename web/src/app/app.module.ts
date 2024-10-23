@@ -19,6 +19,8 @@ import { SemesterManageModule } from './semester-manage/semester-manage.module';
 import {ClazzManageComponent} from "./clazz-manage/clazz-manage.component";
 import {ClazzManageModule} from "./clazz-manage/clazz-manage.module";
 
+import { ScheduleComponent } from './schedule/schedule.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +42,8 @@ import {ClazzManageModule} from "./clazz-manage/clazz-manage.module";
     MatDialogModule,
     SchoolManageModule,
     ClazzManageModule,
-    SemesterManageModule
+    SemesterManageModule,
+    SchoolManageModule
   ],
   providers: [],
   bootstrap: [IndexComponent]
