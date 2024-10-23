@@ -38,27 +38,154 @@ class ClazzController extends Controller
 
     public function index(Request $request)
         {
-            // 获取分页参数
-            $page = $request->param('page', 1, 'intval');
-            $size = $request->param('size', 10, 'intval');
+            $page = $request->param('page', 1);
+            $size = $request->param('size', 10);
             $schoolId = $request->param('school_id', '');
             $clazz = $request->param('clazz', '');
 
-            // 查询班级列表
-            $clazzes = model('Clazz')->where(function ($query) use ($schoolId, $clazz) {
-                $query->when($schoolId, function ($query) use ($schoolId) {
-                    $query->where('school_id', $schoolId);
-                })->when($clazz, function ($query) use ($clazz) {
-                    $query->where('clazz', 'like', '%' . $clazz . '%');
-                });
-            })->paginate($size, false, ['page' => $page]);
+            // 构建查询
+            $query = Clazz::with('school');
 
-            // 返回数据
+            if (!empty($schoolId)) {
+                $query = $query->where('school_id', $schoolId);
+            }
+
+            if (!empty($clazz)) {
+                $query = $query->where('clazz.name', 'like', "%{$clazz}%");
+            }
+
+            // 分页查询
+            $result = $query->paginate($size, false, ['page' => $page]);
+
+            // 处理返回的数据格式
+            $data = [];
+            foreach ($result as $clazzInstance) {
+                $data[] = [
+                    'id' => $clazzInstance->id,
+                    'name' => $clazzInstance->name,
+                    'schoolId' => $clazzInstance->school_id,
+                    'schoolName' => $clazzInstance->school ? $clazzInstance->school->name : '',
+                ];
+            }
+
             return json([
-                'code' => 0,
-                'msg' => '',
-                'data' => $clazzes->items(),
-                'total' => $clazzes->total()
+                'data' => $data,
+                'total' => $result->total(),
+                'currentPage' => $result->currentPage(),
+                'lastPage' => $result->lastPage(),
+                'perPage' => $result->listRows(),
             ]);
         }
+
+    public function add(Request $request)
+    {
+        // 获取原始的 POST 数据
+        $postData = file_get_contents('php://input');
+
+        // 将 JSON 数据解析为 PHP 对象或数组
+        $data = json_decode($postData, true);
+
+        // 检查 JSON 是否正确解析
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return json(['status' => 'fail', 'error' => 'Invalid JSON format']);
+        }
+
+        // 检查必要字段是否存在
+        if (!isset($data['schoolId']) || !isset($data['name'])) {
+            return json(['status' => 'fail', 'error' => 'Missing required fields']);
+        }
+
+        // 插入数据到数据库
+        $result = Db::name('clazz')->insert([
+            'school_id' => $data['schoolId'],
+            'name' => $data['name']
+        ]);
+
+        if ($result) {
+            return json(['status' => 'success']);
+        } else {
+            return json(['status' => 'fail', 'error' => 'Failed to insert data']);
+        }
+    }
+
+    public function delete(Request $request)
+        {
+            $id = $request->param('id');
+            // 确保请求方法是 DELETE
+            if ($request->isDelete()) {
+                // 实例化模型
+                $clazz = Clazz::find($id);
+
+                // 检查学校是否存在
+                if ($clazz) {
+                    // 删除学校
+                    if ($clazz->delete()) {
+                        return json(['status' => 'success', 'message' => 'clazz deleted successfully']);
+                    } else {
+                        return json(['status' => 'error', 'message' => 'Failed to delete clazz'], 500);
+                    }
+                } else {
+                    return json(['status' => 'error', 'message' => 'Clazz not found'], 404);
+                }
+            } else {
+                return json(['status' => 'error', 'message' => 'Invalid request method'], 405);
+            }
+        }
+
+    public function checkNameExists()
+    {
+        // 获取原始的 POST 数据
+        $postData = file_get_contents('php://input');
+
+        // 将 JSON 数据解析为 PHP 对象或数组
+        $data = json_decode($postData, true);
+
+        if (!isset($data['name'])) {
+            return json(['exists' => false, 'error' => '缺少必要的参数']);
+        }
+
+        $name = $data['name'];
+        $exists = Db::name('clazz')->where('name', $name)->find();
+
+        if ($exists) {
+            return json(['exists' => true]);
+        } else {
+            return json(['exists' => false]);
+        }
+    }
+
+    public function update(Request $request)
+    {
+        $postData = file_get_contents('php://input');
+        $data = json_decode($postData, true);
+
+        if (!$data || !isset($data['clazz'])) {
+            return json(['status' => 'fail', 'message' => '无效的数据格式！']);
+        }
+
+        $clazz = $data['clazz'];
+        $id = $clazz['id'];
+        $name = $clazz['name'];
+        $schoolId = $clazz['schoolId'];
+
+        // 执行数据库更新操作
+        $result = Db::name('clazz')
+            ->where('id', $id)
+            ->update(['name' => $name, 'school_id' => $schoolId]);
+
+        // 检查更新结果
+        if ($result) {
+            return json(['status' => 'success', 'message' => '班级信息更新成功！']);
+        } else {
+            // 尝试查找记录以确认是否存在
+            $existingClazz = Db::name('clazz')->find($id);
+            if ($existingClazz) {
+                // 记录存在但未更新，可能是因为字段值没有变化或其他数据库约束
+                return json(['status' => 'fail', 'message' => '尽管记录存在，但更新班级信息失败，请检查字段值和数据库约束！']);
+            } else {
+                // 记录不存在
+                return json(['status' => 'fail', 'message' => '未找到要更新的班级记录，请检查ID是否正确！']);
+            }
+        }
+    }
 }

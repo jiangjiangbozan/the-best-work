@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {SchoolService} from "../../service/school.service";
-import {MatDialog} from "@angular/material/dialog";
-import { AddSchoolPopupComponent } from "./add-school-popup/add-school-popup.component";
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { SchoolService } from '../../service/school.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddSchoolPopupComponent } from './add-school-popup/add-school-popup.component';
 import * as Notiflix from "notiflix";
+import { EditComponent } from './edit/edit.component';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface School {
   id: number;
@@ -22,36 +23,37 @@ interface SchoolsResponse {
 })
 export class SchoolManageComponent implements OnInit {
 
-  schools: any[] = []; // 学校列表
+  schools: School[] = []; // 学校列表
   schoolFilter: string = ''; // 学校过滤器
   pageSize: number = 10; // 每页显示的记录数
   currentPage: number = 1; // 当前页码
   totalItems: number = 0; // 总记录数（从后端获取）
   totalPages: number = 1; // 总页数（计算得出）
 
-  constructor(private http: HttpClient, private schoolService: SchoolService, public dialog: MatDialog) {}
+  constructor(private schoolService: SchoolService, public dialog: MatDialog, private router: Router, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.fetchSchools();
+    this.route.queryParams.subscribe(params => {
+      this.currentPage = params['page'] || 1;
+      this.pageSize = params['size'] || 10;
+      this.fetchSchools();
+    });
   }
 
   fetchSchools(): void {
-    const params = new URLSearchParams();
-    params.set('page', this.currentPage.toString());
-    params.set('size', this.pageSize.toString());
-    if (this.schoolFilter) {
-      params.set('school', this.schoolFilter);
-    }
-
+    Notiflix.Loading.standard('数据加载中，请稍候');
     this.schoolService.getSchools(this.currentPage, this.pageSize, this.schoolFilter).subscribe(
-        (response: SchoolsResponse) => {
-          this.schools = response.data;
-          this.totalItems = response.total;
-          this.totalPages = Math.ceil(this.totalItems / this.pageSize);
-        },
-        error => {
-          console.error('Error fetching schools:', error);
-        }
+      (response: SchoolsResponse) => {
+        this.schools = response.data; // 更新学校列表
+        this.totalItems = response.total;
+        this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+        Notiflix.Loading.remove();
+        this.changeDetectorRef.detectChanges(); // 触发变更检测
+      },
+      error => {
+        console.error('Error fetching schools:', error);
+        Notiflix.Loading.remove();
+      }
     );
   }
 
@@ -103,22 +105,62 @@ export class SchoolManageComponent implements OnInit {
     });
   }
 
-  onChangePage(page: number): void {
-    this.currentPage = page;
-    this.fetchSchools();
+  openEditSchoolDialog(school: any): void {
+    const dialogRef = this.dialog.open(EditComponent, {
+      width: '250px',
+      data: { school: school }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        Notiflix.Loading.standard('正在更新学校信息...');
+
+        this.schoolService.updateSchool(school.id, result).subscribe(
+          () => {
+            Notiflix.Loading.remove();
+            Notiflix.Notify.success('学校信息更新成功！');
+            this.fetchSchools(); // 更新成功后刷新学校列表
+          },
+          error => {
+            Notiflix.Loading.remove();
+            console.error('Error updating school:', error);
+            Notiflix.Notify.failure('更新学校信息失败，请重试！');
+          }
+        );
+      } else {
+        Notiflix.Loading.remove(); // 用户取消对话框时移除加载提示
+      }
+    });
   }
 
-  onPageSizeChange(event: any): void {
-    this.pageSize = parseInt(event.target.innerText.trim().replace(' 条', ''), 10);
-    this.fetchSchools();
-  }
-
-  getPageNumbers(): number[] {
-    const pages = [];
-    for (let i = 1; i <= this.totalPages; i++) {
-      pages.push(i);
+  searchSchools(): void {
+    if (this.schoolFilter) {
+      Notiflix.Loading.standard('搜索中，请稍候...');
+      this.schoolService.searchSchools(this.schoolFilter, this.currentPage, this.pageSize).subscribe(
+        (response) => {
+          this.schools = response.schools; // 更新学校列表
+          this.totalItems = response.schools.length;
+          this.totalPages = 1;
+          Notiflix.Loading.remove();
+          this.changeDetectorRef.detectChanges(); // 触发变更检测
+        },
+        error => {
+          console.error('Error searching schools:', error);
+          Notiflix.Loading.remove();
+        }
+      );
+    } else {
+      this.fetchSchools(); // 如果没有搜索条件，则重新加载学校列表
     }
-    return pages;
   }
 
+  handlePageChange(event: { page: number, pageSize: number }): void {
+    this.currentPage = event.page;
+    this.pageSize = event.pageSize;
+    if (this.schoolFilter) {
+      this.searchSchools(); // 如果有搜索条件，则调用searchSchools方法
+    } else {
+      this.fetchSchools(); // 如果没有搜索条件，则调用fetchSchools方法
+    }
+  }
 }
