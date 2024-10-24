@@ -7,11 +7,12 @@
       </div>
       <div>
         <!-- 查询和增加按钮区域 -->
-        <form class="form-inline"  (ngSubmit)="onSubmit()">
+        <form class="form-inline"  (ngSubmit)="onSubmit()" [formGroup]="formGroup">
           <!-- 查询日期 -->
+          <input class="form-control datetimepicker-input" type="date" name="date" id="date" formControlName="date"/>
           <!-- 提交按钮 -->
           <div class="form-group col-md-2">                    
-            <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
+            <button type="submit" class="btn btn-outline-success" [disabled]="formGroup.invalid">&nbsp;查询</button>
           </div>
         </form>
       </div>        
@@ -19,13 +20,9 @@
     <table class="table">
       <tr>
         <th class="th">时间</th>
-          <th class="th">星期一<br>
-          <th class="th">星期二<br>
-          <th class="th">星期三<br>
-          <th class="th">星期四<br>
-          <th class="th">星期五<br>
-          <th class="th">星期六<br>
-          <th class="th">星期日<br>       
+          <ng-container *ngFor="let day of weekDates; index as index">
+            <th class="th">{{getDayOfWeek(index)}}<br>{{day}}
+          </ng-container>  
       </tr>
       <tr *ngFor="let section of sectionNumber">
         <th class="th">
@@ -39,6 +36,13 @@
         </th>
         <ng-container *ngFor="let date of dateNumber">  
           <td style="height: 158px;" class="td" id="monday-first">
+            <ng-container *ngFor="let obj of PeopleHaveCourse">  
+              <ng-container *ngIf="obj.time === section + '-' + date">  
+                <ng-container *ngFor="let student of obj.students">  
+                 {{student}}
+                </ng-container>
+              </ng-container>
+            </ng-container>
           </td>
         </ng-container>
       </tr>
