@@ -6,10 +6,12 @@
           <h2 class="display-4 special-heading">学校管理</h2>
         </div>
       </div>
-      <form class="form-inline" (submit)="fetchSchools()">
+      <form class="form-inline" (ngSubmit)="filterSchools(schoolFilter)">
         <div class="form-group">
-          <app-search (onSearchComplete)="searchSchools()"></app-search>
-          <a (click)="openAddSchoolDialog()" class="btn btn-primary" style="margin-left: 20px">&nbsp;增加</a>
+          <label style="margin-right: 10px; vertical-align: middle;">学校名称：</label>
+          <input type="text" [(ngModel)]="schoolFilter" name="schoolFilter" class="form-control" placeholder="请您输入学校的名称...">
+          <button type="submit" class="btn btn-outline-success" style="margin-left: 20px">搜索</button>
+          <a (click)="openAddSchoolDialog()" class="btn btn-primary" style="margin-left: 20px">增加</a>
         </div>
       </form>
     </div>
@@ -25,21 +27,18 @@
     </thead>
     <tbody>
     <tr *ngFor="let school of schools; let i = index">
-        <!-- 显示分页后的行号 -->
-        <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
-        <!-- 显示学校名称，假设属性名为name -->
-        <td>{{ school.name }}</td>
-        <td>
-          <button (click)="openEditSchoolDialog(school)" class="btn btn-info">编辑</button>  &nbsp;
-          <app-delete [schoolId]="school.id" (onDeleteSuccess)="fetchSchools()"></app-delete>
-        </td>
+      <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+      <td>{{ school.name }}</td>
+      <td>
+        <button (click)="openEditSchoolDialog(school)" class="btn btn-info">编辑</button>  &nbsp;
+        <app-delete [schoolId]="school.id" (onDeleteSuccess)="loadSchools()"></app-delete>
+      </td>
     </tr>
     </tbody>
   </table>
   <app-pagination [currentPage]="currentPage"
                   [pageSize]="pageSize"
                   [totalPages]="totalPages"
-                  (pageChanged)="handlePageChange($event)"
-                  (fetch)="fetchSchools()">
+                  (pageChanged)="handlePageChange($event)">
   </app-pagination>
 </div>

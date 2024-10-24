@@ -45,7 +45,7 @@ export class ClazzService {
       .pipe(map(response => response)); // 不需要额外转换
   }
 
-  updateClazz(clazz: any): Observable<any> {
-    return this.httpClient.put(`/api/clazz/update`, clazz);
+  updateClazz(id: number, clazzData: { name: string, schoolId: number }): Observable<any> {
+    return this.httpClient.put(`/api/clazz/update?id=${id}`, clazzData);
   }
 }

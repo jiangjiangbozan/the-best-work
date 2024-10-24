@@ -25,31 +25,27 @@ class PersonalcenterController extends Controller
     public function changePassword(Request $request)
     {
         if ($request->isPost()) {
-            $postData = $request->post();
+            // 获取原始的 POST 数据
+            $postData = file_get_contents('php://input');
 
-            // 验证所有字段是否填写
-            if (empty($postData['currentPassword']) || empty($postData['newPassword']) || empty($postData['confirmPassword'])) {
-                return json(['status' => 'error', 'msg' => '请完整填写表格']);
-            }
+            // 将 JSON 数据解析为 PHP 对象或数组
+            $data = json_decode($postData, true);
+
+            $userId = $request->param('id');
 
             // 获取当前用户
-            $user = User::where('id', session('id'))->find();
+            $user = User::where('id', $userId)->find();
 
             // 验证当前密码是否正确
-            if (!password_verify($postData['currentPassword'], $user->password)) {
+            if ($data['currentPassword'] !== $user->password) {
                 return json(['status' => 'error', 'msg' => '当前密码不正确']);
             }
 
-            // 验证两次输入的新密码是否一致
-            if ($postData['newPassword'] !== $postData['confirmPassword']) {
-                return json(['status' => 'error', 'msg' => '两次输入的新密码不一致']);
-            }
-
             // 哈希新密码
-            $hashedNewPassword = password_hash($postData['newPassword'], PASSWORD_DEFAULT);
+//             $hashedNewPassword = password_hash($data['newPassword'], PASSWORD_DEFAULT);
 
             // 更新密码（存储哈希值）
-            $user->password = $hashedNewPassword;
+            $user->password = $data['newPassword'];
 
             try {
                 $result = $user->save();
