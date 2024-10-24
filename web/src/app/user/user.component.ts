@@ -4,7 +4,7 @@ import { UserService } from 'src/service/user.service';
 import { User } from 'src/entity/user';
 import * as Notiflix from 'notiflix';
 import { ClazzService } from 'src/service/clazz.service';
-import { combineLatest } from 'rxjs';  
+import { combineLatest } from 'rxjs';
 import { SchoolService } from 'src/service/school.service';
 @Component({
   selector: 'app-user',
@@ -13,7 +13,7 @@ import { SchoolService } from 'src/service/school.service';
 })
 export class UserComponent implements OnInit {
 
-  pageData ={ 
+  pageData ={
     size : 5,
     tolalElementsOfData : 0,
     currentPage: 1,
@@ -58,16 +58,16 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     Notiflix.Loading.standard('数据加载中，请稍候');
-    combineLatest([  
-      this.sharedDataService.currentId, 
+    combineLatest([
+      this.sharedDataService.currentId,
       this.userService.getUsers({
         currentPage: this.pageData.currentPage,
         size: this.pageData.size
       }),
       this.schoolService.getSchoolNames(),
       this.sharedDataService.currentRole,
-    ]).subscribe(([id, pageData, schools, role]) => {  
-      this.user_id = id;  
+    ]).subscribe(([id, pageData, schools, role]) => {
+      this.user_id = id;
       this.users = pageData.users;
       this.definePageData(pageData.tolalElementsOfData);
       this.schools = schools;
@@ -138,7 +138,7 @@ export class UserComponent implements OnInit {
     Notiflix.Loading.standard('删除用户数据中，请稍候');
     this.userService.deleteUser(user_id)
     .subscribe(() => {
-      this.ngOnInit();  
+      this.ngOnInit();
       Notiflix.Loading.remove();
       Notiflix.Report.success(
         '删除用户成功',

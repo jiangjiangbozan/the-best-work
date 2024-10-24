@@ -1,0 +1,21 @@
+<div mat-dialog-content>
+  <form (ngSubmit)="onSubmit()" #form="ngForm">
+      <mat-form-field>
+        <mat-label>学校</mat-label>
+        <select matNativeControl required [(ngModel)]="selectedSchoolId" name="schoolId">
+          <option *ngFor="let school of schools" [value]="school.id">{{ school.name }}</option>
+        </select>
+        <mat-error *ngIf="form.submitted && !selectedSchoolId">学校必填</mat-error>
+      </mat-form-field>
+
+    <mat-form-field>
+      <input matInput placeholder="班级名称" required [(ngModel)]="clazzName" name="clazzName">
+      <mat-error *ngIf="form.submitted && !clazzName">班级名称必填</mat-error>
+    </mat-form-field>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">新增</button>
+  <button mat-button (click)="onCancelClick()">取消</button>
+</div>
