@@ -2,7 +2,7 @@ import { Component, OnInit, forwardRef} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, FormGroup, Validators} from '@angular/forms';
 import * as Notiflix from 'notiflix';
 import { UserService } from 'src/service/user.service';
-import { combineLatest } from 'rxjs';  
+import { combineLatest } from 'rxjs';
 import { SharedDataService } from 'src/service/shared-data.service';
 import { SchoolService } from 'src/service/school.service';
 import { ClazzService } from 'src/service/clazz.service';
@@ -61,11 +61,11 @@ export class ClazzSelectorComponent implements OnInit, ControlValueAccessor {
   }
 
   ngOnInit(): void {
-    Notiflix.Loading.standard('数据加载中，请稍候');
-    combineLatest([  
-      this.sharedDataService.currentId, 
+    Notiflix.Loading.standard('正在努力为您加载中，请稍候');
+    combineLatest([
+      this.sharedDataService.currentId,
       this.schoolService.getSchoolNames()
-    ]).subscribe(([id, schools]) => {  
+    ]).subscribe(([id, schools]) => {
       this.schools = schools;
       this.clazzService.getClazzAndSchool()
       .subscribe((ClazzAndSchool) => {
@@ -75,7 +75,7 @@ export class ClazzSelectorComponent implements OnInit, ControlValueAccessor {
       },(error) => {
         Notiflix.Loading.remove();
       })
-    }); 
+    });
   }
 
 }

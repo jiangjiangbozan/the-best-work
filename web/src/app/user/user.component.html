@@ -32,8 +32,8 @@
             <option [value]="2">超级管理员</option>
           </select>
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <label for="name">姓名：</label>
-          <input name="name" style="width: 260px;" value="" class="form-control" type="search" placeholder="姓名..." aria-label="Search" [(ngModel)]="data.name">
+          <label for="name">用户：</label>
+          <input name="name" style="width: 260px;" value="" class="form-control" type="search" placeholder="请输入您要搜索的用户的用户名" aria-label="Search" [(ngModel)]="data.name">
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
         </form>
@@ -83,7 +83,7 @@
                         <a class="btn btn-sm btn-success" *ngSwitchCase="0" (click)="changeStatus(user.id, 1)">活跃</a>
                       </ng-container>
                       <a class="btn btn-sm btn-primary" [routerLink]="'edit/' + user.id">编辑</a>
-                      <a class="btn btn-sm btn-info">重置密码</a>
+                      <a class="btn btn-sm btn-info" (click)="resetPassword(user.id)">重置密码</a>
                     </ng-container>
                   </td>
                 </tr>

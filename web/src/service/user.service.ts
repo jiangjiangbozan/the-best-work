@@ -112,4 +112,8 @@ export class UserService {
     return throwError(errors);
   }
 
+  resetPassword(userId: number): Observable<any> {
+    return this.httpClient.post(`/api/user/resetPassword?id=${userId}`, {userId});
+  }
+
 }

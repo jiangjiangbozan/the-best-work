@@ -23,7 +23,7 @@ class UserController extends Controller
             $user->clazz_id = $data['clazz_id'];
             $user->role = $data['role'];
             $user->name = $data['name'];
-            $user->status = 0;
+            $user->status = 1;
             $user->password = 123;
             $user->save();
         }
@@ -151,4 +151,22 @@ class UserController extends Controller
                 'tolalElementsOfData' => $tolalElementsOfData
               ]);
     }
+
+    public function resetPassword(Request $request)
+        {
+            // 验证用户ID
+            $userId = $request->param('id');
+            $user = User::where('id', $userId)->find();
+            if (!$user) {
+                return json(['error' => '用户不存在'], 404);
+            }
+
+            // 更新密码为123，实际应用中应使用更安全的密码处理方式
+            $user->password = '123';
+            if ($user->save()) {
+                return json(['success' => '密码重置成功']);
+            } else {
+                return json(['error' => '密码重置失败'], 500);
+            }
+        }
 }
