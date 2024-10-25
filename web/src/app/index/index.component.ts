@@ -53,6 +53,7 @@ export class IndexComponent implements OnInit {
 
   onLogin(user: Event): void {
     console.log('user',user);
+    this.ngOnInit();
     this.isLogin = true;
   }
 

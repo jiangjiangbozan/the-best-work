@@ -77,10 +77,10 @@ export class PersonalCenterComponent implements OnInit {
 
   setUserRole() {
     switch (this.user.role) {
-      case 1:
+      case 0:
         this.userRole = '学生';
         break;
-      case 2:
+      case 1:
         this.userRole = '管理员';
         break;
       default:
