@@ -39,13 +39,12 @@ export class EditComponent implements OnInit {
           this.formGroup.get('role')?.setValue(user.role);
           this.formGroup.get('username')?.setValue(user.username);
           this.formGroup.get('name')?.setValue(user.name);
-          this.formGroup.get('clazz_id')?.setValue(user.clazz_id); 
+          this.formGroup.get('clazz_id')?.setValue(user.clazz_id);
         })
   }
 
-
   onSubmit() {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+    Notiflix.Loading.standard('正在编辑并更新用户的数据中，请稍候');
     this.user.role = this.formGroup.get('role')?.value;
     this.user.username = this.formGroup.get('username')?.value;
     this.user.name = this.formGroup.get('name')?.value;
@@ -56,14 +55,14 @@ export class EditComponent implements OnInit {
       this.router.navigate(['user']);
       Notiflix.Report.success(
         '编辑用户成功',
-        '"',
+        '恭喜您！',
         '好的'
       );
     },(error) => {
       Notiflix.Loading.remove();
       Notiflix.Report.failure(
         '编辑用户失败',
-        '用户名重复',
+        '抱歉，请重新尝试编辑用户信息',
         '好的'
       );
     })

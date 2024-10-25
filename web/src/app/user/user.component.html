@@ -13,10 +13,10 @@
           <label for="clazz">学校班级：</label>
           <select class="form-control" style="width:auto" name="clazz" id="clazz" [(ngModel)]="data.clazz_id">
             <option value="0">所有学校班级</option>
-                <ng-container *ngFor="let school of schools"> 
+                <ng-container *ngFor="let school of schools">
                     <optgroup label="{{school.name}}">
-                        <ng-container *ngFor="let clazz of clazzAndSchool">  
-                            <ng-container *ngIf="clazz.school_name === school.name">  
+                        <ng-container *ngFor="let clazz of clazzAndSchool">
+                            <ng-container *ngIf="clazz.school_name === school.name">
                                  <option [value]="clazz.id">{{clazz.clazz_name}}</option>
                             </ng-container>
                         </ng-container>
@@ -33,10 +33,10 @@
           </select>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <label for="name">姓名：</label>
-          <input name="name" style="width: 260px;" value="" class="form-control" type="search" placeholder="姓名..." aria-label="Search" [(ngModel)]="data.name"> 
+          <input name="name" style="width: 260px;" value="" class="form-control" type="search" placeholder="姓名..." aria-label="Search" [(ngModel)]="data.name">
           &nbsp;&nbsp;&nbsp;&nbsp;
           <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
-        </form>        
+        </form>
             <a type="button" class="btn btn-primary" [routerLink]="'add'">
               增加
             </a>
@@ -62,25 +62,25 @@
                     <td>{{user.username}}</td>
                     <td>{{user.clazz_name}}</td>
                     <td>{{user.school_name}}</td>
-                    <td>     
-                        <ng-container [ngSwitch]="user.status">  
-                            <p *ngSwitchCase="0">冻结</p>  
-                            <p *ngSwitchCase="1">活跃</p>   
+                    <td>
+                        <ng-container [ngSwitch]="user.status">
+                            <p *ngSwitchCase="0">冻结</p>
+                            <p *ngSwitchCase="1">活跃</p>
                         </ng-container>
                     </td>
                     <td>
-                        <ng-container [ngSwitch]="user.role">  
-                            <p *ngSwitchCase="0">学生</p>  
-                            <p *ngSwitchCase="1">管理员</p>   
-                            <p *ngSwitchCase="2">超级管理员</p>  
+                        <ng-container [ngSwitch]="user.role">
+                            <p *ngSwitchCase="0">学生</p>
+                            <p *ngSwitchCase="1">管理员</p>
+                            <p *ngSwitchCase="2">超级管理员</p>
                         </ng-container>
                     </td>
                   <td>
-                    <ng-container *ngIf="user.role < user_role">  
+                    <ng-container *ngIf="user.role < user_role">
                       <a class="btn btn-sm btn-danger" (click)="onDelect(user.id)">删除</a>
-                      <ng-container [ngSwitch]="user.status">  
-                        <a class="btn btn-sm btn-secondary" *ngSwitchCase="1" (click)="changeStatus(user.id, 0)">冻结</a>  
-                        <a class="btn btn-sm btn-success" *ngSwitchCase="0" (click)="changeStatus(user.id, 1)">活跃</a>   
+                      <ng-container [ngSwitch]="user.status">
+                        <a class="btn btn-sm btn-secondary" *ngSwitchCase="1" (click)="changeStatus(user.id, 0)">冻结</a>
+                        <a class="btn btn-sm btn-success" *ngSwitchCase="0" (click)="changeStatus(user.id, 1)">活跃</a>
                       </ng-container>
                       <a class="btn btn-sm btn-primary" [routerLink]="'edit/' + user.id">编辑</a>
                       <a class="btn btn-sm btn-info">重置密码</a>
@@ -89,7 +89,7 @@
                 </tr>
             </tbody>
           </table>
-          
+
           <!-- 分页组件开始 -->
           <nav class="row justify-content-md-center" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
             <ul class="pagination col-md-auto">
