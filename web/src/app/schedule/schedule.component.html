@@ -27,11 +27,11 @@
       <tr *ngFor="let section of sectionNumber">
         <th class="th">
           <ng-container [ngSwitch]="section">  
-            <p *ngSwitchCase="0">8:30 - 10:05</p>  
-            <p *ngSwitchCase="1">10:30 - 12:00</p>  
-            <p *ngSwitchCase="2">14:00 - 15:30</p>  
-            <p *ngSwitchCase="3">16:30 - 18:00</p>  
-            <p *ngSwitchCase="4">20:00 - 21:00</p>  
+            <p *ngSwitchCase="1">8:30 - 10:05</p>  
+            <p *ngSwitchCase="2">10:30 - 12:00</p>  
+            <p *ngSwitchCase="3">14:00 - 15:30</p>  
+            <p *ngSwitchCase="4">16:30 - 18:00</p>  
+            <p *ngSwitchCase="5">20:00 - 21:00</p>  
           </ng-container>
         </th>
         <ng-container *ngFor="let date of dateNumber">  

@@ -27,7 +27,7 @@ export class TimeTableComponent implements OnInit {
   }
   clazz_name = '';
   school_name = '';
-  sectionNumber = Array.from({ length: 5 }, (_, i) => i);  
+  sectionNumber = Array.from({ length: 5 }, (_, i) => i + 1);  
   dateNumber = Array.from({ length: 7 }, (_, i) => i + 1);  
 
   constructor(
@@ -36,7 +36,6 @@ export class TimeTableComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
     combineLatest([  
       this.sharedDataService.currentId,  
       this.sharedDataService.currentSemesters,  
@@ -47,14 +46,16 @@ export class TimeTableComponent implements OnInit {
       this.data.user_id = id;  
       this.semesters = semesters;  
       this.data.semester_id = semester_id;  
+  
       this.clazz_name = clazz_name;  
       this.school_name = school_name;  
+      this.loadByCourses(this.data);
       // 所有数据都获取完毕后，关闭弹窗
       Notiflix.Loading.remove();
     },(error) => {
       Notiflix.Loading.remove();
     }); 
-    this.loadByCourses(this.data);
+ 
   }
 
   onSubmit() {
@@ -69,7 +70,7 @@ export class TimeTableComponent implements OnInit {
   loadByCourses(data = {
     user_id: 0,
     week: 0,
-    semester_id: 0
+    semester_id: this.data.semester_id
   }): void {
     this.courseService.myCourses(data)
     .subscribe((courses) => {

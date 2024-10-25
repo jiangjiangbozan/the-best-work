@@ -13,6 +13,7 @@ export class TemplateUpComponent implements OnInit {
   @Output()
   beLogout = new EventEmitter<any>();
 
+  user_role = 0;
   user_name = 'root';
   user_id = 0;
   constructor(
@@ -24,9 +25,11 @@ export class TemplateUpComponent implements OnInit {
     this.sharedDataService.currentId.subscribe((user_id) => {
       this.user_id = user_id;
       this.userService.getUser(this.user_id).subscribe((user) => {
-
         this.user_name = user['name'];
       })
+    });
+    this.sharedDataService.currentRole.subscribe((user_role) => {
+      this.user_role =user_role;
     })
   }
 
