@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SharedDataService } from './service/shared-data.service';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -9,7 +10,8 @@ export class RoleGuard implements CanActivate {
 
   user_role = 0;
   constructor(
-    private sharedDataService: SharedDataService
+    private sharedDataService: SharedDataService,
+    private router: Router
   ) {
 
     this.sharedDataService.currentRole.subscribe((user_role) => {
@@ -24,7 +26,7 @@ export class RoleGuard implements CanActivate {
   
   checkRole() {
     if(this.user_role === 0) {
-      return false;
+      return this.router.parseUrl('no-permission');
     }
     return true;
   }
