@@ -97,7 +97,7 @@ class UserController extends Controller
         $userData = isset($parsedData['user']) ? $parsedData['user'] : [];
         $user = User::get($userData['id']);
         $sameUsernameUsers = User::where('username', $userData['username'])->select();
-        if(count($sameUsernameUsers) !== 0) {
+        if(count($sameUsernameUsers) !== 1) {
             return json(['error' => '用户名重复'], 401);
         }else{
             $user->username = $userData['username'];
@@ -105,8 +105,6 @@ class UserController extends Controller
             $user->clazz_id = $userData['clazz_id'];
             $user->role = $userData['role'];
             $user->status = 0;
-
-
             $user->save();
             
         }

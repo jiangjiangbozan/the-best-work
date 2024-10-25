@@ -20,6 +20,7 @@ import {ClazzManageComponent} from "./clazz-manage/clazz-manage.component";
 import {ClazzManageModule} from "./clazz-manage/clazz-manage.module";
 
 import { ScheduleComponent } from './schedule/schedule.component';
+import { NoPermissionComponent } from './no-permission/no-permission.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ScheduleComponent } from './schedule/schedule.component';
     IndexComponent,
     TemplateUpComponent,
     TemplateDownComponent,
-    PersonalCenterComponent
+    PersonalCenterComponent,
+    NoPermissionComponent
   ],
   imports: [
     BrowserModule,

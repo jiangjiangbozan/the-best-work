@@ -1,22 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PersonalCenterComponent } from "./personal-center/personal-center.component";
-import {CourseManageComponent} from "./course-manage/course-manage.component";
 import {AppComponent} from "./app.component";
 import {ClazzManageComponent} from "./clazz-manage/clazz-manage.component";
 import {SchoolManageComponent} from "./school-manage/school-manage.component";
-import {SemesterManageComponent} from "./semester-manage/semester-manage.component";
 import { RoleGuard } from 'src/role.guard';
-
+import { NoPermissionComponent } from './no-permission/no-permission.component';
 const routes: Routes = [
   {
     path: 'course_manage',
-    canActivate: [RoleGuard],
     loadChildren: () => import('./course-manage/course-manage.module').then(m => m.CourseManageModule)
     // component: CourseManageComponent
   },
   {
     path: 'index/profile',component: PersonalCenterComponent
+  },
+  {
+    path: 'no-permission',
+    component: NoPermissionComponent
   },
   {
     path: '',
