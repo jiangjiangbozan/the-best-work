@@ -6,10 +6,12 @@ import {AppComponent} from "./app.component";
 import {ClazzManageComponent} from "./clazz-manage/clazz-manage.component";
 import {SchoolManageComponent} from "./school-manage/school-manage.component";
 import {SemesterManageComponent} from "./semester-manage/semester-manage.component";
+import { RoleGuard } from 'src/role.guard';
 
 const routes: Routes = [
   {
     path: 'course_manage',
+    canActivate: [RoleGuard],
     loadChildren: () => import('./course-manage/course-manage.module').then(m => m.CourseManageModule)
     // component: CourseManageComponent
   },
@@ -27,16 +29,20 @@ const routes: Routes = [
   },
   {
     path: 'user',
+    canActivate: [RoleGuard],
     loadChildren: () => import('./user/user.module').then(m => m.UserModule)
   },
   {
-    path: 'index/clazz_manage', component: ClazzManageComponent
+    path: 'index/clazz_manage', component: ClazzManageComponent,
+    canActivate: [RoleGuard]
   },
   {
-    path: 'index/school_manage', component: SchoolManageComponent
+    path: 'index/school_manage', component: SchoolManageComponent,
+    canActivate: [RoleGuard]
   },
   {
     path: 'semester_manage', 
+    canActivate: [RoleGuard],
     loadChildren: () => import('./semester-manage/semester-manage.module').then(m => m.SemesterManageModule)
   },
   {

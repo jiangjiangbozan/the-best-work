@@ -30,6 +30,7 @@ export class IndexComponent implements OnInit {
       this.isLogin = true;
       this.user_id = data.id;
       this.sharedDataService.setId(this.user_id);
+      console.log('重新获取了userid', this.user_id);
       combineLatest([  
         this.semesterService.getSemsters(this.user_id),
         this.semesterService.getCurrentSemesterId(this.user_id),
@@ -53,7 +54,9 @@ export class IndexComponent implements OnInit {
 
   onLogin(user: Event): void {
     console.log('user',user);
+    this.ngOnInit();
     this.isLogin = true;
+  
   }
 
   Logout(): void {

@@ -49,12 +49,6 @@ export class AddComponent implements OnInit {
   onSubmit(){
     Confirm.show('请确认', '该操作不可逆', '确认', '取消',
       () => {
-        // this.formGroup.get('date')?.setValue(this.course.date);
-        // this.formGroup.get('name')?.setValue(this.course.name);
-        // this.formGroup.get('section')?.setValue(this.course.section);
-        // this.formGroup.get('start_week')?.setValue(this.course.start_week); 
-        // this.formGroup.get('end_week')?.setValue(this.course.end_week); 
-
         this.course.date = this.formGroup.get('date')?.value;
         this.course.name = this.formGroup.get('name')?.value;
         this.course.section = this.formGroup.get('section')?.value;
@@ -64,7 +58,6 @@ export class AddComponent implements OnInit {
           .subscribe(() => {
             this.router.navigate(['course_manage']);
         },(error) => {
-          console.log(error.error.error);
           Notiflix.Report.failure(
             '更新用户失败',
             error.error.error,
