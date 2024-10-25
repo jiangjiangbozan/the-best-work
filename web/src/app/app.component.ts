@@ -12,7 +12,7 @@ import { User } from 'src/entity/user';
 })
 export class AppComponent implements OnInit {
 
-  title = '登陆';
+  title = '登录';
 
   isLogin = false;
 
@@ -26,12 +26,9 @@ export class AppComponent implements OnInit {
     password: string
   }
 
-  // @ts-ignore
-  formGroup: FormGroup;
+  formGroup!: FormGroup;
 
-  constructor(private fb: FormBuilder,
-              private userService: UserService,
-              private httpClient: HttpClient) {
+  constructor(private userService: UserService) {
   }
 
   ngOnInit(): void {
@@ -50,13 +47,8 @@ export class AppComponent implements OnInit {
     const password = this.formGroup.get('password')!!.value;
     this.userService.login(username, password).subscribe(user => {
       this.user = user;
-      console.log(user);
     },  (error)=> {
       console.log('失败', error);
     });
   }
- login(): void {
-
- }
-
 }

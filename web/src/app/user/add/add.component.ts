@@ -23,10 +23,10 @@ export class AddComponent implements OnInit {
     clazz_id: 0,
     role : this.formGroup.get('role')?.value
   }
- 
+
   constructor(
     private userService: UserService,
-    private router: Router 
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -46,17 +46,17 @@ export class AddComponent implements OnInit {
         this.router.navigate(['user']);
         Notiflix.Report.success(
           '添加用户成功',
-          '"',
+          '恭喜您！',
           '好的'
         );
       },(error) => {
         Notiflix.Loading.remove();
         Notiflix.Report.failure(
           '添加用户失败',
-          '用户名重复',
+          '抱歉，请重新尝试。',
           '好的'
         );
       })
-  
+
   }
 }

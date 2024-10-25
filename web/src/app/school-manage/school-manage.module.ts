@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EditComponent } from './edit/edit.component';
 import { DeleteComponent } from './delete/delete.component';
-import { SearchComponent } from './search/search.component';
 import { AddSchoolPopupComponent } from './add-school-popup/add-school-popup.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatInputModule} from "@angular/material/input";
@@ -19,7 +18,6 @@ import { PaginationComponent } from './pagination/pagination.component';
   declarations: [
     EditComponent,
     DeleteComponent,
-    SearchComponent,
     AddSchoolPopupComponent,
     SchoolManageComponent,
     PaginationComponent

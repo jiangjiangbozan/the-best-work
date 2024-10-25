@@ -42,8 +42,8 @@ export class UserService {
     });
   }
 
-  changePassword(formData: any): Observable<any> {
-    return this.httpClient.post('/api/personalCenter/changePassword', formData)
+  changePassword(userId: number, formData: any): Observable<any> {
+    return this.httpClient.post(`/api/personalCenter/changePassword?id=${userId}`, formData)
       .pipe(
         catchError(this.handleError)
       );
@@ -83,7 +83,7 @@ export class UserService {
     return this.httpClient.put('/api/user/deleteUser/',{user_id})
   }
 
-  
+
   changeStatus(user_id: number, changeStatus: number): Observable<any> {
     return this.httpClient.put('/api/user/changeStatus/',{user_id, changeStatus})
   }

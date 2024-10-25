@@ -57,7 +57,7 @@ export class UserComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+    Notiflix.Loading.standard('用户数据加载中，请稍候');
     combineLatest([
       this.sharedDataService.currentId,
       this.userService.getUsers({
@@ -85,23 +85,51 @@ export class UserComponent implements OnInit {
   }
 
   changeStatus(user_id:number, changeStauts: number) {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+    Notiflix.Loading.standard('正在更改用户状态，请稍候...');
     this.userService.changeStatus(user_id, changeStauts)
-    .subscribe(() => {
-      Notiflix.Loading.remove();
-      this.ngOnInit();
-    })
+      .subscribe(
+        () => {
+          Notiflix.Loading.remove();
+          Notiflix.Report.success(
+            '用户状态更改成功',
+            '用户的状态已成功更改。',
+            '好的'
+          );
+          this.ngOnInit();
+        },
+        (error) => {
+          Notiflix.Loading.remove();
+          Notiflix.Report.failure(
+            '用户状态更改失败',
+            '无法更改用户的状态。',
+            '重试'
+          );
+        }
+      );
   }
   onSubmit() {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+    Notiflix.Loading.standard('正在搜索用户，请稍候...');
     this.userService.searchUsers(this.data)
-    .subscribe((data) => {
-      this.users = data.users;
-      this.definePageData(data.tolalElementsOfData);
-      Notiflix.Loading.remove();
-    },(error) => {
-      Notiflix.Loading.remove();
-    })
+      .subscribe(
+        (data) => {
+          this.users = data.users;
+          this.definePageData(data.totalElementsOfData); // 注意属性名可能已更改，见下文
+          Notiflix.Loading.remove();
+          Notiflix.Report.info(
+            '搜索完成',
+            '已找到相关用户。',
+            '关闭'
+          );
+        },
+        (error) => {
+          Notiflix.Loading.remove();
+          Notiflix.Report.failure(
+            '搜索失败',
+            '无法搜索用户。',
+            '重试'
+          );
+        }
+      );
   }
 
   definePageData(tolalElementsOfData: number) {
@@ -125,45 +153,69 @@ export class UserComponent implements OnInit {
 
   loadByPage(currentPage: number) {
     this.userService.getUsers({
-      currentPage: this.pageData.currentPage,
+      currentPage: currentPage,
       size: this.pageData.size
-    }).subscribe((pageData) => {
-      this.definePageData(pageData.tolalElementsOfData);
-      this.users = pageData.users;
-      Notiflix.Loading.remove();
-    })
+    }).subscribe(
+      (pageData) => {
+        this.definePageData(pageData.totalElementsOfData); // 确保属性名正确
+        this.users = pageData.users;
+        Notiflix.Loading.remove();
+        Notiflix.Report.success(
+          '页面加载完成',
+          '您已成功导航到新页面。',
+          '关闭'
+        );
+      },
+      (error) => {
+        Notiflix.Loading.remove();
+        Notiflix.Report.failure(
+          '页面加载失败',
+          '无法加载页面。',
+          '重试'
+        );
+      }
+    );
   }
 
   onDelect(user_id: number) {
-    Notiflix.Loading.standard('删除用户数据中，请稍候');
+    Notiflix.Loading.standard('正在删除用户，请稍候...');
     this.userService.deleteUser(user_id)
-    .subscribe(() => {
-      this.ngOnInit();
-      Notiflix.Loading.remove();
-      Notiflix.Report.success(
-        '删除用户成功',
-        '"',
-        '好的'
+      .subscribe(
+        () => {
+          this.ngOnInit();
+          Notiflix.Loading.remove();
+          Notiflix.Report.success(
+            '用户删除成功',
+            '用户已从系统中删除。',
+            '好的'
+          );
+        },
+        (error) => {
+          Notiflix.Loading.remove();
+          Notiflix.Report.failure(
+            '用户删除失败',
+            '无法删除用户。',
+            '重试'
+          );
+        }
       );
-    },(error) => {
-      Notiflix.Loading.remove();
-    })
   }
-  onPage(currentPage: number){
-    Notiflix.Loading.standard('数据加载中，请稍候');
+  onPage(currentPage: number) {
+    Notiflix.Loading.standard('正在加载页面，请稍候...');
     this.pageData.currentPage = currentPage;
     this.loadByPage(currentPage);
   }
 
   frontPage() {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+    Notiflix.Loading.standard('正在加载前一页，请稍候...');
     this.pageData.currentPage = this.pageData.currentPage - 1;
     this.loadByPage(this.pageData.currentPage);
   }
 
   nextPage() {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+    Notiflix.Loading.standard('正在加载下一页，请稍候...');
     this.pageData.currentPage = this.pageData.currentPage + 1;
     this.loadByPage(this.pageData.currentPage);
   }
+
 }

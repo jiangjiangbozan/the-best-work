@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidatorFn} from '@angular/forms';
-import {HttpClient} from "@angular/common/http";
-import {UserService} from "../../service/user.service";
-import {SharedDataService} from "../../service/shared-data.service";
+import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
+import { HttpClient } from "@angular/common/http";
+import { UserService } from "../../service/user.service";
+import { SharedDataService } from "../../service/shared-data.service";
+import * as Notiflix from "notiflix"; // 引入Notiflix库
 
 @Component({
   selector: 'app-personal-center',
@@ -32,47 +33,34 @@ export class PersonalCenterComponent implements OnInit {
   ngOnInit(): void {
     this.loadUserProfile();
     this.share.currentClazzName.subscribe((clazz_name) => {
-      this.clazz_name= clazz_name;
+      this.clazz_name = clazz_name;
     });
     this.share.currentSchoolName.subscribe((school_name) => {
       this.school_name = school_name;
-    })
-    // this.passwordForm = new FormGroup({
-    //   currentPassword: new FormControl('', [Validators.required]),
-    //   newPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    //   confirmPassword: new FormControl('', [Validators.required])
-    // }, { validators: this.checkPasswords });
+    });
   }
 
   checkPasswords: ValidatorFn = (control: AbstractControl): {[key: string]: any} | null => {
     const newPassword = control.get('newPassword');
     const confirmPassword = control.get('confirmPassword');
 
-    if (newPassword && confirmPassword) {
-      if (newPassword.value !== confirmPassword.value) {
-        return { notSame: true };
-      }
+    if (newPassword && confirmPassword && newPassword.value !== confirmPassword.value) {
+      return { notSame: true };
     }
     return null;
   };
 
   getUser(): void {
     this.userService.getAllUserInfo().subscribe(response => {
-        // 从响应中提取用户列表
-        if (response && response.userList && response.userList.data) {
-          const userList = response.userList.data;
-          this.users = userList; // 假设 this.users 是一个数组，用于存储用户列表
-        } else {
-          console.error('Invalid response format:', response);
-          this.users = []; // 或者处理错误情况，比如显示错误消息
-        }
-      },
-      error => {
-        console.error('Error fetching user info:', error);
-        // 可以在这里添加额外的错误处理逻辑，比如显示错误消息给用户
-        this.users = []; // 清空用户列表或显示错误状态
+      if (response && response.userList && response.userList.data) {
+        this.users = response.userList.data;
+      } else {
+        this.users = [];
       }
-    );
+    }, error => {
+      this.users = [];
+      Notiflix.Notify.failure("网络错误，无法获取用户信息。");
+    });
   }
 
   loadUserProfile() {
@@ -82,7 +70,7 @@ export class PersonalCenterComponent implements OnInit {
         this.setUserRole();
       },
       error => {
-        console.error('Error loading user profile', error);
+        Notiflix.Notify.failure("加载用户信息失败，请稍后再试。");
       }
     );
   }
@@ -111,57 +99,37 @@ export class PersonalCenterComponent implements OnInit {
   }
 
   submitChange(): void {
-    console.log('Password Form State:', this.passwordForm);
     if (this.passwordForm.invalid) {
-      console.log('Form is invalid, checking individual controls...');
-      // 检查当前密码控件
       if (this.passwordForm.get('currentPassword')?.invalid) {
-        console.log('Current Password control is invalid:', this.passwordForm.get('currentPassword'));
-        this.alertMessage = '请输入当前密码';
-        return;
+        Notiflix.Notify.failure("请输入当前密码。");
+      } else if (this.passwordForm.get('newPassword')?.invalid) {
+        Notiflix.Notify.failure("新密码至少6位。");
+      } else if (this.passwordForm.get('confirmPassword')?.invalid || this.passwordForm.errors?.notSame) {
+        Notiflix.Notify.failure("新密码和确认密码不一致。");
+      } else {
+        Notiflix.Notify.failure("表单无效，请检查输入。");
       }
-      // 检查新密码控件
-      if (this.passwordForm.get('newPassword')?.invalid) {
-        console.log('New Password control is invalid:', this.passwordForm.get('newPassword'));
-        this.alertMessage = '新密码至少6位';
-        return;
-      }
-      // 检查确认密码控件
-      if (this.passwordForm.get('confirmPassword')?.invalid) {
-        console.log('Confirm Password control is invalid:', this.passwordForm.get('confirmPassword'));
-        this.alertMessage = '新密码不一致';
-        return;
-      }
-      // 如果以上都没有问题，检查自定义验证器
-      if (this.passwordForm.errors?.notSame) {
-        console.log('Custom validator failed:', this.passwordForm.errors);
-        this.alertMessage = '新密码和确认密码不一致';
-        return;
-      }
-      // 如果这里都没有问题，可能是其他原因导致表单无效
-      this.alertMessage = '表单无效，请检查输入';
       return;
     }
 
-    // 如果表单有效，则继续提交逻辑
     const formData = {
       currentPassword: this.passwordForm.value.currentPassword,
-      newPassword: this.passwordForm.value.newPassword,
-      confirmNewPassword: this.passwordForm.value.confirmPassword
+      newPassword: this.passwordForm.value.newPassword
+      // 不需要发送confirmPassword，因为它只是用于前端验证
     };
 
-    this.userService.changePassword(formData)
+    this.userService.changePassword(this.user.id, formData)
       .subscribe(
         response => {
           if (response['status'] === 'success') {
-            this.alertMessage = response['msg'];
+            Notiflix.Notify.success(response['msg']);
             this.modalVisible = false;
           } else {
-            this.alertMessage = response['msg'];
+            Notiflix.Notify.failure(response['msg']);
           }
         },
         error => {
-          this.alertMessage = '网络错误，请重试';
+          Notiflix.Notify.failure("网络错误，请重试。");
         }
       );
   }

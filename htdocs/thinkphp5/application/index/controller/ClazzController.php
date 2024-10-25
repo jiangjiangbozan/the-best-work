@@ -30,7 +30,6 @@ class ClazzController extends Controller
             $clazzAndSchool['id'] = $clazz->id; 
             $clazzAndSchools[] = $clazzAndSchool;
         }
-        // var_dump($clazzAndSchools);
         return json($clazzAndSchools);
     
         
@@ -156,29 +155,36 @@ class ClazzController extends Controller
 
     public function update(Request $request)
     {
+        // 获取URL参数中的班级ID
+        $clazzId =$request->param('id');
+        if (!$clazzId) {
+            return json(['status' => 'fail', 'message' => '班级ID未提供！']);
+        }
+
+        // 获取请求体中的数据
         $postData = file_get_contents('php://input');
         $data = json_decode($postData, true);
 
-        if (!$data || !isset($data['clazz'])) {
+        // 检查数据是否有效
+        if (!$data || !isset($data['name']) || !isset($data['schoolId'])) {
             return json(['status' => 'fail', 'message' => '无效的数据格式！']);
         }
 
-        $clazz = $data['clazz'];
-        $id = $clazz['id'];
-        $name = $clazz['name'];
-        $schoolId = $clazz['schoolId'];
+        // 获取班级名称和学校ID
+        $name =$data['name'];
+        $schoolId =$data['schoolId'];
 
         // 执行数据库更新操作
         $result = Db::name('clazz')
-            ->where('id', $id)
-            ->update(['name' => $name, 'school_id' => $schoolId]);
+            ->where('id', $clazzId)
+            ->update(['name' => $name, 'school_id' =>$schoolId]);
 
         // 检查更新结果
         if ($result) {
             return json(['status' => 'success', 'message' => '班级信息更新成功！']);
         } else {
             // 尝试查找记录以确认是否存在
-            $existingClazz = Db::name('clazz')->find($id);
+            $existingClazz = Db::name('clazz')->find($clazzId);
             if ($existingClazz) {
                 // 记录存在但未更新，可能是因为字段值没有变化或其他数据库约束
                 return json(['status' => 'fail', 'message' => '尽管记录存在，但更新班级信息失败，请检查字段值和数据库约束！']);
