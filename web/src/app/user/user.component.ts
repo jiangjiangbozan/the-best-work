@@ -132,6 +132,37 @@ export class UserComponent implements OnInit {
       );
   }
 
+  resetPassword(userId: number) {
+    Notiflix.Confirm.show(
+      '确认操作',
+      '您确定要重置此用户的密码为123吗？',
+      '确定',
+      '取消',
+      () => {
+        Notiflix.Loading.standard('正在重置密码，请稍候...');
+        this.userService.resetPassword(userId)
+          .subscribe(
+            () => {
+              Notiflix.Loading.remove();
+              Notiflix.Report.success(
+                '密码重置成功',
+                '用户密码已重置为123。',
+                '好的'
+              );
+            },
+            (error) => {
+              Notiflix.Loading.remove();
+              Notiflix.Report.failure(
+                '密码重置失败',
+                '无法重置用户密码。',
+                '重试'
+              );
+            }
+          );
+      }
+    );
+  }
+
   definePageData(tolalElementsOfData: number) {
     let begin = 1;
     this.pageData.tolalElementsOfData = tolalElementsOfData;
@@ -139,16 +170,8 @@ export class UserComponent implements OnInit {
     for (let i = 1; i <=  this.pageData.totalPages; i++, begin++) {
       this.pages.push(begin);
     }
-    if(this.pageData.currentPage === 1){
-      this.pageData.first = true;
-    }else{
-      this.pageData.first = false;
-    }
-    if(this.pageData.currentPage === this.pageData.totalPages){
-      this.pageData.last = true;
-    }else{
-      this.pageData.last = false;
-    }
+    this.pageData.first = this.pageData.currentPage === 1;
+    this.pageData.last = this.pageData.currentPage === this.pageData.totalPages;
   }
 
   loadByPage(currentPage: number) {
@@ -178,27 +201,40 @@ export class UserComponent implements OnInit {
   }
 
   onDelect(user_id: number) {
-    Notiflix.Loading.standard('正在删除用户，请稍候...');
-    this.userService.deleteUser(user_id)
-      .subscribe(
-        () => {
-          this.ngOnInit();
-          Notiflix.Loading.remove();
-          Notiflix.Report.success(
-            '用户删除成功',
-            '用户已从系统中删除。',
-            '好的'
+    Notiflix.Confirm.show(
+      '确认删除',
+      '您确定要删除此用户吗？',
+      '删除',
+      '取消',
+      () => {
+        // 用户点击了“删除”，执行删除操作
+        Notiflix.Loading.standard('正在删除用户，请稍候...');
+        this.userService.deleteUser(user_id)
+          .subscribe(
+            () => {
+              this.ngOnInit();
+              Notiflix.Loading.remove();
+              Notiflix.Report.success(
+                '用户删除成功',
+                '用户已从系统中删除。',
+                '好的'
+              );
+            },
+            (error) => {
+              Notiflix.Loading.remove();
+              Notiflix.Report.failure(
+                '用户删除失败',
+                '无法删除用户。',
+                '重试'
+              );
+            }
           );
-        },
-        (error) => {
-          Notiflix.Loading.remove();
-          Notiflix.Report.failure(
-            '用户删除失败',
-            '无法删除用户。',
-            '重试'
-          );
-        }
-      );
+      },
+      () => {
+        // 用户点击了“取消”，不执行任何操作
+        // 可以在这里添加一些逻辑，比如关闭模态框等
+      }
+    );
   }
   onPage(currentPage: number) {
     Notiflix.Loading.standard('正在加载页面，请稍候...');
