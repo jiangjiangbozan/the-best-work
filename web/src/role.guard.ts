@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 })
 export class RoleGuard implements CanActivate {
 
-  user_role = 0;
+  user_role = 1;
   constructor(
     private sharedDataService: SharedDataService,
     private router: Router
@@ -16,6 +16,7 @@ export class RoleGuard implements CanActivate {
 
     this.sharedDataService.currentRole.subscribe((user_role) => {
       this.user_role = user_role;
+      console.log('guard', this.user_role);
     })
   }
   canActivate(
@@ -25,6 +26,7 @@ export class RoleGuard implements CanActivate {
   }
   
   checkRole() {
+    
     if(this.user_role === 0) {
       return this.router.parseUrl('no-permission');
     }
