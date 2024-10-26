@@ -42,7 +42,7 @@
           <a class="btn btn-sm btn-primary" [routerLink]="'edit/' + semester.id">
             &nbsp;编辑
           </a>&nbsp;
-          <a class="btn btn-danger btn-sm">
+          <a class="btn btn-danger btn-sm" (click)="onDelect(semester.id)">
             &nbsp;删除
           </a>
         </td>

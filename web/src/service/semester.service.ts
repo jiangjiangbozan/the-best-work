@@ -58,4 +58,10 @@ export class SemesterService {
     }): Observable<any> {
       return this.httpClient.post<any>('/api/semester/updateSemster', {data})
     }
+
+    //删除学期
+    delectSemster(id: number): Observable<any> {
+      return this.httpClient.post<any>('/api/semester/delectSemster', {id})
+    }
+
 }
