@@ -46,7 +46,7 @@ export class SchoolManageComponent implements OnInit {
   }
 
   fetchSchools(filter?: string): void {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+    Notiflix.Loading.standard('学校的数据正在努力地加载中，请稍候');
     this.schoolService.getSchools(this.currentPage, this.pageSize, filter).subscribe(
       (response: SchoolsResponse) => {
         this.schools = response.data; // 更新学校列表
@@ -153,14 +153,5 @@ export class SchoolManageComponent implements OnInit {
     this.totalItems = this.schools.length;
     this.totalPages = Math.ceil(this.totalItems / this.pageSize);
     this.changeDetectorRef.detectChanges(); // 触发变更检测
-  }
-
-  handleSearchComplete(schools: School[]): void {
-    // 更新父组件中的学校列表
-    this.schools = schools;
-    // 如果需要，可以重新计算总页数和触发变更检测
-    // this.totalItems = schools.length;
-    // this.totalPages = Math.ceil(this.totalItems / this.pageSize);
-    // this.changeDetectorRef.detectChanges();
   }
 }

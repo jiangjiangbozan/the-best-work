@@ -1,0 +1,14 @@
+.sidebar li {
+  list-style-type: none; /* 移除列表项的点 */
+}
+
+.sidebar li a {
+  text-decoration: none; /* 移除下划线 */
+  padding: 10px; /* 内边距 */
+  display: block; /* 块级显示 */
+}
+
+.sidebar li.active a {
+  background-color: #007bff; /* 高亮背景色 */
+  color: white; /* 高亮文字色 */
+}

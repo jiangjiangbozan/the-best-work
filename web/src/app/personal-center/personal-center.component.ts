@@ -115,7 +115,6 @@ export class PersonalCenterComponent implements OnInit {
     const formData = {
       currentPassword: this.passwordForm.value.currentPassword,
       newPassword: this.passwordForm.value.newPassword
-      // 不需要发送confirmPassword，因为它只是用于前端验证
     };
 
     this.userService.changePassword(this.user.id, formData)
