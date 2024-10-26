@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PersonalCenterComponent } from "./personal-center/personal-center.component";
+import { PersonalCenterComponent } from './personal-center/personal-center.component';
 import {AppComponent} from "./app.component";
 import {ClazzManageComponent} from "./clazz-manage/clazz-manage.component";
 import {SchoolManageComponent} from "./school-manage/school-manage.component";

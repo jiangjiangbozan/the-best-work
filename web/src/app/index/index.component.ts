@@ -41,7 +41,7 @@ export class IndexComponent implements OnInit {
         this.sharedDataService.setCurrentSemsterId(semester_id);
         this.sharedDataService.setClazz(clazz_name);
         this.sharedDataService.setSchool(data.school_name);
-        this.sharedDataService.setSchool(data.id);
+        this.sharedDataService.setSchoolId(data.id);
         this.sharedDataService.setRole(role);
         Notiflix.Loading.remove();
       });

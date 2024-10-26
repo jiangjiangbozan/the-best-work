@@ -37,6 +37,7 @@ export class PersonalCenterComponent implements OnInit {
     });
     this.share.currentSchoolName.subscribe((school_name) => {
       this.school_name = school_name;
+      console.log('profile', this.school_name, school_name);
     });
   }
 
