@@ -112,8 +112,9 @@ export class UserComponent implements OnInit {
     this.userService.searchUsers(this.data)
       .subscribe(
         (data) => {
+          console.log(data);
           this.users = data.users;
-          this.definePageData(data.totalElementsOfData); // 注意属性名可能已更改，见下文
+          this.definePageData(data.tolalElementsOfData); // 注意属性名可能已更改，见下文
           Notiflix.Loading.remove();
           Notiflix.Report.info(
             '搜索完成',
@@ -166,7 +167,10 @@ export class UserComponent implements OnInit {
   definePageData(tolalElementsOfData: number) {
     let begin = 1;
     this.pageData.tolalElementsOfData = tolalElementsOfData;
+    console.log(this.pageData.tolalElementsOfData);
     this.pageData.totalPages = Math.ceil(this.pageData.tolalElementsOfData / this.pageData.size);
+    console.log(this.pageData.totalPages);
+    this.pages = [];
     for (let i = 1; i <=  this.pageData.totalPages; i++, begin++) {
       this.pages.push(begin);
     }
@@ -180,7 +184,7 @@ export class UserComponent implements OnInit {
       size: this.pageData.size
     }).subscribe(
       (pageData) => {
-        this.definePageData(pageData.totalElementsOfData); // 确保属性名正确
+        this.definePageData(pageData.tolalElementsOfData); // 确保属性名正确
         this.users = pageData.users;
         Notiflix.Loading.remove();
         Notiflix.Report.success(

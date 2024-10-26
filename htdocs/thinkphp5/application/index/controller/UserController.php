@@ -144,8 +144,8 @@ class UserController extends Controller
                     $user->role
                 );
             }
-            $tolalElementsOfData = count($users);
-            // var_dump($query);
+            $tolalElementsOfData = count(User::where('name', 'like', '%' . $data['name'] . '%')->select());
+            // var_dump($user->name);
             return json([
                 'users' => $usersData,
                 'tolalElementsOfData' => $tolalElementsOfData

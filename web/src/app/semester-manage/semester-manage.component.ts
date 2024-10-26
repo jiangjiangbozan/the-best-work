@@ -68,6 +68,14 @@ export class SemesterManageComponent implements OnInit {
     this.loadByPage(currentPage);
   }
 
+  onDelect(semester_id: number) {
+    this.semesterService.delectSemster(semester_id)
+      .subscribe(() => {
+        console.log('删除成功');
+      });
+      this.ngOnInit();
+  }
+
   frontPage() {
     Notiflix.Loading.standard('数据加载中，请稍候');
     this.pageData.currentPage = this.pageData.currentPage - 1;

@@ -4,6 +4,7 @@ namespace app\common\model;
 // 定义一个类  
 
 class UserData {  
+    public $id;
     public $username;  
     public $name;  
     public $clazz_name;  

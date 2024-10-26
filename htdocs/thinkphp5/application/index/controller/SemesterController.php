@@ -40,7 +40,14 @@ class SemesterController extends Controller
         $semester->save();
     }
 
-
+    public function delectSemster() {
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $id = isset($parsedData['id']) ? $parsedData['id'] : 0;
+        $semester = Semester::get($id, 'course');
+        $semester->course()->delete();
+        $semester->delete();
+    }
+ 
     public function getAllSemsters() {
         $Semesters = Semester::all();
         $allSemesters = [];
