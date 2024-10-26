@@ -20,7 +20,6 @@ export class DeleteComponent implements OnInit {
 
   deleteSchool(): void {
     Notiflix.Loading.standard('正在删除学校...');
-    console.log(this.schoolId);
     this.schoolService.deleteSchool(this.schoolId).subscribe(
       (response) => {
         Notiflix.Loading.remove();

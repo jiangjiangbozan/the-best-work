@@ -107,7 +107,8 @@ class SchoolController extends Controller
 
     public function delete(Request $request)
     {
-        $id = $request->param('id');
+        $id =$request->param('id');
+
         // 确保请求方法是 DELETE
         if ($request->isDelete()) {
             // 实例化模型
@@ -115,9 +116,17 @@ class SchoolController extends Controller
 
             // 检查学校是否存在
             if ($school) {
+                // 获取属于该学校的班级ID
+                $clazzIds = Clazz::where('school_id',$id)->column('id');
+
+                // 删除属于这些班级的用户
+                if (!empty($clazzIds)) {
+                    User::where('clazz_id', 'in', $clazzIds)->delete();
+                }
+
                 // 删除学校
                 if ($school->delete()) {
-                    return json(['status' => 'success', 'message' => 'School deleted successfully']);
+                    return json(['status' => 'success', 'message' => 'School and associated users deleted successfully']);
                 } else {
                     return json(['status' => 'error', 'message' => 'Failed to delete school'], 500);
                 }
@@ -128,6 +137,7 @@ class SchoolController extends Controller
             return json(['status' => 'error', 'message' => 'Invalid request method'], 405);
         }
     }
+
 
     public function searchSchools(Request $request)
     {
