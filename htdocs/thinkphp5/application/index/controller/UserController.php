@@ -136,6 +136,7 @@ class UserController extends Controller
                 $clazz_name = $clazz->clazz->name;
                 $school_name = $school->school->name;
                 $usersData[] = new UserData(
+                    $user->id,
                     $user->username, 
                     $user->name,
                     $clazz_name,

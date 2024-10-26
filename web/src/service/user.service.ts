@@ -50,6 +50,9 @@ export class UserService {
   }
 
   getUsers(pageData?: {
+    name: string,
+    clazz_id: number,
+    role: number,
     currentPage: number,
     size: number
   }): Observable<any> {
