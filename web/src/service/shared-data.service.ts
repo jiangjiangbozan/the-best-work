@@ -8,7 +8,7 @@ export class SharedDataService {
   private semestersSource = new BehaviorSubject<Array<any>>([]);  
   private semesterIdSource = new BehaviorSubject<number>(0);  
   private idSource = new BehaviorSubject<number>(0); 
-  private roleSource = new BehaviorSubject<number>(0); 
+  private roleSource = new BehaviorSubject<number>(1); 
   private clazzNameSource = new BehaviorSubject<string>(''); 
   private schoolNameSource = new BehaviorSubject<string>(''); 
   private schoolIdSource = new BehaviorSubject<number>(0); 
