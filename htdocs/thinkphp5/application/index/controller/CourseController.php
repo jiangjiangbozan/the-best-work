@@ -135,12 +135,21 @@ class CourseController extends Controller
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);
         $data = isset($parsedData['data']) ? $parsedData['data'] : [];
-        $Courses = Course::where([
+        $size = $data['size'];
+        $currentPage = $data['currentPage'];
+        $offset = ($currentPage - 1) * $size;
+        $query = [
             'user_id' => $data['id'],
             'semester_id' => $data['semester_id']
-            ])
+        ];
+        $Courses = Course::where($query)
         ->where('name', 'like', '%' . $data['name'] . '%')
+        ->limit($offset, $size)
         ->select();
-        return json($Courses);
+        $tolalElementsOfData = count(Course::where($query)->where('name', 'like', '%' . $data['name'] . '%')->select());
+        return json([
+            'courses' => $Courses,
+            'tolalElementsOfData' => $tolalElementsOfData
+          ]);
     }
 }

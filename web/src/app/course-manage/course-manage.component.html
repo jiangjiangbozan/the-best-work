@@ -10,17 +10,17 @@
         <!-- 学期名称 -->
         <div class="form-group">    
           <label for="course">学期：</label>
-          <select id="week" name="week" class="form-control" [(ngModel)]="course.semester_id">  
+          <select id="week" name="week" class="form-control" [(ngModel)]="courseData.semester_id">  
             <ng-container *ngFor="let semester of semesters | keyvalue">    
               <option [value]="semester.key">{{semester.value}}</option>    
             </ng-container>  
-            <option *ngIf="data.semester_id === 0" [value]="0">当前暂无学期安排</option> 
+            <option *ngIf="courseData.semester_id === 0" [value]="0">当前暂无学期安排</option> 
           </select>    
         </div>
         <!-- 课程名称 -->
         <div class="form-group">
           <label for="course">课程名：</label>
-          <input type="text" class="form-control" id="course.name" name="course.name" placeholder="请输入课程名称" [(ngModel)]="course.name">
+          <input type="text" class="form-control" id="course.name" name="course.name" placeholder="请输入课程名称" [(ngModel)]="courseData.name">
         </div>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <!-- 查询按钮 -->
@@ -55,7 +55,15 @@
           </tr>
         </table>
       <!-- 分页组件开始 -->
-    
+      <nav class="row justify-content-md-center" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
+        <ul class="pagination col-md-auto">
+          <li [ngClass]="{disabled: pageData.first}" class="page-item"><span class="page-link" (click)="frontPage()">上一页</span></li>
+          <li *ngFor="let p of pages" [ngClass]="{active: pageData.currentPage === p}" class="page-item">
+            <span class="page-link" (click)="onPage(p)">{{p}}</span>
+          </li>
+          <li [ngClass]="{disabled: pageData.last}" class="page-item"><span class="page-link" (click)="nextPage()">下一页</span></li>
+        </ul>
+      </nav>
       <!-- 分页组件结束 -->
   </div>
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

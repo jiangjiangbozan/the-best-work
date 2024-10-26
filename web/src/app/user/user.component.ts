@@ -60,7 +60,10 @@ export class UserComponent implements OnInit {
     Notiflix.Loading.standard('用户数据加载中，请稍候');
     combineLatest([
       this.sharedDataService.currentId,
-      this.userService.getUsers({
+      this.userService.searchUsers({
+        name: this.data.name,
+        clazz_id: this.data.clazz_id,
+        role: this.data.role,
         currentPage: this.pageData.currentPage,
         size: this.pageData.size
       }),
@@ -179,7 +182,10 @@ export class UserComponent implements OnInit {
   }
 
   loadByPage(currentPage: number) {
-    this.userService.getUsers({
+    this.userService.searchUsers({
+      name: this.data.name,
+      clazz_id: this.data.clazz_id,
+      role: this.data.role,
       currentPage: currentPage,
       size: this.pageData.size
     }).subscribe(
