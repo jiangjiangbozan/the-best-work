@@ -1,42 +1,39 @@
-
 <div class="top-bar">
   <div class="title">课程管理系统</div>
   <div class="name">用户名：{{user_name}}</div>
   <button class="logout" (click)="onLogout()">退出登录</button>
 </div>
-
 <div>
   <div class="sidebar">
     <ul>
-      <li>
-        <a [routerLink]="''">首页</a>
+      <li [class.active]="activeRouterLink === ''" (click)="setActiveLink('')">
+        <a>首页</a>
       </li>
-        <li *ngIf="user_role !== 0">
-          <a [routerLink]="'user'">用户管理</a>
-        </li>
-        <li *ngIf="user_role !== 0">
-          <a routerLink="/index/school_manage">学校管理</a>
-        </li>
-        <li *ngIf="user_role !== 0">
-          <a routerLink="/index/clazz_manage">班级管理</a>
-        </li>
-        <li *ngIf="user_role !== 0" >
-          <a routerLink="/semester_manage">学期管理</a>
-        </li>
-      <li>
-        <a [routerLink]="'course_manage'">我的课程</a>
+      <li *ngIf="user_role!== 0" [class.active]="activeRouterLink === '/user'" (click)="setActiveLink('/user')">
+        <a>用户管理</a>
       </li>
-      <li>
-        <a [routerLink]="'timeTable'">课表查询</a>
+      <li *ngIf="user_role!== 0" [class.active]="activeRouterLink === '/index/school_manage'" (click)="setActiveLink('/index/school_manage')">
+        <a>学校管理</a>
       </li>
-      <li>
-        <a routerLink="schedule">行程表</a>
+      <li *ngIf="user_role!== 0" [class.active]="activeRouterLink === '/index/clazz_manage'" (click)="setActiveLink('/index/clazz_manage')">
+        <a>班级管理</a>
       </li>
-      <li>
-        <a routerLink="/index/profile">个人中心</a>
+      <li *ngIf="user_role!== 0" [class.active]="activeRouterLink === '/semester_manage'" (click)="setActiveLink('/semester_manage')">
+        <a>学期管理</a>
+      </li>
+      <li [class.active]="activeRouterLink === '/course_manage'" (click)="setActiveLink('/course_manage')">
+        <a>我的课程</a>
+      </li>
+      <li [class.active]="activeRouterLink === '/timeTable'" (click)="setActiveLink('/timeTable')">
+        <a>课表查询</a>
+      </li>
+      <li [class.active]="activeRouterLink === '/schedule'" (click)="setActiveLink('/schedule')">
+        <a>行程表</a>
+      </li>
+      <li [class.active]="activeRouterLink === '/index/profile'" (click)="setActiveLink('/index/profile')">
+        <a>个人中心</a>
       </li>
     </ul>
   </div>
-  <!-- 主内容区样式 -->
 </div>
 

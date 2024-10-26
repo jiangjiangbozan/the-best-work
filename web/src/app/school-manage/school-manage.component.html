@@ -9,7 +9,7 @@
       <form class="form-inline" (ngSubmit)="filterSchools(schoolFilter)">
         <div class="form-group">
           <label style="margin-right: 10px; vertical-align: middle;">学校名称：</label>
-          <input type="text" [(ngModel)]="schoolFilter" name="schoolFilter" class="form-control" placeholder="请您输入学校的名称...">
+          <input type="text" [(ngModel)]="schoolFilter" name="schoolFilter" class="form-control" placeholder="请您输入要搜索的学校的名称">
           <button type="submit" class="btn btn-outline-success" style="margin-left: 20px">搜索</button>
           <a (click)="openAddSchoolDialog()" class="btn btn-primary" style="margin-left: 20px">增加</a>
         </div>
