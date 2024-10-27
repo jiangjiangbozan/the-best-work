@@ -26,27 +26,12 @@ export class UserService {
     return this.httpClient.get<any>('api/index/logout');
   }
 
+  getUser(user_id: number): Observable<any> {
+    return this.httpClient.post('/api/user/getUser', {user_id})
+  }
 
   getUserRole(): Observable<any> {
     return this.httpClient.get('/api/index/getUserRole');
-  }
-
-  getUserInfo(): Observable<any> {
-    return this.httpClient.get('/api/personalCenter/getUserInfo');
-  }
-
-  getAllUserInfo(): Observable<any> {
-    return forkJoin({
-      userInfo: this.getUserInfo(),
-      userList: this.getUsers()
-    });
-  }
-
-  changePassword(userId: number, formData: any): Observable<any> {
-    return this.httpClient.post(`/api/personalCenter/changePassword?id=${userId}`, formData)
-      .pipe(
-        catchError(this.handleError)
-      );
   }
 
   getUsers(pageData?: {
@@ -57,10 +42,6 @@ export class UserService {
     size: number
   }): Observable<any> {
     return this.httpClient.post('/api/user/getUsers', {pageData})
-  }
-
-  getUser(user_id: number): Observable<any> {
-    return this.httpClient.post('/api/user/getUser', {user_id})
   }
 
   searchUsers(data = {
@@ -86,10 +67,10 @@ export class UserService {
     return this.httpClient.put('/api/user/deleteUser/',{user_id})
   }
 
-
   changeStatus(user_id: number, changeStatus: number): Observable<any> {
     return this.httpClient.put('/api/user/changeStatus/',{user_id, changeStatus})
   }
+
   updateUser(user = {
     id: 0,
     username :  '',

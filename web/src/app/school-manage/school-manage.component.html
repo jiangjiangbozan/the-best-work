@@ -8,10 +8,10 @@
       </div>
       <form class="form-inline" (ngSubmit)="filterSchools(schoolFilter)">
         <div class="form-group">
-          <label style="margin-right: 10px; vertical-align: middle;">学校名称：</label>
-          <input type="text" [(ngModel)]="schoolFilter" name="schoolFilter" class="form-control" placeholder="请您输入要搜索的学校的名称">
-          <button type="submit" class="btn btn-outline-success" style="margin-left: 20px">搜索</button>
-          <a (click)="openAddSchoolDialog()" class="btn btn-primary" style="margin-left: 20px">增加</a>
+          <label for="schoolFilter">学校名称：</label>
+          <input type="text" id="schoolFilter" [(ngModel)]="schoolFilter" name="schoolFilter" class="form-control" placeholder="请您输入要搜索的学校的名称" (input)="filterSchools(schoolFilter)">
+          <button type="button" class="btn btn-outline-success" style="margin-left: 20px" (click)="filterSchools(schoolFilter)">搜索</button>
+          <button type="button" class="btn btn-primary" style="margin-left: 20px" (click)="openAddSchoolDialog()">增加</button>
         </div>
       </form>
     </div>
@@ -31,7 +31,7 @@
       <td>{{ school.name }}</td>
       <td>
         <button (click)="openEditSchoolDialog(school)" class="btn btn-info">编辑</button>  &nbsp;
-        <app-delete [schoolId]="school.id" (onDeleteSuccess)="loadSchools()"></app-delete>
+        <app-delete [schoolId]="school.id" (onDeleteSuccess)="fetchSchools()"></app-delete>
       </td>
     </tr>
     </tbody>

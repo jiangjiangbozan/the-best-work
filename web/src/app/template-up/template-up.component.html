@@ -6,31 +6,31 @@
 <div>
   <div class="sidebar">
     <ul>
-      <li [class.active]="activeRouterLink === ''" (click)="setActiveLink('')">
+      <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/']">
         <a>首页</a>
       </li>
-      <li *ngIf="user_role!== 0" [class.active]="activeRouterLink === '/user'" (click)="setActiveLink('/user')">
+      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/user']">
         <a>用户管理</a>
       </li>
-      <li *ngIf="user_role!== 0" [class.active]="activeRouterLink === '/index/school_manage'" (click)="setActiveLink('/index/school_manage')">
+      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/index/school_manage']">
         <a>学校管理</a>
       </li>
-      <li *ngIf="user_role!== 0" [class.active]="activeRouterLink === '/index/clazz_manage'" (click)="setActiveLink('/index/clazz_manage')">
+      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/index/clazz_manage']">
         <a>班级管理</a>
       </li>
-      <li *ngIf="user_role!== 0" [class.active]="activeRouterLink === '/semester_manage'" (click)="setActiveLink('/semester_manage')">
+      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/semester_manage']">
         <a>学期管理</a>
       </li>
-      <li [class.active]="activeRouterLink === '/course_manage'" (click)="setActiveLink('/course_manage')">
+      <li routerLinkActive="active" [routerLink]="['/course_manage']">
         <a>我的课程</a>
       </li>
-      <li [class.active]="activeRouterLink === '/timeTable'" (click)="setActiveLink('/timeTable')">
+      <li routerLinkActive="active" [routerLink]="['/timeTable']">
         <a>课表查询</a>
       </li>
-      <li [class.active]="activeRouterLink === '/schedule'" (click)="setActiveLink('/schedule')">
+      <li routerLinkActive="active" [routerLink]="['/schedule']">
         <a>行程表</a>
       </li>
-      <li [class.active]="activeRouterLink === '/index/profile'" (click)="setActiveLink('/index/profile')">
+      <li routerLinkActive="active" [routerLink]="['/index/profile']">
         <a>个人中心</a>
       </li>
     </ul>

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
-import { HttpClient } from "@angular/common/http";
-import { UserService } from "../../service/user.service";
+import { FormBuilder, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { SharedDataService } from "../../service/shared-data.service";
-import * as Notiflix from "notiflix"; // 引入Notiflix库
+import * as Notiflix from "notiflix";
+import {PersonalCenterService} from "../../service/personal-center.service";
 
 @Component({
   selector: 'app-personal-center',
@@ -20,9 +19,8 @@ export class PersonalCenterComponent implements OnInit {
   clazz_name = '';
   school_name = '';
 
-  constructor(private http: HttpClient, private userService: UserService, private fb: FormBuilder, private share: SharedDataService) {
+  constructor(private personalCenterService: PersonalCenterService, private fb: FormBuilder, private share: SharedDataService) {
     this.setUserRole();
-    this.getUser();
     this.passwordForm = this.fb.group({
       currentPassword: ['', [Validators.required]],
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
@@ -31,6 +29,7 @@ export class PersonalCenterComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    Notiflix.Loading.standard('正在加载您的信息...');
     this.loadUserProfile();
     this.share.currentClazzName.subscribe((clazz_name) => {
       this.clazz_name = clazz_name;
@@ -51,26 +50,16 @@ export class PersonalCenterComponent implements OnInit {
     return null;
   };
 
-  getUser(): void {
-    this.userService.getAllUserInfo().subscribe(response => {
-      if (response && response.userList && response.userList.data) {
-        this.users = response.userList.data;
-      } else {
-        this.users = [];
-      }
-    }, error => {
-      this.users = [];
-      Notiflix.Notify.failure("网络错误，无法获取用户信息。");
-    });
-  }
-
   loadUserProfile() {
-    this.userService.getUserInfo().subscribe(
+    this.personalCenterService.getUserInfo().subscribe(
       data => {
         this.user = data;
         this.setUserRole();
+        Notiflix.Notify.success("恭喜您！加载用户信息成功。");
+        Notiflix.Loading.remove(); // 移除加载提示
       },
       error => {
+        Notiflix.Loading.remove(); // 移除加载提示
         Notiflix.Notify.failure("加载用户信息失败，请稍后再试。");
       }
     );
@@ -91,17 +80,17 @@ export class PersonalCenterComponent implements OnInit {
 
   openModal() {
     this.modalVisible = true;
-    this.alertMessage = '';
   }
 
   closeModal() {
     this.modalVisible = false;
-    this.alertMessage = '';
   }
 
   submitChange(): void {
     if (this.passwordForm.invalid) {
-      if (this.passwordForm.get('currentPassword')?.invalid) {
+      if (this.passwordForm.get('currentPassword')?.pristine && this.passwordForm.get('newPassword')?.pristine && this.passwordForm.get('confirmPassword')?.pristine) {
+        Notiflix.Notify.failure("表单未填写完整，请填写所有字段。");
+      } else if (this.passwordForm.get('currentPassword')?.invalid) {
         Notiflix.Notify.failure("请输入当前密码。");
       } else if (this.passwordForm.get('newPassword')?.invalid) {
         Notiflix.Notify.failure("新密码至少6位。");
@@ -118,7 +107,7 @@ export class PersonalCenterComponent implements OnInit {
       newPassword: this.passwordForm.value.newPassword
     };
 
-    this.userService.changePassword(this.user.id, formData)
+    this.personalCenterService.changePassword(this.user.id, formData)
       .subscribe(
         response => {
           if (response['status'] === 'success') {
@@ -133,4 +122,5 @@ export class PersonalCenterComponent implements OnInit {
         }
       );
   }
+
 }

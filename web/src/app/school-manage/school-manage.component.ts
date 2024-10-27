@@ -16,6 +16,11 @@ interface SchoolsResponse {
   total: number;
 }
 
+interface CheckSchoolResponse {
+  exists: boolean;
+}
+
+
 @Component({
   selector: 'app-school-manage',
   templateUrl: './school-manage.component.html',
@@ -28,36 +33,30 @@ export class SchoolManageComponent implements OnInit {
   currentPage: number = 1; // 当前页码
   totalItems: number = 0; // 总记录数（从后端获取）
   totalPages: number = 1; // 总页数（计算得出）
-  allSchools: School[] = [];
+  filteredSchools: School[] = []; // 过滤后的学校列表
 
   constructor(private schoolService: SchoolService, public dialog: MatDialog, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      this.currentPage = params['page'] ? Number(params['page']) : 1;
-      this.pageSize = params['size'] ? Number(params['size']) : 10;
-      this.loadSchools();
-    });
-    this.loadAllSchools();
+    this.fetchSchools();
   }
 
-  loadSchools(): void {
-    this.fetchSchools(this.schoolFilter);
-  }
-
-  fetchSchools(filter?: string): void {
+  fetchSchools(): void {
     Notiflix.Loading.standard('学校的数据正在努力地加载中，请稍候');
-    this.schoolService.getSchools(this.currentPage, this.pageSize, filter).subscribe(
+    this.schoolService.getSchools(this.currentPage, this.pageSize, this.schoolFilter).subscribe(
       (response: SchoolsResponse) => {
-        this.schools = response.data; // 更新学校列表
+        console.log(response);
+        console.log(this.pageSize);
+        this.schools = response.data;
         this.totalItems = response.total;
         this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+        this.filteredSchools = this.schools;
         Notiflix.Loading.remove();
-        this.changeDetectorRef.detectChanges(); // 触发变更检测
       },
       error => {
         console.error('Error fetching schools:', error);
         Notiflix.Loading.remove();
+        Notiflix.Notify.failure('加载学校数据失败，请稍后再试。');
       }
     );
   }
@@ -69,22 +68,36 @@ export class SchoolManageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        Notiflix.Loading.standard('正在添加学校...');
-        this.schoolService.addSchool(result).subscribe(
-          (response) => {
-            Notiflix.Loading.remove();
-            console.log('School added successfully:', response);
-            this.loadSchools(); // 成功添加后刷新列表
-            Notiflix.Notify.success('学校添加成功！');
+        // 用户输入了学校名称，现在检查这个名称是否已经存在
+        this.schoolService.checkSchoolNameExists(result.name).subscribe(
+          (response: CheckSchoolResponse) => {
+            if (response.exists) {
+              // 如果学校名称已存在，则通知用户
+              Notiflix.Notify.warning('该学校名称已存在，请使用不同的名称。');
+            } else {
+              // 如果学校名称不存在，则继续添加学校
+              Notiflix.Loading.standard('正在添加学校...');
+              this.schoolService.addSchool(result).subscribe(
+                (response) => {
+                  Notiflix.Loading.remove();
+                  console.log('School added successfully:', response);
+                  this.fetchSchools(); // 成功添加后刷新列表
+                  Notiflix.Notify.success('学校添加成功！');
+                },
+                (error) => {
+                  Notiflix.Loading.remove();
+                  console.error('Error adding school:', error);
+                  Notiflix.Notify.failure('添加学校失败，请重试！');
+                }
+              );
+            }
           },
           (error) => {
-            Notiflix.Loading.remove();
-            console.error('Error adding school:', error);
-            Notiflix.Notify.failure('添加学校失败，请重试！');
+            // 检查学校名称是否存在时发生错误
+            console.error('Error checking if school name exists:', error);
+            Notiflix.Notify.failure('无法检查学校名称是否存在，请稍后再试。');
           }
         );
-      } else {
-        Notiflix.Loading.remove();
       }
     });
   }
@@ -103,7 +116,7 @@ export class SchoolManageComponent implements OnInit {
           () => {
             Notiflix.Loading.remove();
             Notiflix.Notify.success('学校信息更新成功！');
-            this.loadSchools(); // 更新成功后刷新学校列表
+            this.fetchSchools(); // 更新成功后刷新学校列表
           },
           error => {
             Notiflix.Loading.remove();
@@ -120,38 +133,12 @@ export class SchoolManageComponent implements OnInit {
   handlePageChange(event: { page: number, pageSize: number }): void {
     this.currentPage = event.page;
     this.pageSize = event.pageSize;
-    this.loadSchools();
-  }
-
-  loadAllSchools(): void {
-    Notiflix.Loading.standard('数据加载中，请稍候');
-    this.schoolService.getSchools().subscribe(
-      (response: SchoolsResponse) => {
-        this.allSchools = response.data; // 加载所有学校
-        this.filterSchools(this.schoolFilter); // 初始过滤
-        Notiflix.Loading.remove();
-      },
-      error => {
-        console.error('Error fetching schools:', error);
-        Notiflix.Loading.remove();
-      }
-    );
+    this.fetchSchools();
   }
 
   filterSchools(filter: string): void {
-    if (filter) {
-      // 如果有过滤器，则在前端过滤学校列表
-      this.schools = this.allSchools.filter(school =>
-        school.name.toLowerCase().includes(filter.toLowerCase())
-      );
-    } else {
-      // 如果没有过滤器，则显示所有学校
-      this.schools = [...this.allSchools];
-    }
-    // 由于是前端过滤，不需要重新计算总页数
-    // 但如果需要，可以重新设置 totalItems 和 totalPages
-    this.totalItems = this.schools.length;
-    this.totalPages = Math.ceil(this.totalItems / this.pageSize);
-    this.changeDetectorRef.detectChanges(); // 触发变更检测
+    this.schoolFilter = filter;
+    this.currentPage = 1;
+    this.fetchSchools();
   }
 }

@@ -42,12 +42,12 @@ const routes: Routes = [
     canActivate: [RoleGuard]
   },
   {
-    path: 'semester_manage', 
+    path: 'semester_manage',
     canActivate: [RoleGuard],
     loadChildren: () => import('./semester-manage/semester-manage.module').then(m => m.SemesterManageModule)
   },
   {
-    path: 'schedule', 
+    path: 'schedule',
     loadChildren: () => import('./schedule/schedule.module').then(m => m.ScheduleModule)
   }
 ];
