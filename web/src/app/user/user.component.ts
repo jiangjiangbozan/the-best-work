@@ -60,7 +60,10 @@ export class UserComponent implements OnInit {
     Notiflix.Loading.standard('用户数据加载中，请稍候');
     combineLatest([
       this.sharedDataService.currentId,
-      this.userService.getUsers({
+      this.userService.searchUsers({
+        name: this.data.name,
+        clazz_id: this.data.clazz_id,
+        role: this.data.role,
         currentPage: this.pageData.currentPage,
         size: this.pageData.size
       }),
@@ -165,13 +168,29 @@ export class UserComponent implements OnInit {
   }
 
   definePageData(tolalElementsOfData: number) {
-    let begin = 1;
+    let begin;
+    let maxCount;
     this.pageData.tolalElementsOfData = tolalElementsOfData;
-    console.log(this.pageData.tolalElementsOfData);
     this.pageData.totalPages = Math.ceil(this.pageData.tolalElementsOfData / this.pageData.size);
-    console.log(this.pageData.totalPages);
     this.pages = [];
-    for (let i = 1; i <=  this.pageData.totalPages; i++, begin++) {
+    if (this.pageData.totalPages >= 7) {
+      maxCount = 7;
+      console.log('if');
+       // 起始页为当前页-3.比如当前页为10，则应该由7页开始
+      begin = this.pageData.currentPage - 3;
+      if (begin < 1) {
+        // 判断是否越界，可以删除下一行代码查看错误的效果
+        begin = 1;
+      } else if (begin > this.pageData.totalPages - 7) {
+        // 判断是否越界，可以删除下一行代码查看错误的效果
+        begin = this.pageData.totalPages - 7 + 1;
+      };
+    } else {
+      maxCount = this.pageData.totalPages;
+      begin = 1;
+    };
+    for (let i = 1; i <=  maxCount; begin++, i++) {
+      console.log(begin);
       this.pages.push(begin);
     }
     this.pageData.first = this.pageData.currentPage === 1;
@@ -179,7 +198,10 @@ export class UserComponent implements OnInit {
   }
 
   loadByPage(currentPage: number) {
-    this.userService.getUsers({
+    this.userService.searchUsers({
+      name: this.data.name,
+      clazz_id: this.data.clazz_id,
+      role: this.data.role,
       currentPage: currentPage,
       size: this.pageData.size
     }).subscribe(

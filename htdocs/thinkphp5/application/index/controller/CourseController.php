@@ -2,6 +2,7 @@
 namespace app\index\controller;
 
 use app\common\model\Course;
+use app\common\model\Semester;
 use think\Request;
 use think\Db;
 use think\Controller;
@@ -16,6 +17,18 @@ class CourseController extends Controller
             return json(['error' => '起始周大于结束周'], 401);
         }else if((int)$course['end_week'] === 0 || (int)$course['start_week'] === 0) {
             return json(['error' => '起始周或结束周不能设置为0'], 401);
+        }
+        $semester = Semester::get($course['semester_id']);
+        $timestamp = strtotime($semester['start_time']);
+        $date = date('w', $timestamp);
+        if((int)$date === 0) {
+            if((int)$course['date'] !== 7) {
+                return json(['error' => '课程设置星期数小于第一周开学日期的星期数'], 401);
+            }
+        }else {
+            if((int)$course['date'] < (int)$date) {
+                return json(['error' => '课程设置星期数小于第一周开学日期的星期数'], 401);
+            }
         }
         $newCourse = new Course;
         $newCourse->user_id = $course['user_id'];
@@ -86,16 +99,25 @@ class CourseController extends Controller
         }else if((int)$course['end_week'] === 0 || (int)$course['start_week'] === 0) {
             return json(['error' => '起始周或结束周不能设置为0'], 401);
         }
-       
-        
-         $sameWeek = Course::where([
-            'date' => $course['date'],
-            'section' => $course['section'],
-            'user_id' => $course['user_id'],
-            'semester_id' => $course['semester_id']
-            ])->select();
-          
-          
+        $semester = Semester::get($course['semester_id']);
+        $timestamp = strtotime($course['start_time']);
+        $date = date('w', $timestamp);
+        if($date === 0) {
+            if($course['date'] !== 7) {
+                return json(['error' => '课程设置星期数小于第一周开学日期的星期数'], 401);
+            }
+        }else {
+            if($course['date'] < $date) {
+                return json(['error' => '课程设置星期数小于第一周开学日期的星期数'], 401);
+            }
+        }
+        $sameWeek = Course::where([
+        'date' => $course['date'],
+        'section' => $course['section'],
+        'user_id' => $course['user_id'],
+        'semester_id' => $course['semester_id']
+        ])->select();
+           
         if(!empty($sameWeek)){
             foreach ($sameWeek as $courses) {
                     if (($course['end_week'] < $courses['start_week'] || $course['start_week'] > $courses['end_week']) && $courses['name'] === $course['name']) {
@@ -135,12 +157,21 @@ class CourseController extends Controller
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);
         $data = isset($parsedData['data']) ? $parsedData['data'] : [];
-        $Courses = Course::where([
+        $size = $data['size'];
+        $currentPage = $data['currentPage'];
+        $offset = ($currentPage - 1) * $size;
+        $query = [
             'user_id' => $data['id'],
             'semester_id' => $data['semester_id']
-            ])
+        ];
+        $Courses = Course::where($query)
         ->where('name', 'like', '%' . $data['name'] . '%')
+        ->limit($offset, $size)
         ->select();
-        return json($Courses);
+        $tolalElementsOfData = count(Course::where($query)->where('name', 'like', '%' . $data['name'] . '%')->select());
+        return json([
+            'courses' => $Courses,
+            'tolalElementsOfData' => $tolalElementsOfData
+          ]);
     }
 }
