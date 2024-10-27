@@ -36,6 +36,7 @@ export class SchoolService {
     const params = new URLSearchParams();
     params.set('page', page.toString());
     params.set('size', size.toString());
+    params.set('schoolName', schoolName.toString());
 
     // @ts-ignore
     return this.httpClient.get<SchoolsResponse>(`api/school/index?${params.toString()}`, {params});
@@ -49,21 +50,10 @@ export class SchoolService {
     return this.httpClient.delete(`/api/school/delete?id=${schoolId}`);
   }
 
-  // 检查学校名称是否存在的服务方法
   checkSchoolNameExists(name: string): Observable<CheckSchoolResponse> {
-    const body = { name: name }; // 发送学校名称作为请求体
+    const body = { name: name };
 
     return this.httpClient.post<CheckSchoolResponse>('/api/school/checkNameExists', body)
-      .pipe(map(response => response)); // 不需要额外转换
-  }
-
-  searchSchools(name: string, page: number = 1, size: number = 10): Observable<{ schools: School[] }> {
-    const params = new URLSearchParams();
-    params.set('name', name);
-    params.set('page', page.toString());
-    params.set('size', size.toString());
-
-    return this.httpClient.get<{ schools: School[] }>(`/api/school/searchSchools?${params.toString()}`);
   }
 
   updateSchool(schoolId: number, updatedSchool: any): Observable<any> {

@@ -57,16 +57,6 @@ export class PaginationComponent implements OnInit {
     });
   }
 
-  getPageNumbers(): number[] {
-    // 确保totalPages至少为1
-    const totalPages = Math.max(this.totalPages, 1);
-    const pages = [];
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(i);
-    }
-    return pages;
-  }
-
   getPageNumbersNearby(): number[] {
     const pages: number[] = [];
     const half = 5; // 显示当前页左右各5页
