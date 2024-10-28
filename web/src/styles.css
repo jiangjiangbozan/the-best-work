@@ -249,3 +249,10 @@ body, html {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.btn {
+  margin-right: 0.5em;
+}
+
+.btn > svg {
+  margin-right: 0.3em;
+}

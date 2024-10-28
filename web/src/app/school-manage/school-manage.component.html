@@ -11,7 +11,7 @@
           <label style="margin-right: 10px; vertical-align: middle;">学校名称：</label>
           <input type="text" [(ngModel)]="schoolFilter" name="schoolFilter" class="form-control" placeholder="请您输入要搜索的学校的名称">
           <button type="submit" class="btn btn-outline-success" style="margin-left: 20px">搜索</button>
-          <a (click)="openAddSchoolDialog()" class="btn btn-primary" style="margin-left: 20px">增加</a>
+          <a (click)="openAddSchoolDialog()" class="btn btn-primary" style="margin-left: 20px"><i class="fas fa-plus"></i>增加</a>
         </div>
       </form>
     </div>
@@ -30,7 +30,7 @@
       <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
       <td>{{ school.name }}</td>
       <td>
-        <button (click)="openEditSchoolDialog(school)" class="btn btn-info">编辑</button>  &nbsp;
+        <button (click)="openEditSchoolDialog(school)" class="btn btn-info"><i class="fas fa-pen"></i>编辑</button>  &nbsp;
         <app-delete [schoolId]="school.id" (onDeleteSuccess)="loadSchools()"></app-delete>
       </td>
     </tr>
