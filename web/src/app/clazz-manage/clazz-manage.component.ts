@@ -60,7 +60,7 @@ export class ClazzManageComponent implements OnInit {
     console.log('openAddClazzDialog');
     const dialogRef = this.dialog.open(AddComponent, {
       width: '250px',
-      data: { schools: this.schools } // 确保这里传递的是正确的学校列表数据
+      data: { schools: this.schools }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -106,9 +106,7 @@ export class ClazzManageComponent implements OnInit {
     console.log('openEditClazzDialog', clazz);
     const dialogRef = this.dialog.open(EditComponent, {
       width: '300px',
-      data: {
-        clazz
-      }
+      data: { clazz }
     });
 
     dialogRef.afterClosed().subscribe(result => {

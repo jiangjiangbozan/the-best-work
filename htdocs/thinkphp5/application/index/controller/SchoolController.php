@@ -63,25 +63,33 @@ class SchoolController extends Controller
     public function index(Request $request)
     {
         // 获取分页参数
-        $page = $request->param('page', 1, 'intval');
-        $size = $request->param('size', 10, 'intval');
-        $schoolName = $request->param('school', '');
+            $page =$request->param('page/d', 1);
+            $size =$request->param('size/d', 10);
+            $schoolName =$request->param('schoolName', '');
 
-        // 查询学校列表
-        $schools = School::where('name', 'like', '%'. $schoolName. '%')
-            ->paginate($size, false, ['page' => $page]);
+            // 构建查询条件
+            $query = Db::name('school')
+                    ->where('name', 'like', '%' . $schoolName . '%')
+                    ->select();
+            $querys = Db::name('school')
+                      ->where('name', 'like', '%' . $schoolName . '%');
 
-        // 使用 toArray() 方法获取分页数据
-        $schoolsData = $schools->toArray();
+            // 计算总数
+            $total =$querys->count();
 
-        // 返回数据
-        return json([
-            'code' => 0,
-            'msg' => '',
-            'data' => $schoolsData['data'],
-            'total' => $schoolsData['total']
-        ]);
+            // 获取分页数据
+            $schools =$query;
+
+            // 构建响应数据
+            $results = [
+                'data' => $schools,
+                'total' => $total
+            ];
+
+            // 返回JSON响应
+            return json($results);
     }
+
 
     public function checkNameExists()
     {
@@ -107,7 +115,8 @@ class SchoolController extends Controller
 
     public function delete(Request $request)
     {
-        $id = $request->param('id');
+        $id =$request->param('id');
+
         // 确保请求方法是 DELETE
         if ($request->isDelete()) {
             // 实例化模型
@@ -115,9 +124,17 @@ class SchoolController extends Controller
 
             // 检查学校是否存在
             if ($school) {
+                // 获取属于该学校的班级ID
+                $clazzIds = Clazz::where('school_id',$id)->column('id');
+
+                // 删除属于这些班级的用户
+                if (!empty($clazzIds)) {
+                    User::where('clazz_id', 'in', $clazzIds)->delete();
+                }
+
                 // 删除学校
                 if ($school->delete()) {
-                    return json(['status' => 'success', 'message' => 'School deleted successfully']);
+                    return json(['status' => 'success', 'message' => 'School and associated users deleted successfully']);
                 } else {
                     return json(['status' => 'error', 'message' => 'Failed to delete school'], 500);
                 }
@@ -126,37 +143,6 @@ class SchoolController extends Controller
             }
         } else {
             return json(['status' => 'error', 'message' => 'Invalid request method'], 405);
-        }
-    }
-
-    public function searchSchools(Request $request)
-    {
-        $name = $request->param('name');
-        $page = $request->param('page', 1, 'intval');
-        $size = $request->param('size', 10, 'intval');
-
-        if ($name) {
-            $offset = ($page - 1) * $size;
-            $schools = Db::name('school')
-                ->where('name', 'like', '%'. $name. '%')
-                ->limit($offset, $size)
-                ->select();
-
-            $schoolArray = json_decode(json_encode($schools), true);
-
-            $result = [];
-            foreach ($schoolArray as $school) {
-                $result[] = [
-                    'id' => $school['id'],
-                    'name' => $school['name']
-                ];
-            }
-
-            $total = Db::name('school')->where('name', 'like', '%'. $name. '%')->count();
-
-            return json(['schools' => $result, 'total' => $total]);
-        } else {
-            return json(['schools' => [], 'total' => 0]);
         }
     }
 
