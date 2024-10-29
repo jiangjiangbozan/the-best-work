@@ -8,17 +8,10 @@
       </div>
       <form class="form-inline" (ngSubmit)="filterSchools(schoolFilter)">
         <div class="form-group">
-<<<<<<< HEAD
-          <label style="margin-right: 10px; vertical-align: middle;">学校名称：</label>
-          <input type="text" [(ngModel)]="schoolFilter" name="schoolFilter" class="form-control" placeholder="请您输入要搜索的学校的名称">
-          <button type="submit" class="btn btn-outline-success" style="margin-left: 20px">搜索</button>
-          <a (click)="openAddSchoolDialog()" class="btn btn-primary" style="margin-left: 20px"><i class="fas fa-plus"></i>增加</a>
-=======
           <label for="schoolFilter">学校名称：</label>
-          <input type="text" id="schoolFilter" [(ngModel)]="schoolFilter" name="schoolFilter" class="form-control" placeholder="请您输入要搜索的学校的名称" (input)="filterSchools(schoolFilter)">
+          <input type="text" id="schoolFilter" [(ngModel)]="schoolFilter" name="schoolFilter" class="form-control" placeholder="请您输入要搜索的学校的名称">
           <button type="button" class="btn btn-outline-success" style="margin-left: 20px" (click)="filterSchools(schoolFilter)">搜索</button>
           <button type="button" class="btn btn-primary" style="margin-left: 20px" (click)="openAddSchoolDialog()">增加</button>
->>>>>>> 1fbb4e2503a9d911e4808389cb02abc17aa6b081
         </div>
       </form>
     </div>
@@ -37,13 +30,8 @@
       <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
       <td>{{ school.name }}</td>
       <td>
-<<<<<<< HEAD
-        <button (click)="openEditSchoolDialog(school)" class="btn btn-info"><i class="fas fa-pen"></i>编辑</button>  &nbsp;
-        <app-delete [schoolId]="school.id" (onDeleteSuccess)="loadSchools()"></app-delete>
-=======
         <button (click)="openEditSchoolDialog(school)" class="btn btn-info">编辑</button>  &nbsp;
         <app-delete [schoolId]="school.id" (onDeleteSuccess)="fetchSchools()"></app-delete>
->>>>>>> 1fbb4e2503a9d911e4808389cb02abc17aa6b081
       </td>
     </tr>
     </tbody>

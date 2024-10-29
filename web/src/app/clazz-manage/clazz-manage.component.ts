@@ -103,7 +103,7 @@ export class ClazzManageComponent implements OnInit {
   }
 
   openEditClazzDialog(clazz: Classroom): void {
-    console.log('openEditClazzDialog', clazz);
+    console.log(clazz,2);
     const dialogRef = this.dialog.open(EditComponent, {
       width: '300px',
       data: { clazz }

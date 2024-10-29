@@ -12,10 +12,10 @@
       <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/user']">
         <a>用户管理</a>
       </li>
-      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/index/school_manage']">
+      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/school_manage']">
         <a>学校管理</a>
       </li>
-      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/index/clazz_manage']">
+      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/clazz_manage']">
         <a>班级管理</a>
       </li>
       <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/semester_manage']">
@@ -30,7 +30,7 @@
       <li routerLinkActive="active" [routerLink]="['/schedule']">
         <a>行程表</a>
       </li>
-      <li routerLinkActive="active" [routerLink]="['/index/profile']">
+      <li routerLinkActive="active" [routerLink]="['/profile']">
         <a>个人中心</a>
       </li>
     </ul>

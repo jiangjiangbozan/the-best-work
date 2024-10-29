@@ -25,6 +25,7 @@ export class EditComponent implements OnInit {
   form!: FormGroup;
   schools: School[] = [];
   selectedSchoolId: number = 0; // 初始化为0
+  originalData: ClassroomEditData = {...this.data}; // 使用对象解构来创建副本
 
   constructor(
       private fb: FormBuilder,
@@ -33,8 +34,7 @@ export class EditComponent implements OnInit {
       private clazzService: ClazzService,
       private schoolService: SchoolService
   ) {
-    console.log(data);
-    this.selectedSchoolId = this.data.schoolId; // 设置默认学校ID
+    console.log(data,3);
     this.loadSchools(); // 加载学校列表
   }
 
@@ -43,15 +43,14 @@ export class EditComponent implements OnInit {
       name: [this.data.name, [Validators.required]],
       schoolId: [this.selectedSchoolId, [Validators.required]]
     });
-
-    // 初始化下拉列表时选择正确的学校
+    // 设置默认学校ID
     this.form.get('schoolId')?.setValue(this.data.schoolId, { emitEvent: false });
   }
 
   loadSchools(): void {
     this.schoolService.getSchool().subscribe(
         (schoolsData) => {
-          console.log(schoolsData);
+          console.log(schoolsData,1);
           this.schools = schoolsData;
           // 初始化下拉列表时选择正确的学校
           this.form.get('schoolId')?.setValue(this.data.schoolId, { emitEvent: false });
@@ -68,9 +67,6 @@ export class EditComponent implements OnInit {
         name: this.form.get('name')?.value,
         schoolId: this.form.get('schoolId')?.value
       };
-
-      console.log(clazzData);
-      console.log(this.data);
 
       // 将班级ID作为URL参数传递给后端
       Notiflix.Loading.standard('正在更新班级信息...');
@@ -98,6 +94,8 @@ export class EditComponent implements OnInit {
   }
 
   close(): void {
+    this.dialogRef.close(false);
+    this.form.reset(this.originalData); // 重置表单到原始数据状态
     this.dialogRef.close(false);
   }
 
