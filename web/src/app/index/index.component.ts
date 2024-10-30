@@ -35,7 +35,7 @@ export class IndexComponent implements OnInit {
         this.semesterService.getCurrentSemesterId(this.user_id),
         this.clazzService.getCurrentClazzName(this.user_id),
         this.schoolService.getCurrentSchool(this.user_id),
-        this.userService.getUserRole()
+        this.userService.getUserRole(),
       ]).subscribe(([semesters, semester_id, clazz_name, data, role]) => {
         this.sharedDataService.setSemsters(semesters);
         this.sharedDataService.setCurrentSemsterId(semester_id);
