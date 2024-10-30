@@ -47,7 +47,7 @@ export class SchoolService {
   }
 
   deleteSchool(schoolId: number): Observable<any> {
-    return this.httpClient.delete(`/api/school/delete?id=${schoolId}`);
+    return this.httpClient.delete(`/api/school/delete/${schoolId}`);
   }
 
   checkSchoolNameExists(name: string): Observable<CheckSchoolResponse> {

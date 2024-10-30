@@ -14,7 +14,6 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatDialogModule} from "@angular/material/dialog";
 import {SchoolManageModule} from "./school-manage/school-manage.module";
 import { SemesterManageModule } from './semester-manage/semester-manage.module';
-import {ClazzManageComponent} from "./clazz-manage/clazz-manage.component";
 import {ClazzManageModule} from "./clazz-manage/clazz-manage.module";
 import { XAuthTokenInterceptor } from 'src/x-auth-token.interceptor';
 import { ScheduleComponent } from './schedule/schedule.component';
@@ -39,8 +38,6 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
     FormsModule,
     RouterModule,
     NoopAnimationsModule,
-    MatFormFieldModule,
-    MatDialogModule,
     SchoolManageModule,
     ClazzManageModule,
     SemesterManageModule,

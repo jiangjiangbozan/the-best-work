@@ -26,7 +26,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let school of schools; let i = index">
+    <tr *ngFor="let school of schools.slice(start, end); let i = index">
       <td>{{ (currentPage - 1) * pageSize + i + 1 }}</td>
       <td>{{ school.name }}</td>
       <td>
