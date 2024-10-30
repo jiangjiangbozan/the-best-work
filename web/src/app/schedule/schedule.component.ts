@@ -37,17 +37,25 @@ export class ScheduleComponent implements OnInit {
       this.scheduleService.getUnbusyStudentsOfCurrentWeek(firstDayOfCurrentWeek)
         .subscribe((data) => {
           this.PeopleHaveCourse = data;
-          console.log(this.PeopleHaveCourse);
         })
     })
   }
 
   onSubmit() {
-    console.log(this.weekDates);
+ 
+    this.scheduleService.getFirstDayOfCurrentWeek(this.formGroup.get('date')?.value)
+    .subscribe((firstDayOfCurrentWeek) => {
+      this.caculateWeekDay(firstDayOfCurrentWeek);
+      this.scheduleService.getUnbusyStudentsOfCurrentWeek(firstDayOfCurrentWeek)
+        .subscribe((data) => {
+          this.PeopleHaveCourse = data;
+        })
+    })
   }
 
   //获取整个星期每天的日期
   caculateWeekDay(firstDayOfCurrentWeek : string) {
+    this.weekDates = [];
     //创建一个date对象才能进行操作
     const Monday = new Date(firstDayOfCurrentWeek);
     for(let i=0; i< 7; i++) {
