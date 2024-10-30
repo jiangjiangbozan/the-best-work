@@ -115,9 +115,10 @@ class ClazzController extends Controller
                 // 实例化模型
                 $clazz = Clazz::find($id);
 
-                // 检查学校是否存在
+                // 检查班级是否存在
                 if ($clazz) {
-                    // 删除学校
+                    User::where('clazz_id', 'in', $id)->delete();
+                    // 删除班级
                     if ($clazz->delete()) {
                         return json(['status' => 'success', 'message' => 'clazz deleted successfully']);
                     } else {

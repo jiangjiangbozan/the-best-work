@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>编辑班级</h2>
 <mat-dialog-content>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>所属学校</mat-label>
       <mat-select formControlName="schoolId" required>
         <mat-option *ngFor="let school of schools" [value]="school.id">
@@ -12,7 +12,7 @@
         所属学校是必填项。
       </mat-error>
     </mat-form-field>
-    <mat-form-field>
+    <mat-form-field appearance="fill">
       <mat-label>班级名称</mat-label>
       <input matInput formControlName="name" required>
       <mat-error *ngIf="form.get('name')?.invalid && form.get('name')?.touched">

@@ -5,14 +5,18 @@ import {ClazzService} from "../../../service/clazz.service";
 import {SchoolService} from "../../../service/school.service";
 import * as Notiflix from "notiflix";
 
-interface ClassroomEditData {
+interface Clazz {
   id: number;
   name: string;
   schoolId: number;
+  schoolName: string;
 }
 interface School {
   id: number;
   name: string;
+}
+interface ClassroomEditData {
+  clazz: Clazz;
 }
 
 @Component({
@@ -24,8 +28,7 @@ export class EditComponent implements OnInit {
 
   form!: FormGroup;
   schools: School[] = [];
-  selectedSchoolId: number = 0; // 初始化为0
-  originalData: ClassroomEditData = {...this.data}; // 使用对象解构来创建副本
+  originalData!: ClassroomEditData; // 直接使用 this.data 初始化
 
   constructor(
       private fb: FormBuilder,
@@ -34,17 +37,17 @@ export class EditComponent implements OnInit {
       private clazzService: ClazzService,
       private schoolService: SchoolService
   ) {
+    this.originalData = {...this.data}; // 创建数据副本
     console.log(data,3);
     this.loadSchools(); // 加载学校列表
   }
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      name: [this.data.name, [Validators.required]],
-      schoolId: [this.selectedSchoolId, [Validators.required]]
+
+      name: [this.data.clazz.name, [Validators.required]],
+      schoolId: [this.data.clazz.schoolId, [Validators.required]]
     });
-    // 设置默认学校ID
-    this.form.get('schoolId')?.setValue(this.data.schoolId, { emitEvent: false });
   }
 
   loadSchools(): void {
@@ -52,8 +55,7 @@ export class EditComponent implements OnInit {
         (schoolsData) => {
           console.log(schoolsData,1);
           this.schools = schoolsData;
-          // 初始化下拉列表时选择正确的学校
-          this.form.get('schoolId')?.setValue(this.data.schoolId, { emitEvent: false });
+          this.form.get('schoolId')?.setValue(this.data.clazz.schoolId, { emitEvent: false });
         },
         (error) => {
           console.error('无法加载学校列表', error);
@@ -96,7 +98,6 @@ export class EditComponent implements OnInit {
   close(): void {
     this.dialogRef.close(false);
     this.form.reset(this.originalData); // 重置表单到原始数据状态
-    this.dialogRef.close(false);
   }
 
 }

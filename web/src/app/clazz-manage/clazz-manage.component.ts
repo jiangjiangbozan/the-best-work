@@ -118,7 +118,7 @@ export class ClazzManageComponent implements OnInit {
 
   loadData(): void {
     this.loading = true;
-    Notiflix.Loading.standard('正在加载数据...');
+    Notiflix.Loading.standard('班级的数据正在努力地加载中，请稍候');
 
     this.fetchSchools()
       .pipe(
@@ -208,19 +208,30 @@ export class ClazzManageComponent implements OnInit {
   }
 
   onDelete(id: number): void {
-    if (confirm('确定要删除这个班级吗?')) {
-      this.http.delete(`api/clazz/delete/${id}`)
-        .pipe(
-          catchError(error => {
-            console.error('删除班级失败:', error);
-            Notiflix.Notify.failure('删除班级失败，请稍后再试。');
-            return of(null); // 返回null以避免错误中断流
-          })
-        )
-        .subscribe(() => {
-          this.fetchClazzes();
-        });
-    }
+    Notiflix.Confirm.show(
+      '确认删除',
+      '您确定要删除这个班级吗？',
+      '是',
+      '否',
+      () => {
+        // 用户确认删除
+        this.http.delete(`api/clazz/delete?id=${id}`)
+          .pipe(
+            catchError(error => {
+              console.error('删除班级失败:', error);
+              Notiflix.Notify.failure('删除班级失败，请稍后再试。');
+              return of(null); // 返回null以避免错误中断流
+            })
+          )
+          .subscribe(response => {
+            // 检查响应，如果删除成功则显示成功提示
+            if (response) {
+              Notiflix.Notify.success('恭喜您！班级删除成功！');
+            }
+            this.fetchClazzes(); // 重新获取班级列表
+          });
+      },
+    );
   }
 
   handlePageChange(event: { page: number, pageSize: number }): void {
