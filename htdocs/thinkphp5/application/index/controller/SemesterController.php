@@ -185,7 +185,7 @@ class SemesterController extends Controller
             $parsedData = json_decode(Request::instance()->getContent(), true);
             $data = isset($parsedData['data']) ? $parsedData['data'] : [];
             $Semester =Semester::where('name', $data['semester_name'])->find();
-            if(!empty($Semester) && ($data['id'] !== $Semester->id)){
+            if(!empty($Semester) && ((int)$data['id'] !== $Semester->id)){
                 return json(['error' => '学期名重复'], 401);
             };
 
@@ -196,6 +196,10 @@ class SemesterController extends Controller
             $sameSemester = Semester::where('school_id', $data['school_id'])->select();
             if(!empty($sameSemester)){
                 foreach ($sameSemester as $semester) {
+                    //排除当前学期
+                    if($semester->id === (int)$data['id']) {
+                        break;
+                    }
                     if (strtotime($data['end_time']) < strtotime($semester['start_time']) || strtotime($data['start_time']) > strtotime($semester['end_time'])) {
                         continue;
                     }else{

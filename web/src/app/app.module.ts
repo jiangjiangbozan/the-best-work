@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
 import { LoginComponent } from './login/login.component';
 import { IndexComponent } from './index/index.component';
 import { TemplateUpComponent } from './template-up/template-up.component';
@@ -15,7 +13,10 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {SchoolManageModule} from "./school-manage/school-manage.module";
 import { SemesterManageModule } from './semester-manage/semester-manage.module';
 import {ClazzManageModule} from "./clazz-manage/clazz-manage.module";
+import { XAuthTokenInterceptor } from 'src/x-auth-token.interceptor';
+import { ScheduleComponent } from './schedule/schedule.component';
 import { NoPermissionComponent } from './no-permission/no-permission.component';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,9 @@ import { NoPermissionComponent } from './no-permission/no-permission.component';
     SemesterManageModule,
     SchoolManageModule
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: XAuthTokenInterceptor, multi: true}
+  ],
   bootstrap: [IndexComponent]
 })
 export class AppModule { }

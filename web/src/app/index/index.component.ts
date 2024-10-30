@@ -51,13 +51,13 @@ export class IndexComponent implements OnInit {
       });
   }
 
-  onLogin(user: Event): void {
-    console.log('user',user);
+  onLogin(): void {
     this.ngOnInit();
     this.isLogin = true;
   }
 
   Logout(): void {
+    window.sessionStorage.clear();
     this.user_id = 0;
     this.isLogin = false;
   }

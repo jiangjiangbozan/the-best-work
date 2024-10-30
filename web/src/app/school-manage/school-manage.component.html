@@ -8,10 +8,10 @@
       </div>
       <form class="form-inline" (ngSubmit)="filterSchools(schoolFilter)">
         <div class="form-group">
-          <label for="schoolFilter">学校名称：</label>
-          <input type="text" id="schoolFilter" [(ngModel)]="schoolFilter" name="schoolFilter" class="form-control" placeholder="请您输入要搜索的学校的名称">
-          <button type="button" class="btn btn-outline-success" style="margin-left: 20px" (click)="filterSchools(schoolFilter)">搜索</button>
-          <button type="button" class="btn btn-primary" style="margin-left: 20px" (click)="openAddSchoolDialog()">增加</button>
+          <label style="margin-right: 10px; vertical-align: middle;">学校名称：</label>
+          <input type="text" [(ngModel)]="schoolFilter" name="schoolFilter" class="form-control" placeholder="请您输入要搜索的学校的名称">
+          <button type="submit" class="btn btn-outline-success" style="margin-left: 20px">搜索</button>
+          <a (click)="openAddSchoolDialog()" class="btn btn-primary" style="margin-left: 20px"><i class="fas fa-plus"></i>增加</a>
         </div>
       </form>
     </div>
