@@ -1,4 +1,4 @@
 <app-template-up *ngIf="isLogin" (beLogout)="Logout()"></app-template-up>
-<app-login *ngIf="!isLogin" (beLogin)="onLogin($event)"></app-login>
+<app-login *ngIf="!isLogin" (beLogin)="onLogin()"></app-login>
 <router-outlet *ngIf="isLogin"></router-outlet>
 <app-template-down *ngIf="isLogin"></app-template-down>

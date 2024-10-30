@@ -10,8 +10,8 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  login(username: string, password: string): Observable<User> {
-    return this.httpClient.post<User>('/api/index/login', {username, password})
+  login(username: string, password: string): Observable<any> {
+    return this.httpClient.post<any>('/api/index/login', {username, password})
     .pipe(
       catchError((error: HttpErrorResponse ) => {
         return this.handleError(error);
