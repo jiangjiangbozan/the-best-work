@@ -34,6 +34,8 @@ export class SchoolManageComponent implements OnInit {
   totalItems: number = 0; // 总记录数（从后端获取）
   totalPages: number = 1; // 总页数（计算得出）
   filteredSchools: School[] = []; // 过滤后的学校列表
+  start: number = 0;
+  end: number = 0;
 
   constructor(private schoolService: SchoolService, public dialog: MatDialog, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) { }
 
@@ -51,6 +53,7 @@ export class SchoolManageComponent implements OnInit {
         this.totalItems = response.total;
         this.totalPages = Math.ceil(this.totalItems / this.pageSize);
         this.filteredSchools = this.schools;
+        this.updatePageRange();
         Notiflix.Loading.remove();
       },
       error => {
@@ -134,6 +137,12 @@ export class SchoolManageComponent implements OnInit {
     this.currentPage = event.page;
     this.pageSize = event.pageSize;
     this.fetchSchools();
+    this.updatePageRange();
+  }
+
+  updatePageRange(): void {
+    this.start = (this.currentPage - 1) * this.pageSize;
+    this.end = this.start + this.pageSize;
   }
 
   filterSchools(filter: string): void {
