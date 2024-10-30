@@ -10,6 +10,17 @@ use think\Controller;
 
 class ClazzController extends Controller
 {
+    public function getUserId() {  
+        // 假设从请求获取 id  
+        if(!$this->request->header('x-auth-token')) {
+        // return json(['error' => '当前无用户登陆'], 401);
+        }else {
+        $token = $this->request->header('x-auth-token');
+        $user_session = UserSessions::where('token', $token)->find();
+        return $user_session->user_id;
+        }
+    } 
+
     public function getCurrentClazzName() {
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);

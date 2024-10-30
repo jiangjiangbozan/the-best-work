@@ -34,6 +34,10 @@ export class UserService {
     return this.httpClient.get('/api/index/getUserRole');
   }
 
+  setUserId(): Observable<any> {
+    return this.httpClient.get('/api/base/initialize');
+  }
+
   getUsers(pageData?: {
     name: string,
     clazz_id: number,
