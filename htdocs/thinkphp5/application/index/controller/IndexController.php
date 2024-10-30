@@ -10,10 +10,16 @@ use think\Controller;
 
 class IndexController extends BaseController
 {
-  // public function __construct() {  
-  //     $this->initialize(); // 或者直接在构造方法中调用初始化逻辑  
-  // }  
-
+  public function getUserId() {  
+    // 假设从请求获取 id  
+    if(!$this->request->header('x-auth-token')) {
+        // return json(['error' => '当前无用户登陆'], 401);
+      }else {
+        $token = $this->request->header('x-auth-token');
+        $user_session = UserSessions::where('token', $token)->find();
+        return $user_session->user_id;
+      }
+  } 
   public function login() {
       // 解析 JSON 数据
       $parsedData = json_decode(Request::instance()->getContent(), true);
@@ -50,8 +56,6 @@ class IndexController extends BaseController
         $user_session = UserSessions::where('token', $token)->find();
         $id = $user_session->user_id;
       }
-  
-     
       if($id !== null){
         return json(['id' => $id]);
       }
@@ -59,9 +63,8 @@ class IndexController extends BaseController
     }
 
     public function logout(){
-   var_dump($this->id);
-   die();
-      $user_session = UserSessions::where('user_id', session('id'))->find();
+      $this->getUserId();
+      $user_session = UserSessions::where('user_id', $this->getUserId())->find();
       $user_session->delete();
       session('id', null);
       return json([
@@ -86,7 +89,7 @@ class IndexController extends BaseController
 
     public function getUserRole() {
       //获取当前登录用户信息
-      $user = User::get(session('id'));
+      $user = User::get($this->getUserId());
       $role = $user->role;
       return json($role);
     }
