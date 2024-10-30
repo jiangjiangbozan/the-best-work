@@ -17,10 +17,7 @@ export class LoginComponent implements OnInit {
 
   user = {} as User;
 
-  data = {} as {
-    username: string,
-    password: string
-  }
+  token = '';
 
   formGroup!: FormGroup;
 
@@ -50,13 +47,15 @@ export class LoginComponent implements OnInit {
     Notiflix.Loading.standard('登录中，请稍候...');
 
     this.userService.login(username, password).subscribe(
-      (user) => {
-        this.user = user;
-        this.beLogin.emit(this.user);
+      (data) => {
+        this.beLogin.emit();
+        this.token = data.token;
+        window.sessionStorage.setItem('x-auth-token', data.token);
         Notiflix.Loading.remove();
         Notiflix.Notify.success('登录成功！');
       },
       (error) => {
+        console.log(error);
         Notiflix.Loading.remove();
         // 根据错误类型显示不同的错误信息
         if (error.status === 401) {
