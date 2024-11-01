@@ -84,8 +84,6 @@ class UserController extends Controller
             $clazz_id = $clazz->clazz->id;
             $school = Clazz::with('school')->find($clazz_id);
             $clazz_name = $clazz->clazz->name;
-            var_dump($school);
-            die();
             $school_name = $school->school->name;
             $usersData[] = new UserData(
                 $user->id,

@@ -26,26 +26,30 @@ class ScheduleController extends Controller
     public function getUnbusyStudentsOfCurrentWeek() {
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);
-        $date = isset($parsedData['date']) ? $parsedData['date'] : [];
+        $date = isset($parsedData['date']) ? $parsedData['date'] : $this->changeToMonday(time());
         // 将日期转换为时间戳  
         $timestamp = strtotime($date);
         $semesters = Semester::all();
         $UnbusyStudentsOfCurrentWeek = array();
-        // $UnbusyStudentsOfCurrentWeek[0]['time'] = '1-1';
-        // $UnbusyStudentsOfCurrentWeek[0]['students'][] = 'zhangsan';
 
+        //先查找今天时间所在的所有学期
         foreach($semesters as $semester) {
             if((strtotime($semester['start_time']) <= $timestamp)&& (strtotime($semester['end_time']) >= $timestamp)) {
                 $Semester = Semester::with('school')->find($semester['id']);
+                //找到学校的班级
                 $clazzes =  School::get($Semester->school->id)->clazz()->select();
                 
                 //将该学期的开始时间记录为该星期的星期一的日期字符串
                 $start_time = $this->changeToMonday(strtotime($Semester->start_time));
                 //计算当前星期和当前学期开始星期的偏移量,查询时应该加一
                $weekOffset = floor(($timestamp - strtotime($start_time)) / (60 * 60 * 24 * 7));
+               //循环班级
                 foreach($clazzes as $clazz) {
+                    //找到班级里全部用户
                     $users =  Clazz::get($clazz->id)->user()->select();
                     foreach($users as $user) {
+                  
+                        //用户学期内的课程
                         $courses = Course::where([
                             'semester_id' => $Semester->id,
                             'user_id' => $user['id'],
@@ -53,6 +57,7 @@ class ScheduleController extends Controller
                         ->where('end_week', '>=', $weekOffset + 1)
                         ->select();
                         if(count($courses) !== 0) {
+                           
                             foreach($courses as $course) {
                                 $time = (string)$course['date']. '-'.(string)$course['section'];
                                 $studentData = [
@@ -81,7 +86,7 @@ class ScheduleController extends Controller
                     }
                 }
             }
-        }
+        }  
             return  json($UnbusyStudentsOfCurrentWeek);       
         
     }
