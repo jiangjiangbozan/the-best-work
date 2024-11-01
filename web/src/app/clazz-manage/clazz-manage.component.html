@@ -51,10 +51,11 @@
     </tr>
     </tbody>
   </table>
-  <app-pagination [currentPage]="currentPage"
-                  [pageSize]="pageSize"
-                  [totalPages]="totalPages"
-                  (pageChanged)="handlePageChange($event)"
-                  (fetch)="fetchSchools()">
-  </app-pagination>
+  <ng-container *ngIf="schools.length >= 5">
+    <app-pagination [currentPage]="currentPage"
+                    [pageSize]="pageSize"
+                    [totalPages]="totalPages"
+                    (pageChanged)="handlePageChange($event)">
+    </app-pagination>
+  </ng-container>
 </div>

@@ -5,6 +5,7 @@ use app\common\model\User;
 use think\Request;
 use think\Db;
 use think\Controller;
+use app\common\model\UserSessions;
 
 class PersonalcenterController extends Controller
 {

@@ -71,6 +71,12 @@ export class SchoolManageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
+        // 检查学校名称是否为空
+        if (!result.name.trim()) {
+          // 如果学校名称为空，则通知用户
+          Notiflix.Notify.warning('学校名称不能为空，请输入有效的学校名称。');
+          return;
+        }
         // 用户输入了学校名称，现在检查这个名称是否已经存在
         this.schoolService.checkSchoolNameExists(result.name).subscribe(
           (response: CheckSchoolResponse) => {
@@ -113,25 +119,11 @@ export class SchoolManageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        Notiflix.Loading.standard('正在更新学校信息...');
-
-        this.schoolService.updateSchool(school.id, result).subscribe(
-          () => {
-            Notiflix.Loading.remove();
-            Notiflix.Notify.success('学校信息更新成功！');
-            this.fetchSchools(); // 更新成功后刷新学校列表
-          },
-          error => {
-            Notiflix.Loading.remove();
-            console.error('Error updating school:', error);
-            Notiflix.Notify.failure('更新学校信息失败，请重试！');
-          }
-        );
-      } else {
-        Notiflix.Loading.remove();
+        this.fetchSchools(); // 更新成功后刷新学校列表
       }
     });
   }
+
 
   handlePageChange(event: { page: number, pageSize: number }): void {
     this.currentPage = event.page;

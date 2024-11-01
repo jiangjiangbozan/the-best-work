@@ -126,6 +126,7 @@ class SchoolController extends Controller
             if ($school) {
                 // 获取属于该学校的班级ID
                 $clazzIds = Clazz::where('school_id',$id)->column('id');
+                Clazz::where('school_id', 'in', $id)->delete();
 
                 // 删除属于这些班级的用户
                 if (!empty($clazzIds)) {
