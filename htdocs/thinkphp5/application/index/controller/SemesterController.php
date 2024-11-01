@@ -28,7 +28,7 @@ class SemesterController extends Controller
                 if (strtotime($data['end_time']) < strtotime($semester['start_time']) || strtotime($data['start_time']) > strtotime($semester['end_time'])) {
                     continue;
                 }else{
-                    return json(['error' => '学期日期选择失败'], 401);
+                    return json(['error' => '新学期的日期选择和之前已有的学期所包含的日期有重叠部分，请重新选择'], 401);
                 }
               }
         }
@@ -178,9 +178,6 @@ class SemesterController extends Controller
                   ]);
         }
 
-
-        
-
         public function updateSemster() {
             $parsedData = json_decode(Request::instance()->getContent(), true);
             $data = isset($parsedData['data']) ? $parsedData['data'] : [];
@@ -203,7 +200,7 @@ class SemesterController extends Controller
                     if (strtotime($data['end_time']) < strtotime($semester['start_time']) || strtotime($data['start_time']) > strtotime($semester['end_time'])) {
                         continue;
                     }else{
-                        return json(['error' => '学期日期选择失败'], 401);
+                        return json(['error' => '新学期的日期选择和之前已有的学期所包含的日期有重叠部分，请重新选择'], 401);
                     }
                   }
             }

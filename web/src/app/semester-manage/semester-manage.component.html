@@ -8,7 +8,7 @@
       </div>
       <form class="form-inline" (submit)="onSubmit()" [formGroup]="formGroup" >
         <div class="form-group">
-          <app-school-selector formControlName="school_id"></app-school-selector>
+          <app-school-selector formControlName="school_id" [showAllOption]="showAllSchoolsInSearch"></app-school-selector>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <label for="term">学期：</label>
           <input id="term" name="term" type="text" class="form-control" placeholder="请输入您要搜索的学期..." formControlName="semester_name">
@@ -49,15 +49,15 @@
       </tr>
     </tbody>
   </table>
-          <!-- 分页组件开始 -->
-          <nav class="row justify-content-md-center" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
-            <ul class="pagination col-md-auto">
-              <li [ngClass]="{disabled: pageData.first}" class="page-item"><span class="page-link" (click)="frontPage()">上一页</span></li>
-              <li *ngFor="let p of pages" [ngClass]="{active: pageData.currentPage === p}" class="page-item">
-                <span class="page-link" (click)="onPage(p)">{{p}}</span>
-              </li>
-              <li [ngClass]="{disabled: pageData.last}" class="page-item"><span class="page-link" (click)="nextPage()">下一页</span></li>
-            </ul>
-          </nav>
-          <!-- 分页组件结束 -->
+  <!-- 分页组件开始 -->
+  <nav class="row justify-content-md-center" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
+    <ul class="pagination col-md-auto">
+      <li [ngClass]="{disabled: pageData.first}" class="page-item"><span class="page-link" (click)="frontPage()">上一页</span></li>
+      <li *ngFor="let p of pages" [ngClass]="{active: pageData.currentPage === p}" class="page-item">
+        <span class="page-link" (click)="onPage(p)">{{p}}</span>
+      </li>
+      <li [ngClass]="{disabled: pageData.last}" class="page-item"><span class="page-link" (click)="nextPage()">下一页</span></li>
+    </ul>
+  </nav>
+  <!-- 分页组件结束 -->
 </div>

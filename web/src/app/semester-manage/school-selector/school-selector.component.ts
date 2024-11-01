@@ -1,8 +1,7 @@
-import { Component, OnInit, forwardRef} from '@angular/core';
+import {Component, OnInit, forwardRef, Input} from '@angular/core';
 import { SchoolService } from 'src/service/school.service';
-import { combineLatest } from 'rxjs';  
-import * as Notiflix from 'notiflix';
-import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR, FormGroup, Validators} from '@angular/forms';
+import { combineLatest } from 'rxjs';
+import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
 @Component({
   selector: 'app-school-selector',
   templateUrl: './school-selector.component.html',
@@ -23,26 +22,25 @@ export class SchoolSelectorComponent implements OnInit, ControlValueAccessor {
     id: 0
   }];
   school_id = new FormControl();
+  @Input() showAllOption = true;
 
-  constructor(
-    private schoolService: SchoolService
-  ) { }
+  constructor(private schoolService: SchoolService) { }
 
   writeValue(obj: any): void {
     this.school_id.setValue(obj);
-    console.log('write');
   }
+
   registerOnChange(fn: (data: number) => void): void {
     this.school_id.valueChanges
       .subscribe(school_id => fn(school_id));
-    console.log(this.school_id);
   }
+
   registerOnTouched(fn: any): void {
-    console.log('touch');
   }
+
   setDisabledState?(isDisabled: boolean): void {
-    console.log('disable');
   }
+
   ngOnInit(): void {
     combineLatest([
       this.schoolService.getSchoolNames(),
