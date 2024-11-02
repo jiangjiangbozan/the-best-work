@@ -99,8 +99,9 @@ class CourseController extends Controller
         }else if((int)$course['end_week'] === 0 || (int)$course['start_week'] === 0) {
             return json(['error' => '起始周或结束周不能设置为0'], 401);
         }
+    
         $semester = Semester::get($course['semester_id']);
-        $timestamp = strtotime($course['start_time']);
+        $timestamp = strtotime($semester['start_time']);
         $date = date('w', $timestamp);
         if($date === 0) {
             if($course['date'] !== 7) {
