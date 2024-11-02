@@ -1,0 +1,7 @@
+<label for="week">结束周：</label>
+<select style="width:30%" class="custom-select mr-sm-2" id="end_week" name="end_week" [formControl]="end_week">
+    <option selected disabled value="{}">请选择课程节次</option>
+    <ng-container *ngFor="let week of totalWeeks">
+        <option [value]="week">第{{week}}周</option>
+    </ng-container>
+</select>

@@ -40,6 +40,40 @@ class SemesterController extends Controller
         $semester->save();
     }
 
+    public function changeToMonday($timestamp) {
+        //传入时间戳
+        $dayOfWeekNumber = date('w', $timestamp);  
+         // 使用 switch 语句来判断星期几  然后转化为当前星期的星期一
+         switch ($dayOfWeekNumber) {  
+            case 0:  
+                $firstDayOfCurrentWeek = $timestamp - 86400 * 6;  
+                break;  
+            case 1:  
+                $firstDayOfCurrentWeek = $timestamp;  
+                break;  
+            case 2:  
+                $firstDayOfCurrentWeek = $timestamp - 86400 * 1;  
+                break;  
+            case 3:  
+                $firstDayOfCurrentWeek = $timestamp - 86400 * 2;  
+                break;  
+            case 4:  
+                $firstDayOfCurrentWeek = $timestamp - 86400 * 3;  
+                break;  
+            case 5:  
+                $firstDayOfCurrentWeek = $timestamp - 86400 * 4;  
+                break;  
+            case 6:  
+                $firstDayOfCurrentWeek = $timestamp - 86400 * 5;  
+                break;  
+            default:  
+                $firstDayOfCurrentWeek = $timestamp;  
+                break;  
+        }  
+        $dateString = date('Y-m-d', $firstDayOfCurrentWeek); 
+        return $dateString;
+    }
+
     public function delectSemster() {
         $parsedData = json_decode(Request::instance()->getContent(), true);
         $id = isset($parsedData['id']) ? $parsedData['id'] : 0;
@@ -84,9 +118,24 @@ class SemesterController extends Controller
         // 解析 JSON 数据
         $parsedData = json_decode(Request::instance()->getContent(), true);
         $semester_id = isset($parsedData['semester_id']) ? $parsedData['semester_id'] : 0;
-        $semester = Semester::get($semester_id);
+        if($semester_id != 0){
+            $semester = Semester::get($semester_id);
+            return json($semester);
+        }
+       
+    }
 
-        return json($semester);
+    public function getCurrentSemesterTotalWeek() {
+        // 解析 JSON 数据
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $semester_id = isset($parsedData['semesterId']) ? $parsedData['semesterId'] : 0;
+        if($semester_id != 0) {
+            $semester = Semester::find($semester_id);
+            $start_time = $this->changeToMonday(strtotime($semester->start_time));
+            $totalWeek = ceil((strtotime($semester->end_time) - strtotime($start_time)) / (60 * 60 * 24 * 7));
+            return json($totalWeek);
+        }
+       
     }
 
     public function getCurrentSemesterId() {
