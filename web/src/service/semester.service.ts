@@ -28,6 +28,9 @@ export class SemesterService {
     return this.httpClient.get<any>('/api/semester/getAllSemsters')
   }
 
+  getCurrentSemesterTotalWeek(semesterId: number): Observable<number> {
+    return this.httpClient.post<number>('api/semester/getCurrentSemesterTotalWeek', {semesterId})
+  }
   //查询学期列表
   searchSemsters(data = {
     school_id: 0,
