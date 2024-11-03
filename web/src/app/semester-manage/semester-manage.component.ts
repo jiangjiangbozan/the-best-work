@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { SemesterService } from 'src/service/semester.service';
 import { Semester } from 'src/entity/semester';
 import { SchoolService } from 'src/service/school.service';
@@ -22,7 +21,7 @@ export class SemesterManageComponent implements OnInit {
   semesters: Semester[] = [];
   pageData = {
     size: 5,
-    tolalElementsOfData: 0,
+    tolalElementsOfData: 1,
     currentPage: 1,
     totalPages: 2,
     first: true,

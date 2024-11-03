@@ -3,7 +3,6 @@
   <ng-container *ngIf="showAllOption">
     <option value="0">所有的学校</option>
   </ng-container>
-  <option>请选择您想选择的学校</option>
   <ng-container *ngFor="let school of schools">
     <option [value]="school.id">
       {{school.name}}
