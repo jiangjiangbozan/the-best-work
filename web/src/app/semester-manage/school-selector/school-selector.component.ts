@@ -2,6 +2,11 @@ import {Component, OnInit, forwardRef, Input} from '@angular/core';
 import { SchoolService } from 'src/service/school.service';
 import { combineLatest } from 'rxjs';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
+
+interface schools {
+  id: number;
+  name: string;
+}
 @Component({
   selector: 'app-school-selector',
   templateUrl: './school-selector.component.html',
@@ -15,13 +20,11 @@ import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from '@angular/for
     }
   ]
 })
+
 export class SchoolSelectorComponent implements OnInit, ControlValueAccessor {
 
-  schools = [{
-    name:'',
-    id: 0
-  }];
-  school_id = new FormControl();
+  schools!: schools[];
+  school_id = new FormControl('', { updateOn: 'change' });
   @Input() showAllOption = true;
 
   constructor(private schoolService: SchoolService) { }
