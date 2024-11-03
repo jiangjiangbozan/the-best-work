@@ -219,7 +219,10 @@ class SemesterController extends Controller
                         $Semester->school->name
                     );
                 }
-                $tolalElementsOfData = count($semesters);
+                $allSemesters = Semester::where('name', 'like', '%' . $data['semester_name'] . '%')
+                ->where($query)
+                ->select();
+                $tolalElementsOfData = count($allSemesters);
                 // var_dump($query);
                 return json([
                     'semesters' => $semestersData,
