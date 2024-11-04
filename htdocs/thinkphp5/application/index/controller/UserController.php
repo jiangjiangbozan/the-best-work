@@ -34,7 +34,7 @@ class UserController extends Controller
             $user->clazz_id = $data['clazz_id'];
             $user->role = $data['role'];
             $user->name = $data['name'];
-            $user->status = 0;
+            $user->status = 1;
             $user->password = 123;
             $user->save();
         }
