@@ -11,15 +11,15 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class XAuthTokenInterceptor implements HttpInterceptor {
 
-  private token = window.sessionStorage.getItem('x-auth-token');
+ 
 
   constructor() {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
- 
-    if(this.token !== null) {
-      
-      request = request.clone({setHeaders: {'x-auth-token': this.token}});
+    let token = window.sessionStorage.getItem('x-auth-token');
+    if(token !== null) {
+      request = request.clone({setHeaders: {'x-auth-token': token}});
+      console.log('拦截器');
     }
     return next.handle(request).pipe(tap(input => {
       if(input instanceof HttpResponseBase) {
@@ -32,9 +32,10 @@ export class XAuthTokenInterceptor implements HttpInterceptor {
     }));
   }
 
-  setToken(token: string) {
-    if(this.token !== token)  {
-      this.token = token;
+  setToken(XAuthToken: string) {
+    let token = window.sessionStorage.getItem('x-auth-token');
+    if(token !== XAuthToken)  {
+      token = XAuthToken;
       window.sessionStorage.setItem('x-auth-token', token);
     }
   }

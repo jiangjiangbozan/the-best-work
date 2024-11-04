@@ -2,6 +2,7 @@
 namespace app\index\controller;
 
 use app\common\model\User;
+use app\common\model\UserSessions;
 use app\common\model\UserData;
 use app\common\model\Clazz;
 use app\common\model\School;
@@ -57,7 +58,7 @@ class UserController extends Controller
 
     public function getUser() {
         $parsedData = json_decode(Request::instance()->getContent(), true);
-        $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : [];
+        $user_id = $this->getUserId();
         $user = User::find($user_id);
         return json([
             'username' => $user->username,
