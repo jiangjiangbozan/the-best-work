@@ -55,14 +55,10 @@ export class LoginComponent implements OnInit {
         Notiflix.Notify.success('登录成功！');
       },
       (error) => {
-        console.log(error);
+        console.log(error.error);
         Notiflix.Loading.remove();
-        // 根据错误类型显示不同的错误信息
-        if (error.status === 401) {
-          Notiflix.Notify.failure('用户名或密码错误');
-        } else {
-          Notiflix.Notify.failure('登录失败，请稍后再试');
-        }
+          Notiflix.Notify.failure(error.error.error);
+
       }
     );
   }
