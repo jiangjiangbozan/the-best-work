@@ -111,11 +111,11 @@ class CourseController extends Controller
         $date = date('w', $timestamp);
         if((int)$date === 0) {
             if((int)$course['date'] !== 7) {
-                return json(['error' => '课程日期早与开学日期'], 401);
+                return json(['error'=> '课程日期早与开学日期,开学日期为第一个星期的星期'. $date], 401);
             }
         }else {
             if((int)$course['date'] < (int)$date) {
-                return json(['error' => '课程日期早与开学日期'], 401);
+                return json(['error' => '课程日期早与开学日期,开学日期为第一个星期的星期'. $date], 401);
             }
         }
         }
