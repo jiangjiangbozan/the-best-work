@@ -13,7 +13,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class SemesterManageComponent implements OnInit {
   formGroup = new FormGroup({
-    school_id: new FormControl(),
+    school_id: new FormControl(0),
     semester_name: new FormControl(),
   });
 

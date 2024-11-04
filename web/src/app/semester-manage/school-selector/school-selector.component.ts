@@ -27,7 +27,8 @@ export class SchoolSelectorComponent implements OnInit, ControlValueAccessor {
   school_id = new FormControl('', { updateOn: 'change' });
   @Input() showAllOption = true;
 
-  constructor(private schoolService: SchoolService) { }
+  constructor(private schoolService: SchoolService) { 
+  }
 
   writeValue(obj: any): void {
     this.school_id.setValue(obj);

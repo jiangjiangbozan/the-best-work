@@ -1,10 +1,22 @@
 <div class="main-content">
+  <div class="text-danger font-weight-bold font-size-lg">  
+    您只能操作当前学期的课程<br>
+      <ng-container *ngFor="let semester of semesters | keyvalue">   
+        <ng-container *ngIf="changeToNUmber(semester.key) === current_semester_id">  
+          您当前学期为：{{semester.value}}
+        </ng-container> 
+      </ng-container>
+      <ng-container *ngIf="!current_semester_id">  
+        当前暂无学期安排。
+      </ng-container> 
+</div>  
     <div class="container mt-4 mb-4">
       <div class="row justify-content-center my-3"> <!-- 添加垂直间距 -->
         <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
             <h2 class="display-4 special-heading">我的课程</h2>
         </div>
       </div>
+     
       <!-- 查询和增加按钮区域 -->
       <form class="form-inline" (ngSubmit)="onSubmit()">
         <!-- 学期名称 -->
@@ -25,7 +37,9 @@
         &nbsp;&nbsp;&nbsp;&nbsp;
         <!-- 查询按钮 -->
         <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
-        <a class="btn btn-primary" style="margin-left: auto;" [routerLink]="'add'"><i class="fas fa-plus"></i>增加</a>
+        <ng-container *ngIf="current_semester_id !== 0">  
+          <a class="btn btn-primary" style="margin-left: auto;" [routerLink]="'add'"><i class="fas fa-plus"></i>增加</a>
+        </ng-container>
       </form>       
     </div>
     <div class="row">
@@ -47,11 +61,13 @@
             <td>{{course.name}}</td>
             <td>{{course.start_week}}--{{course.end_week}}</td>
             <td>{{course.date}}</td>
-            <td>{{course.section}}</td>         
-            <td>
+            <td>{{course.section}}</td>   
+            <ng-container *ngIf="course.semester_id === current_semester_id">        
+              <td>
                 <a class="btn btn-sm btn-danger" (click)="onDelect(course.id)"><i class="far fa-trash-alt"></i>删除</a>
                 <a  class="btn btn-sm btn-primary" [routerLink]="'edit/' + course.id"><i class="fas fa-pen"></i>编辑</a>
-            </td>
+              </td>
+          </ng-container>
           </tr>
         </table>
       <!-- 分页组件开始 -->

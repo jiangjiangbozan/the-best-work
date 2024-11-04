@@ -58,7 +58,7 @@ class UserController extends Controller
 
     public function getUser() {
         $parsedData = json_decode(Request::instance()->getContent(), true);
-        $user_id = $this->getUserId();
+        $user_id = $parsedData['user_id'];
         $user = User::find($user_id);
         return json([
             'username' => $user->username,
@@ -115,7 +115,6 @@ class UserController extends Controller
             $user->name = $userData['name'];
             $user->clazz_id = $userData['clazz_id'];
             $user->role = $userData['role'];
-            $user->status = 0;
             $user->save();
             
         }
