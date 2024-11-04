@@ -42,7 +42,7 @@ export class CourseManageComponent implements OnInit {
     size : this.pageData.size
   };
 
-
+  current_semester_id = 0;
   semesters = Array();
   constructor(
     private courseService: CourseService,
@@ -59,6 +59,7 @@ export class CourseManageComponent implements OnInit {
     this.sharedDataService.currentSemesterId
     .subscribe((semester_id) => {
       this.courseData.semester_id = semester_id;
+      this.current_semester_id = semester_id;
       this.courseService.searchCourses(this.courseData)
       .subscribe((data) => {
         this.courses= data.courses;
@@ -149,5 +150,10 @@ export class CourseManageComponent implements OnInit {
      this.definePageData(data.tolalElementsOfData);
      Notiflix.Loading.remove();
     })
+  }
+
+  changeToNUmber(data: any) {
+    return Number(data);
+
   }
 }

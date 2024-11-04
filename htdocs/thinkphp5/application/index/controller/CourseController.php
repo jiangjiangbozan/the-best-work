@@ -18,18 +18,22 @@ class CourseController extends Controller
         }else if((int)$course['end_week'] === 0 || (int)$course['start_week'] === 0) {
             return json(['error' => '起始周或结束周不能设置为0'], 401);
         }
-        $semester = Semester::get($course['semester_id']);
-        $timestamp = strtotime($semester['start_time']);
-        $date = date('w', $timestamp);
-        if((int)$date === 0) {
-            if((int)$course['date'] !== 7) {
-                return json(['error' => '课程设置星期数小于第一周开学日期的星期数'], 401);
-            }
-        }else {
-            if((int)$course['date'] < (int)$date) {
-                return json(['error' => '课程设置星期数小于第一周开学日期的星期数'], 401);
+        //判断是否是第一周，如果是就需要判断这节课是否在开学前
+        if((int)$course['start_week'] === 1) {
+            $semester = Semester::get($course['semester_id']);
+            $timestamp = strtotime($semester['start_time']);
+            $date = date('w', $timestamp);
+            if((int)$date === 0) {
+                if((int)$course['date'] !== 7) {
+                    return json(['error' => '课程日期早与开学日期'], 401);
+                }
+            }else {
+                if((int)$course['date'] < (int)$date) {
+                    return json(['error' => '课程日期早与开学日期'], 401);
+                }
             }
         }
+       
         $newCourse = new Course;
         $newCourse->user_id = $course['user_id'];
         $newCourse->name = $course['name'];
@@ -99,18 +103,21 @@ class CourseController extends Controller
         }else if((int)$course['end_week'] === 0 || (int)$course['start_week'] === 0) {
             return json(['error' => '起始周或结束周不能设置为0'], 401);
         }
-    
+
+        //判断是否是第一周，如果是就需要判断这节课是否在开学前
+        if((int)$course['start_week'] === 1) {
         $semester = Semester::get($course['semester_id']);
         $timestamp = strtotime($semester['start_time']);
         $date = date('w', $timestamp);
-        if($date === 0) {
-            if($course['date'] !== 7) {
-                return json(['error' => '课程设置星期数小于第一周开学日期的星期数'], 401);
+        if((int)$date === 0) {
+            if((int)$course['date'] !== 7) {
+                return json(['error' => '课程日期早与开学日期'], 401);
             }
         }else {
-            if($course['date'] < $date) {
-                return json(['error' => '课程设置星期数小于第一周开学日期的星期数'], 401);
+            if((int)$course['date'] < (int)$date) {
+                return json(['error' => '课程日期早与开学日期'], 401);
             }
+        }
         }
         $sameWeek = Course::where([
         'date' => $course['date'],
