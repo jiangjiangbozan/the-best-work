@@ -66,7 +66,7 @@ export class EditComponent implements OnInit {
         this.course.name = this.formGroup.get('name')?.value;
         this.course.section = this.formGroup.get('section')?.value;
         this.course.start_week = this.formGroup.get('start_week')?.value;
-        this.course.end_week = this.formGroup.get('start_week')?.value;
+        this.course.end_week = this.formGroup.get('end_week')?.value;
         this.courseService.updateCourse(this.course)
           .subscribe(() => {
             console.log('更新成功');

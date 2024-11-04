@@ -1,7 +1,7 @@
 <label for="school">学校名称：</label>
 <select id="school" name="school_id" class="form-control" style="width:auto" [formControl]="school_id">
   <ng-container *ngIf="showAllOption">
-    <option value="0">所有的学校</option>
+    <option [value]="0">所有的学校</option>
   </ng-container>
   <ng-container *ngFor="let school of schools">
     <option [value]="school.id">

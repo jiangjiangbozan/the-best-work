@@ -12,10 +12,6 @@ export class UserService {
 
   login(username: string, password: string): Observable<any> {
     return this.httpClient.post<any>('/api/index/login', {username, password})
-    .pipe(
-      catchError((error: HttpErrorResponse ) => {
-        return this.handleError(error);
-      }));
   }
 
   isLogin(): Observable<any> {
@@ -84,22 +80,7 @@ export class UserService {
   }): Observable<any> {
     return this.httpClient.put('/api/user/updateUser/',{user})
   }
-  private handleError(error: HttpErrorResponse): Observable<any> {
-    let errors = {
-      detail: '',
-      status: 500,
-    };
-    if (!error.error) {
-      errors.detail = error.message;
-      errors.status = error.status;
-    } else if (error.status === 401) {
-      errors.detail = '状态码为401的报错信息';
-    } else {
-      errors = error.error;
-    }
-    return throwError(errors);
-  }
-
+ 
   resetPassword(userId: number): Observable<any> {
     return this.httpClient.post(`/api/user/resetPassword?id=${userId}`, {userId});
   }
