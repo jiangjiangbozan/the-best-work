@@ -12,7 +12,6 @@ import { FormControl, FormGroup } from '@angular/forms';
   styleUrls: ['./semester-manage.component.css']
 })
 export class SemesterManageComponent implements OnInit {
-
   formGroup = new FormGroup({
     school_id: new FormControl(0),
     semester_name: new FormControl(),
@@ -23,19 +22,16 @@ export class SemesterManageComponent implements OnInit {
     size: 5,
     tolalElementsOfData: 1,
     currentPage: 1,
-    totalPages: 2,
+    totalPages: 0,
     first: true,
     last: false
   };
-  schools = [{
-    name: '',
-    id: 0
-  }];
+  schools: any[] = [];
   data = {
     school_id: 0,
     semester_name: '',
-    currentPage: this.pageData.currentPage,
-    size: this.pageData.size
+    currentPage: 1,
+    size: 5
   };
   pages: number[] = [];
   showAllSchoolsInSearch = true;
@@ -43,24 +39,49 @@ export class SemesterManageComponent implements OnInit {
   constructor(private semesterService: SemesterService, private schoolService: SchoolService) { }
 
   ngOnInit(): void {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+    this.loadInitialData();
+  }
+
+  loadInitialData() {
+    Notiflix.Loading.standard('学期的数据正在努力地加载中，请稍候');
     combineLatest([
       this.schoolService.getSchoolNames(),
     ]).subscribe(([schools]) => {
       this.schools = schools;
-      this.loadByPage(this.pageData.currentPage);
+      this.loadSemesters();
     });
   }
 
-  onSubmit() {
-    Notiflix.Loading.standard('数据加载中，请稍候');
-    this.loadByPage(this.pageData.currentPage);
+  loadSemesters() {
+    this.updateDataFromForm();
+    this.semesterService.searchSemsters(this.data).subscribe((data) => {
+      this.updatePageData(data.tolalElementsOfData);
+      this.semesters = data.semesters;
+      Notiflix.Loading.remove();
+    });
   }
 
-  onPage(currentPage: number) {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+  updateDataFromForm() {
+    this.data.school_id = this.formGroup.get('school_id')?.value;
+    this.data.semester_name = this.formGroup.get('semester_name')?.value;
+    this.data.currentPage = this.pageData.currentPage;
+  }
+
+  updatePageData(totalElementsOfData: number) {
+    this.pageData.tolalElementsOfData = totalElementsOfData;
+    this.pageData.totalPages = Math.ceil(totalElementsOfData / this.pageData.size);
+    this.pages = Array.from({ length: this.pageData.totalPages }, (_, i) => i + 1);
+    this.pageData.first = this.pageData.currentPage === 1;
+    this.pageData.last = this.pageData.currentPage === this.pageData.totalPages;
+  }
+
+  onSubmit() {
+    this.loadSemesters();
+  }
+
+  onPageChange(currentPage: number) {
     this.pageData.currentPage = currentPage;
-    this.loadByPage(currentPage);
+    this.loadSemesters();
   }
 
   onDelect(semester_id: number) {
@@ -72,7 +93,7 @@ export class SemesterManageComponent implements OnInit {
       () => {
         this.semesterService.delectSemster(semester_id).subscribe(() => {
           Notiflix.Notify.success('学期删除成功！');
-          this.loadByPage(this.pageData.currentPage);
+          this.loadSemesters();
         }, error => {
           Notiflix.Notify.failure('删除学期失败，请稍后再试。');
         });
@@ -80,35 +101,15 @@ export class SemesterManageComponent implements OnInit {
     );
   }
 
-  frontPage() {
-    Notiflix.Loading.standard('数据加载中，请稍候');
-    this.pageData.currentPage = this.pageData.currentPage - 1;
-    this.loadByPage(this.pageData.currentPage);
+  onPreviousPage() {
+    if (!this.pageData.first) {
+      this.onPageChange(this.pageData.currentPage - 1);
+    }
   }
 
-  nextPage() {
-    Notiflix.Loading.standard('数据加载中，请稍候');
-    this.pageData.currentPage = this.pageData.currentPage + 1;
-    this.loadByPage(this.pageData.currentPage);
+  onNextPage() {
+    if (!this.pageData.last) {
+      this.onPageChange(this.pageData.currentPage + 1);
+    }
   }
-
-  loadByPage(currentPage: number) {
-    this.data.currentPage = currentPage;
-    this.data.school_id = this.formGroup.get('school_id')?.value;
-    this.data.semester_name = this.formGroup.get('semester_name')?.value;
-    this.semesterService.searchSemsters(this.data).subscribe((data) => {
-      this.definePageData(data.tolalElementsOfData);
-      this.semesters = data.semesters;
-      Notiflix.Loading.remove();
-    });
-  }
-
-  definePageData(tolalElementsOfData: number) {
-    this.pageData.tolalElementsOfData = tolalElementsOfData;
-    this.pageData.totalPages = Math.ceil(this.pageData.tolalElementsOfData / this.pageData.size);
-    this.pages = Array.from({ length: this.pageData.totalPages }, (_, i) => i + 1);
-    this.pageData.first = this.pageData.currentPage === 1;
-    this.pageData.last = this.pageData.currentPage === this.pageData.totalPages;
-  }
-
 }

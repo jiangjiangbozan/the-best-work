@@ -3,7 +3,7 @@ import { SchoolService } from 'src/service/school.service';
 import { combineLatest } from 'rxjs';
 import {ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR} from '@angular/forms';
 
-interface schools {
+interface Schools {
   id: number;
   name: string;
 }
@@ -23,7 +23,7 @@ interface schools {
 
 export class SchoolSelectorComponent implements OnInit, ControlValueAccessor {
 
-  schools!: schools[];
+  schools!: Schools[];
   school_id = new FormControl('', { updateOn: 'change' });
   @Input() showAllOption = true;
 
