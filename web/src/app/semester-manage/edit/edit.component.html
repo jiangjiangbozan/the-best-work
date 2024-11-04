@@ -12,7 +12,7 @@
         <small style="margin-left: 50px;" class="form-text text-muted"  >例:2023-2024年春</small>
       </div>
       <div class="form-group">
-        <app-school-selector formControlName="school_id"></app-school-selector>
+        <app-school-selector formControlName="school_id" [showAllOption]="showAllSchoolsInEdit"></app-school-selector>
       </div>
       <div class="form-group">
         <label for="start_time">开学时间:</label>

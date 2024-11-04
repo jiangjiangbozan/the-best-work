@@ -13,7 +13,7 @@ const routes: Routes = [
     // component: CourseManageComponent
   },
   {
-    path: 'index/profile',component: PersonalCenterComponent
+    path: 'profile',component: PersonalCenterComponent
   },
   {
     path: 'no-permission',
@@ -34,11 +34,11 @@ const routes: Routes = [
     loadChildren: () => import('./user/user.module').then(m => m.UserModule)
   },
   {
-    path: 'index/clazz_manage', component: ClazzManageComponent,
+    path: 'clazz_manage', component: ClazzManageComponent,
     canActivate: [RoleGuard]
   },
   {
-    path: 'index/school_manage', component: SchoolManageComponent,
+    path: 'school_manage', component: SchoolManageComponent,
     canActivate: [RoleGuard]
   },
   {

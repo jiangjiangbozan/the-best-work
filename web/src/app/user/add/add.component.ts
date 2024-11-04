@@ -33,7 +33,7 @@ export class AddComponent implements OnInit {
   }
 
   onSubmit() {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+    Notiflix.Loading.standard('用户信息添加中，请稍候');
     this.user = {
         username :  this.formGroup.get('username')?.value,
         name: this.formGroup.get('name')?.value,

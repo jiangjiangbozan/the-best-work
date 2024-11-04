@@ -4,15 +4,15 @@
         <h2 class="display-4 special-heading">新增学期</h2>
       </div>
     </div>
-    <form style="padding: 33px 100px 0px 385px;" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <form style="padding: 33px 100px 0 385px;" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
       <div class="form-group">
         <input type="hidden" name="id" value="" />
         <label for="term">学期名称:</label>
         <input class="form-control" type="text" name="term" id="term" formControlName="semester_name"/>
-        <small style="margin-left: 50px;" class="form-text text-muted"  >例:2023-2024年春</small>
+        <small class="form-text text-muted">例:2023-2024年春</small>
       </div>
       <div class="form-group">
-        <app-school-selector formControlName="school_id"></app-school-selector>
+        <app-school-selector formControlName="school_id" [showAllOption]="showAllSchoolsInAdd"></app-school-selector>
       </div>
       <div class="form-group">
         <label for="start_time">开学时间:</label>
