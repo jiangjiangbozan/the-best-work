@@ -11,9 +11,9 @@
           <app-school-selector formControlName="school_id" [showAllOption]="showAllSchoolsInSearch"></app-school-selector>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <label for="term">学期：</label>
-          <input id="term" name="term" type="text" class="form-control" placeholder="请输入您要搜索的学期..." formControlName="semester_name">
+          <input id="term" name="term" type="text" class="form-control" placeholder="请您输入学期的名称" formControlName="semester_name">
           &nbsp;&nbsp;&nbsp;&nbsp;
-          <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
+          <button type="submit" class="btn btn-outline-success">&nbsp;<i class="fas fa-search"></i>查询</button>
           <a class="btn btn-primary" style="margin-left: 20px;" [routerLink]="'add'"><i class="fas fa-plus"></i>增加</a>
         </div>
       </form>
@@ -39,10 +39,10 @@
         <td>{{semester.start_time}}</td>
         <td>{{semester.end_time}}</td>
         <td>
-          <a class="btn btn-sm btn-primary" [routerLink]="'edit/' + semester.id">
+          <a class="btn btn-primary" [routerLink]="'edit/' + semester.id">
             <i class="fas fa-pen"></i>编辑
           </a>&nbsp;
-          <a class="btn btn-danger btn-sm" (click)="onDelect(semester.id)">
+          <a class="btn btn-danger" (click)="onDelect(semester.id)">
             <i class="far fa-trash-alt"></i>删除
           </a>
         </td>

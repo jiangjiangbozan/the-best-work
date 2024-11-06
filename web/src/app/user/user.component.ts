@@ -6,6 +6,7 @@ import * as Notiflix from 'notiflix';
 import { ClazzService } from 'src/service/clazz.service';
 import { combineLatest } from 'rxjs';
 import { SchoolService } from 'src/service/school.service';
+import {userError} from "@angular/compiler-cli/src/transformers/util";
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -145,19 +146,36 @@ export class UserComponent implements OnInit {
         Notiflix.Loading.standard('正在重置密码，请稍候...');
         this.userService.resetPassword(userId)
           .subscribe(
-            () => {
+            (response) => {
               Notiflix.Loading.remove();
-              Notiflix.Report.success(
-                '密码重置成功',
-                '用户密码已重置为123。',
-                '好的'
-              );
+              if (response.error) {
+                Notiflix.Report.failure(
+                  '密码重置失败',
+                  response.error,
+                  '重试'
+                );
+              } else {
+                Notiflix.Report.success(
+                  '密码重置成功',
+                  '用户密码已重置为123。',
+                  '好的'
+                );
+              }
             },
             (error) => {
               Notiflix.Loading.remove();
+              console.error(`Failed to reset password for user ${userId}:`, error);
+              let errorMessage = '无法重置用户密码。';
+              if (error.status === 404) {
+                errorMessage = '用户不存在。';
+              } else if (error.status === 400) {
+                errorMessage = '密码已经是默认密码，无需重置。';
+              } else {
+                errorMessage = '请检查网络连接或稍后再试。';
+              }
               Notiflix.Report.failure(
                 '密码重置失败',
-                '无法重置用户密码。',
+                errorMessage,
                 '重试'
               );
             }
@@ -253,10 +271,6 @@ export class UserComponent implements OnInit {
             }
           );
       },
-      () => {
-        // 用户点击了“取消”，不执行任何操作
-        // 可以在这里添加一些逻辑，比如关闭模态框等
-      }
     );
   }
   onPage(currentPage: number) {

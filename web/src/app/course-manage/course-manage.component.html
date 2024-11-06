@@ -36,11 +36,11 @@
           <!-- 课程名称 -->
           <div class="form-group">
             <label for="course">课程名：</label>
-            <input type="text" class="form-control" id="course.name" name="course.name" placeholder="请输入课程名称" [(ngModel)]="courseData.name">
+            <input type="text" class="form-control" id="course.name" name="course.name" placeholder="请您输入课程的名称" [(ngModel)]="courseData.name">
           </div>
           &nbsp;&nbsp;&nbsp;&nbsp;
           <!-- 查询按钮 -->
-          <button type="submit" class="btn btn-outline-success" style="margin-left: 5px">&nbsp;查询</button>
+          <button type="submit" class="btn btn-outline-success" style="margin-left: 5px">&nbsp;<i class="fas fa-search"></i>查询</button>
           <ng-container *ngIf="current_semester_id !== 0">
             <a class="btn btn-primary" style="margin-left: 20px;" [routerLink]="'add'"><i class="fas fa-plus"></i>增加</a>
           </ng-container>
@@ -69,8 +69,8 @@
             <td>{{course.section}}</td>
             <ng-container *ngIf="course.semester_id === current_semester_id">
               <td>
-                <a  class="btn btn-sm btn-primary" [routerLink]="'edit/' + course.id"><i class="fas fa-pen"></i>编辑</a>
-                <a class="btn btn-sm btn-danger" (click)="onDelect(course.id)"><i class="far fa-trash-alt"></i>删除</a>
+                <a  class="btn btn-primary" [routerLink]="'edit/' + course.id"><i class="fas fa-pen"></i>编辑</a>
+                <a class="btn btn-danger" (click)="onDelect(course.id)"><i class="far fa-trash-alt"></i>删除</a>
               </td>
           </ng-container>
           </tr>
