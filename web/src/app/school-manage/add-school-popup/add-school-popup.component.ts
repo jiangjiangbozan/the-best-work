@@ -23,7 +23,6 @@ export class AddSchoolPopupComponent implements OnInit {
 
   onYesClick(schoolData: any): void {
     this.dialogRef.close(schoolData);
-    console.log(schoolData);
   }
 
 }

@@ -20,7 +20,7 @@ export class DateSeletorComponent implements OnInit, ControlValueAccessor {
   totalWeeks : number[] = [];
   semester_id = 0;
   start_week = new FormControl(null, Validators.required);
- 
+
   constructor(
     private semesterService: SemesterService,
     private sharedDataService: SharedDataService
@@ -29,18 +29,16 @@ export class DateSeletorComponent implements OnInit, ControlValueAccessor {
   ngOnInit(): void {
     this.sharedDataService.currentSemesterId.subscribe((semester_id) => {
       this.semester_id = semester_id;
-      console.log(this.semester_id);
       this.semesterService.getCurrentSemesterTotalWeek(this.semester_id).subscribe((totalweek) => {
         for (let i = 1; i <=  totalweek; i++) {
           this.totalWeeks.push(i);
         }
       })
     })
-  
+
   }
   writeValue(obj: any): void {
     this.start_week.setValue(obj);
-    console.log('write');
   }
   registerOnChange(fn: (data: number) => void): void {
     this.start_week.valueChanges
@@ -49,9 +47,7 @@ export class DateSeletorComponent implements OnInit, ControlValueAccessor {
       });
   }
   registerOnTouched(fn: any): void {
-    console.log('touch');
   }
   setDisabledState?(isDisabled: boolean): void {
-    console.log('disable');
   }
 }

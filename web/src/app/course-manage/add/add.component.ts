@@ -19,7 +19,7 @@ export class AddComponent implements OnInit {
     start_week : new FormControl(null, Validators.required),
     end_week : new FormControl(null, Validators.required),
   });
-  
+
   course = {
     user_id: 0,
     name: '',
@@ -46,25 +46,21 @@ export class AddComponent implements OnInit {
     })
   }
 
-  onSubmit(){
-    Confirm.show('请确认', '该操作不可逆', '确认', '取消',
-      () => {
-        this.course.date = this.formGroup.get('date')?.value;
-        this.course.name = this.formGroup.get('name')?.value;
-        this.course.section = this.formGroup.get('section')?.value;
-        this.course.start_week = this.formGroup.get('start_week')?.value;
-        this.course.end_week = this.formGroup.get('end_week')?.value;
-        this.courseService.addCourse(this.course)
-          .subscribe(() => {
-            this.router.navigate(['course_manage']);
-        },(error) => {
-          Notiflix.Report.failure(
-            '更新用户失败',
-            error.error.error,
-            '好的'
-          );
-        });
-      })
-   
+  onSubmit() {
+    this.course.date = this.formGroup.get('date')?.value;
+    this.course.name = this.formGroup.get('name')?.value;
+    this.course.section = this.formGroup.get('section')?.value;
+    this.course.start_week = this.formGroup.get('start_week')?.value;
+    this.course.end_week = this.formGroup.get('end_week')?.value;
+
+    this.courseService.addCourse(this.course)
+      .subscribe(() => {
+        // 成功添加课程后的操作
+        Notiflix.Notify.success('课程添加成功！');
+        this.router.navigate(['course_manage']);
+      }, (error) => {
+        // 添加课程失败后的操作
+        Notiflix.Notify.failure('课程添加失败: ' + error.error.error);
+      });
   }
 }

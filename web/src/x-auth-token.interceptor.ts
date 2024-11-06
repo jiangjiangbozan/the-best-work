@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class XAuthTokenInterceptor implements HttpInterceptor {
 
- 
+
 
   constructor() {}
 
@@ -19,7 +19,6 @@ export class XAuthTokenInterceptor implements HttpInterceptor {
     let token = window.sessionStorage.getItem('x-auth-token');
     if(token !== null) {
       request = request.clone({setHeaders: {'x-auth-token': token}});
-      console.log('拦截器');
     }
     return next.handle(request).pipe(tap(input => {
       if(input instanceof HttpResponseBase) {

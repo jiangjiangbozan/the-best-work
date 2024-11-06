@@ -115,7 +115,6 @@ export class UserComponent implements OnInit {
     this.userService.searchUsers(this.data)
       .subscribe(
         (data) => {
-          console.log(data);
           this.users = data.users;
           this.definePageData(data.tolalElementsOfData); // 注意属性名可能已更改，见下文
           Notiflix.Loading.remove();
@@ -175,7 +174,6 @@ export class UserComponent implements OnInit {
     this.pages = [];
     if (this.pageData.totalPages >= 7) {
       maxCount = 7;
-      console.log('if');
        // 起始页为当前页-3.比如当前页为10，则应该由7页开始
       begin = this.pageData.currentPage - 3;
       if (begin < 1) {
@@ -190,7 +188,6 @@ export class UserComponent implements OnInit {
       begin = 1;
     };
     for (let i = 1; i <=  maxCount; begin++, i++) {
-      console.log(begin);
       this.pages.push(begin);
     }
     this.pageData.first = this.pageData.currentPage === 1;

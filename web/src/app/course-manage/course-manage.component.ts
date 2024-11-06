@@ -51,7 +51,7 @@ export class CourseManageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    Notiflix.Loading.standard('数据加载中，请稍候');
+    Notiflix.Loading.standard('您的课程的数据正在努力地加载中，请稍候');
     this.sharedDataService.currentId.subscribe((id) => {
       this.user_id = id;
       this.courseData.id = id;
@@ -82,7 +82,6 @@ export class CourseManageComponent implements OnInit {
       () => {
         this.courseService.delectCourse(id)
           .subscribe(() => {
-            console.log('删除成功'),
             this.ngOnInit()
           })
       })
@@ -101,7 +100,6 @@ export class CourseManageComponent implements OnInit {
     this.pages = [];
     if (this.pageData.totalPages >= 7) {
       maxCount = 7;
-      console.log('if');
        // 起始页为当前页-3.比如当前页为10，则应该由7页开始
       begin = this.pageData.currentPage - 3;
       if (begin < 1) {
@@ -109,15 +107,14 @@ export class CourseManageComponent implements OnInit {
         begin = 1;
       } else if (begin > this.pageData.totalPages - 7) {
         // 判断是否越界，可以删除下一行代码查看错误的效果
-        
+
         begin = this.pageData.totalPages - 7 + 1;
       };
     } else {
       maxCount = this.pageData.totalPages;
       begin = 1;
-    };
+    }
     for (let i = 1; i <=  maxCount; begin++, i++) {
-      console.log(begin);
       this.pages.push(begin);
     }
     this.pageData.first = this.pageData.currentPage === 1;
@@ -154,6 +151,5 @@ export class CourseManageComponent implements OnInit {
 
   changeToNUmber(data: any) {
     return Number(data);
-
   }
 }

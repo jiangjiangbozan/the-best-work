@@ -51,11 +51,11 @@ export class LoginComponent implements OnInit {
         this.beLogin.emit();
         this.token = data.token;
         window.sessionStorage.setItem('x-auth-token', data.token);
+        localStorage.setItem('hasLoggedIn', 'true');
         Notiflix.Loading.remove();
         Notiflix.Notify.success('登录成功！');
       },
       (error) => {
-        console.log(error.error);
         Notiflix.Loading.remove();
           Notiflix.Notify.failure(error.error.error);
 

@@ -23,7 +23,7 @@ export class PersonalCenterComponent implements OnInit {
     this.setUserRole();
     this.passwordForm = this.fb.group({
       currentPassword: ['', [Validators.required]],
-      newPassword: ['', [Validators.required, Validators.minLength(6)]],
+      newPassword: ['', [Validators.required, Validators.minLength(3)]],
       confirmPassword: ['', [Validators.required]]
     }, { validators: this.checkPasswords });
   }
@@ -36,7 +36,7 @@ export class PersonalCenterComponent implements OnInit {
     });
     this.share.currentSchoolName.subscribe((school_name) => {
       this.school_name = school_name;
-      console.log('profile', this.school_name, school_name);
+      // ('profile', this.school_name, school_name);
     });
   }
 
@@ -93,7 +93,7 @@ export class PersonalCenterComponent implements OnInit {
       } else if (this.passwordForm.get('currentPassword')?.invalid) {
         Notiflix.Notify.failure("请输入当前密码。");
       } else if (this.passwordForm.get('newPassword')?.invalid) {
-        Notiflix.Notify.failure("新密码至少6位。");
+        Notiflix.Notify.failure("新密码至少3位。");
       } else if (this.passwordForm.get('confirmPassword')?.invalid || this.passwordForm.errors?.notSame) {
         Notiflix.Notify.failure("新密码和确认密码不一致。");
       } else {

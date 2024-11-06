@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../../service/course.service';
 import { SharedDataService } from '../../service/shared-data.service';
 import * as Notiflix from 'notiflix';
-import { combineLatest } from 'rxjs';  
+import { combineLatest } from 'rxjs';
 @Component({
   selector: 'app-time-table',
   templateUrl: './time-table.component.html',
@@ -17,7 +17,7 @@ export class TimeTableComponent implements OnInit {
     date: 1,
     start_week: 0,
     end_week:0
-  }]; 
+  }];
   weeks = Array();
   semesters = Array();
   data = {
@@ -27,39 +27,40 @@ export class TimeTableComponent implements OnInit {
   }
   clazz_name = '';
   school_name = '';
-  sectionNumber = Array.from({ length: 5 }, (_, i) => i + 1);  
-  dateNumber = Array.from({ length: 7 }, (_, i) => i + 1);  
+  sectionNumber = Array.from({ length: 5 }, (_, i) => i + 1);
+  dateNumber = Array.from({ length: 7 }, (_, i) => i + 1);
 
   constructor(
-    private courseService: CourseService, 
+    private courseService: CourseService,
     private sharedDataService:SharedDataService
   ) { }
 
   ngOnInit(): void {
-    combineLatest([  
-      this.sharedDataService.currentId,  
-      this.sharedDataService.currentSemesters,  
-      this.sharedDataService.currentSemesterId,  
-      this.sharedDataService.currentClazzName,  
-      this.sharedDataService.currentSchoolName  
-    ]).subscribe(([id, semesters, semester_id, clazz_name, school_name]) => {  
-      this.data.user_id = id;  
-      this.semesters = semesters;  
-      this.data.semester_id = semester_id;  
-  
-      this.clazz_name = clazz_name;  
-      this.school_name = school_name;  
+    Notiflix.Loading.standard('课表查询的数据正在努力地加载中，请稍候');
+    combineLatest([
+      this.sharedDataService.currentId,
+      this.sharedDataService.currentSemesters,
+      this.sharedDataService.currentSemesterId,
+      this.sharedDataService.currentClazzName,
+      this.sharedDataService.currentSchoolName
+    ]).subscribe(([id, semesters, semester_id, clazz_name, school_name]) => {
+      this.data.user_id = id;
+      this.semesters = semesters;
+      this.data.semester_id = semester_id;
+
+      this.clazz_name = clazz_name;
+      this.school_name = school_name;
       this.loadByCourses(this.data);
       // 所有数据都获取完毕后，关闭弹窗
       Notiflix.Loading.remove();
     },(error) => {
       Notiflix.Loading.remove();
-    }); 
- 
+    });
+
   }
 
   onSubmit() {
-    Notiflix.Loading.dots('数据加载中，请稍候');
+    Notiflix.Loading.dots('您所查询的数据正在加载中，请稍候');
     this.loadByCourses(this.data);
   }
 

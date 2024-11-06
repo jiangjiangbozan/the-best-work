@@ -51,8 +51,8 @@ export class EditComponent implements OnInit {
       this.formGroup.get('date')?.setValue(this.course.date);
       this.formGroup.get('name')?.setValue(this.course.name);
       this.formGroup.get('section')?.setValue(this.course.section);
-      this.formGroup.get('start_week')?.setValue(this.course.start_week); 
-      this.formGroup.get('end_week')?.setValue(this.course.end_week); 
+      this.formGroup.get('start_week')?.setValue(this.course.start_week);
+      this.formGroup.get('end_week')?.setValue(this.course.end_week);
     }));
     this.sharedDataService.currentSemesterId.subscribe((semester_id) => {
       this.course.semester_id = semester_id;
@@ -69,10 +69,8 @@ export class EditComponent implements OnInit {
         this.course.end_week = this.formGroup.get('end_week')?.value;
         this.courseService.updateCourse(this.course)
           .subscribe(() => {
-            console.log('更新成功');
             this.router.navigate(['course_manage']);
           },(error) => {
-            console.log(error.error.error);
             Notiflix.Report.failure(
               '更新用户失败',
               error.error.error,
