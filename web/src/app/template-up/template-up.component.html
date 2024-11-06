@@ -7,31 +7,31 @@
   <div class="sidebar">
     <ul>
       <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" [routerLink]="['/']">
-        <a>首页</a>
+        <a><i class="fas fa-home"></i> 首页</a>
       </li>
-      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/user']">
-        <a>用户管理</a>
+      <li *ngIf="user_role !== 0" routerLinkActive="active" [routerLink]="['/user']">
+        <a><i class="fas fa-users-cog"></i> 用户管理</a>
       </li>
-      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/school_manage']">
-        <a>学校管理</a>
+      <li *ngIf="user_role !== 0" routerLinkActive="active" [routerLink]="['/school_manage']">
+        <a><i class="fas fa-university"></i> 学校管理</a>
       </li>
-      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/clazz_manage']">
-        <a>班级管理</a>
+      <li *ngIf="user_role !== 0" routerLinkActive="active" [routerLink]="['/clazz_manage']">
+        <a><i class="fas fa-chalkboard-teacher"></i> 班级管理</a>
       </li>
-      <li *ngIf="user_role!== 0" routerLinkActive="active" [routerLink]="['/semester_manage']">
-        <a>学期管理</a>
+      <li *ngIf="user_role !== 0" routerLinkActive="active" [routerLink]="['/semester_manage']">
+        <a><i class="fas fa-calendar-alt"></i> 学期管理</a>
       </li>
       <li routerLinkActive="active" [routerLink]="['/course_manage']">
-        <a>我的课程</a>
+        <a><i class="fas fa-book-open"></i> 我的课程</a>
       </li>
       <li routerLinkActive="active" [routerLink]="['/timeTable']">
-        <a>课表查询</a>
+        <a><i class="fas fa-table"></i> 课表查询</a>
       </li>
       <li routerLinkActive="active" [routerLink]="['/schedule']">
-        <a>行程表</a>
+        <a><i class="fas fa-list-alt"></i> 行程表</a>
       </li>
       <li routerLinkActive="active" [routerLink]="['/profile']">
-        <a>个人中心</a>
+        <a><i class="fas fa-user"></i> 个人中心</a>
       </li>
     </ul>
   </div>

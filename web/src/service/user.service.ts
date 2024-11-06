@@ -34,11 +34,6 @@ export class UserService {
   getUserRole(): Observable<any> {
     return this.httpClient.get('/api/index/getUserRole');
   }
-
-  setUserId(): Observable<any> {
-    return this.httpClient.get('/api/base/initialize');
-  }
-
   getUsers(pageData?: {
     name: string,
     clazz_id: number,
@@ -85,7 +80,7 @@ export class UserService {
   }): Observable<any> {
     return this.httpClient.put('/api/user/updateUser/',{user})
   }
- 
+
   resetPassword(userId: number): Observable<any> {
     return this.httpClient.post(`/api/user/resetPassword?id=${userId}`, {userId});
   }
