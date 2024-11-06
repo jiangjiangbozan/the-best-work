@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Router, NavigationEnd } from '@angular/router';
 import { catchError, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as Notiflix from "notiflix";
@@ -43,13 +42,7 @@ export class ClazzManageComponent implements OnInit {
   error: string | null = null;
   totalPages: number = 1;
 
-  constructor(private http: HttpClient, private router: Router, private dialog: MatDialog, private clazzService: ClazzService,) {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        this.ngOnInit();
-      }
-    });
-  }
+  constructor(private http: HttpClient, private dialog: MatDialog, private clazzService: ClazzService) {}
 
   ngOnInit(): void {
     this.loadSchools();
@@ -57,7 +50,6 @@ export class ClazzManageComponent implements OnInit {
   }
 
   openAddClazzDialog() {
-    console.log('openAddClazzDialog');
     const dialogRef = this.dialog.open(AddComponent, {
       width: '250px',
       data: { schools: this.schools }
@@ -78,7 +70,6 @@ export class ClazzManageComponent implements OnInit {
               this.clazzService.addClazz(result).subscribe(
                 (response) => {
                   Notiflix.Loading.remove();
-                  console.log('School added successfully:', response);
                   this.fetchClazzes(); // 成功添加后刷新列表
                   Notiflix.Notify.success('班级添加成功！');
                 },
@@ -103,9 +94,8 @@ export class ClazzManageComponent implements OnInit {
   }
 
   openEditClazzDialog(clazz: Classroom): void {
-    console.log(clazz,2);
     const dialogRef = this.dialog.open(EditComponent, {
-      width: '300px',
+      width: '250px',
       data: { clazz }
     });
 
@@ -117,21 +107,18 @@ export class ClazzManageComponent implements OnInit {
   }
 
   loadData(): void {
-    this.loading = true;
     Notiflix.Loading.standard('班级的数据正在努力地加载中，请稍候');
 
     this.fetchSchools()
       .pipe(
         tap(() => this.fetchClazzes()),
         catchError(error => {
-          this.loading = false;
           Notiflix.Loading.remove();
           this.error = '数据加载失败，请稍后再试。';
           return of([]); // 返回空数组以避免错误中断流
         })
       )
       .subscribe(() => {
-        this.loading = false;
         Notiflix.Loading.remove();
         this.error = null; // 清除错误消息
       });
@@ -214,10 +201,12 @@ export class ClazzManageComponent implements OnInit {
       '是',
       '否',
       () => {
+        Notiflix.Loading.standard('正在删除学校...');
         // 用户确认删除
         this.http.delete(`api/clazz/delete?id=${id}`)
           .pipe(
             catchError(error => {
+              Notiflix.Loading.remove();
               console.error('删除班级失败:', error);
               Notiflix.Notify.failure('删除班级失败，请稍后再试。');
               return of(null); // 返回null以避免错误中断流
@@ -226,6 +215,7 @@ export class ClazzManageComponent implements OnInit {
           .subscribe(response => {
             // 检查响应，如果删除成功则显示成功提示
             if (response) {
+              Notiflix.Loading.remove();
               Notiflix.Notify.success('恭喜您！班级删除成功！');
             }
             this.fetchClazzes(); // 重新获取班级列表

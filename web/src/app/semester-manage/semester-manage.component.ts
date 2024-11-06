@@ -54,10 +54,18 @@ export class SemesterManageComponent implements OnInit {
 
   loadSemesters() {
     this.updateDataFromForm();
-    this.semesterService.searchSemsters(this.data).subscribe((data) => {
-      this.updatePageData(data.tolalElementsOfData);
-      this.semesters = data.semesters;
-      Notiflix.Loading.remove();
+    this.semesterService.searchSemsters(this.data).subscribe({
+      next: (data) => {
+        this.updatePageData(data.tolalElementsOfData);
+        this.semesters = data.semesters;
+        Notiflix.Loading.remove();
+      },
+      error: (error) => {
+        Notiflix.Loading.remove();
+        Notiflix.Notify.failure('您因错误操作而导致系统出现错误，请联系开发者。');
+        // 这里可以添加更多的错误处理逻辑，比如日志记录等
+        console.error('加载学期数据失败:', error);
+      }
     });
   }
 
@@ -91,10 +99,13 @@ export class SemesterManageComponent implements OnInit {
       '是',
       '否',
       () => {
+        Notiflix.Loading.standard('正在删除学期...');
         this.semesterService.delectSemster(semester_id).subscribe(() => {
+          Notiflix.Loading.remove();
           Notiflix.Notify.success('学期删除成功！');
           this.loadSemesters();
         }, error => {
+          Notiflix.Loading.remove();
           Notiflix.Notify.failure('删除学期失败，请稍后再试。');
         });
       }

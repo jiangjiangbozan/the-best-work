@@ -1,47 +1,53 @@
 <div class="main-content">
-  <div class="text-danger font-weight-bold font-size-lg">  
-    您只能操作当前学期的课程<br>
-      <ng-container *ngFor="let semester of semesters | keyvalue">   
-        <ng-container *ngIf="changeToNUmber(semester.key) === current_semester_id">  
-          您当前学期为：{{semester.value}}
-        </ng-container> 
-      </ng-container>
-      <ng-container *ngIf="!current_semester_id">  
-        当前暂无学期安排。
-      </ng-container> 
-</div>  
-    <div class="container mt-4 mb-4">
-      <div class="row justify-content-center my-3"> <!-- 添加垂直间距 -->
-        <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
+    <div class="text-danger font-weight-bold font-size-lg">
+      您只能操作当前学期的课程<br>
+        <ng-container *ngFor="let semester of semesters | keyvalue">
+          <ng-container *ngIf="changeToNUmber(semester.key) === current_semester_id">
+            您当前学期为：{{semester.value}}
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!current_semester_id">
+          当前暂无学期安排。
+        </ng-container>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row justify-content-center my-3">
+          <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
             <h2 class="display-4 special-heading">我的课程</h2>
+          </div>
         </div>
       </div>
-     
-      <!-- 查询和增加按钮区域 -->
-      <form class="form-inline" (ngSubmit)="onSubmit()">
-        <!-- 学期名称 -->
-        <div class="form-group">    
-          <label for="course">学期：</label>
-          <select id="week" name="week" class="form-control" [(ngModel)]="courseData.semester_id">  
-            <ng-container *ngFor="let semester of semesters | keyvalue">    
-              <option [value]="semester.key">{{semester.value}}</option>    
-            </ng-container>  
-            <option *ngIf="courseData.semester_id === 0" [value]="0">当前暂无学期安排</option> 
-          </select>    
-        </div>
-        <!-- 课程名称 -->
-        <div class="form-group">
-          <label for="course">课程名：</label>
-          <input type="text" class="form-control" id="course.name" name="course.name" placeholder="请输入课程名称" [(ngModel)]="courseData.name">
-        </div>
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <!-- 查询按钮 -->
-        <button type="submit" class="btn btn-outline-success">&nbsp;查询</button>
-        <ng-container *ngIf="current_semester_id !== 0">  
-          <a class="btn btn-primary" style="margin-left: auto;" [routerLink]="'add'"><i class="fas fa-plus"></i>增加</a>
-        </ng-container>
-      </form>       
     </div>
+    <!-- 查询和增加按钮区域 -->
+    <div class="row">
+      <div class="col-md-4">
+        <form class="form-inline" (ngSubmit)="onSubmit()">
+          <!-- 学期名称 -->
+          <div class="form-group" style="margin-right: 10px;">
+            <label for="course">学期：</label>
+            <select id="week" name="week" class="form-control" [(ngModel)]="courseData.semester_id">
+              <ng-container *ngFor="let semester of semesters | keyvalue">
+                <option [value]="semester.key">{{semester.value}}</option>
+              </ng-container>
+              <option *ngIf="courseData.semester_id === 0" [value]="0">当前暂无学期安排</option>
+            </select>
+          </div>
+          <!-- 课程名称 -->
+          <div class="form-group">
+            <label for="course">课程名：</label>
+            <input type="text" class="form-control" id="course.name" name="course.name" placeholder="请输入课程名称" [(ngModel)]="courseData.name">
+          </div>
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <!-- 查询按钮 -->
+          <button type="submit" class="btn btn-outline-success" style="margin-left: 5px">&nbsp;查询</button>
+          <ng-container *ngIf="current_semester_id !== 0">
+            <a class="btn btn-primary" style="margin-left: 20px;" [routerLink]="'add'"><i class="fas fa-plus"></i>增加</a>
+          </ng-container>
+        </form>
+      </div>
+    </div>
+    <br><br>
     <div class="row">
       <div class="col-md-12">
         <table class="table table-hover table-bordered">
@@ -54,51 +60,32 @@
                 <th>节次</th>
                 <th>操作</th>
               </tr>
-          </thead>                    
-          
+          </thead>
           <tr *ngFor="let course of courses; index as index">
             <td>{{index+1}}</td>
             <td>{{course.name}}</td>
             <td>{{course.start_week}}--{{course.end_week}}</td>
             <td>{{course.date}}</td>
-            <td>{{course.section}}</td>   
-            <ng-container *ngIf="course.semester_id === current_semester_id">        
+            <td>{{course.section}}</td>
+            <ng-container *ngIf="course.semester_id === current_semester_id">
               <td>
-                <a class="btn btn-sm btn-danger" (click)="onDelect(course.id)"><i class="far fa-trash-alt"></i>删除</a>
                 <a  class="btn btn-sm btn-primary" [routerLink]="'edit/' + course.id"><i class="fas fa-pen"></i>编辑</a>
+                <a class="btn btn-sm btn-danger" (click)="onDelect(course.id)"><i class="far fa-trash-alt"></i>删除</a>
               </td>
           </ng-container>
           </tr>
         </table>
-      <!-- 分页组件开始 -->
-      <nav class="row justify-content-md-center" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
-        <ul class="pagination col-md-auto">
-          <li [ngClass]="{disabled: pageData.first}" class="page-item"><span class="page-link" (click)="frontPage()">上一页</span></li>
-          <li *ngFor="let p of pages" [ngClass]="{active: pageData.currentPage === p}" class="page-item">
-            <span class="page-link" (click)="onPage(p)">{{p}}</span>
-          </li>
-          <li [ngClass]="{disabled: pageData.last}" class="page-item"><span class="page-link" (click)="nextPage()">下一页</span></li>
-        </ul>
-      </nav>
-      <!-- 分页组件结束 -->
-  </div>
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">新增用户</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <!-- 表单内容... -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-          <button type="button" class="btn btn-primary">保存更改</button>
-        </div>
+        <!-- 分页组件开始 -->
+        <nav class="row justify-content-md-center" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
+          <ul class="pagination col-md-auto">
+            <li [ngClass]="{disabled: pageData.first}" class="page-item"><span class="page-link" (click)="frontPage()">上一页</span></li>
+            <li *ngFor="let p of pages" [ngClass]="{active: pageData.currentPage === p}" class="page-item">
+              <span class="page-link" (click)="onPage(p)">{{p}}</span>
+            </li>
+            <li [ngClass]="{disabled: pageData.last}" class="page-item"><span class="page-link" (click)="nextPage()">下一页</span></li>
+          </ul>
+        </nav>
+        <!-- 分页组件结束 -->
       </div>
     </div>
-  </div>
-  </div>
+</div>

@@ -1,10 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SchoolService } from '../../service/school.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddSchoolPopupComponent } from './add-school-popup/add-school-popup.component';
 import * as Notiflix from "notiflix";
 import { EditComponent } from './edit/edit.component';
-import { ActivatedRoute } from '@angular/router';
 
 interface School {
   id: number;
@@ -37,7 +36,7 @@ export class SchoolManageComponent implements OnInit {
   start: number = 0;
   end: number = 0;
 
-  constructor(private schoolService: SchoolService, public dialog: MatDialog, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef) { }
+  constructor(private schoolService: SchoolService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.fetchSchools();
@@ -47,8 +46,6 @@ export class SchoolManageComponent implements OnInit {
     Notiflix.Loading.standard('学校的数据正在努力地加载中，请稍候');
     this.schoolService.getSchools(this.currentPage, this.pageSize, this.schoolFilter).subscribe(
       (response: SchoolsResponse) => {
-        console.log(response);
-        console.log(this.pageSize);
         this.schools = response.data;
         this.totalItems = response.total;
         this.totalPages = Math.ceil(this.totalItems / this.pageSize);
@@ -89,7 +86,6 @@ export class SchoolManageComponent implements OnInit {
               this.schoolService.addSchool(result).subscribe(
                 (response) => {
                   Notiflix.Loading.remove();
-                  console.log('School added successfully:', response);
                   this.fetchSchools(); // 成功添加后刷新列表
                   Notiflix.Notify.success('学校添加成功！');
                 },

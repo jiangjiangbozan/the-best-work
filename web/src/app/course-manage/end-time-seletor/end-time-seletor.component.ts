@@ -28,7 +28,6 @@ export class EndTimeSeletorComponent implements OnInit {
   ngOnInit(): void {
     this.sharedDataService.currentSemesterId.subscribe((semester_id) => {
       this.semester_id = semester_id;
-      console.log(this.semester_id);
       this.semesterService.getCurrentSemesterTotalWeek(this.semester_id).subscribe((totalweek) => {
         for (let i = 1; i <=  totalweek; i++) {
           this.totalWeeks.push(i);
@@ -38,19 +37,15 @@ export class EndTimeSeletorComponent implements OnInit {
   }
   writeValue(obj: any): void {
     this.end_week.setValue(obj);
-    console.log('write');
   }
   registerOnChange(fn: (data: number) => void): void {
     this.end_week.valueChanges
     .subscribe(end_week => {
       fn(end_week);
-      console.log(end_week);
-    });    
+    });
   }
   registerOnTouched(fn: any): void {
-    console.log('touch');
   }
   setDisabledState?(isDisabled: boolean): void {
-    console.log('disable');
   }
 }

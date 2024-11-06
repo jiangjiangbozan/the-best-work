@@ -16,7 +16,6 @@ export class RoleGuard implements CanActivate {
 
     this.sharedDataService.currentRole.subscribe((user_role) => {
       this.user_role = user_role;
-      console.log('guard', this.user_role);
     })
   }
   canActivate(
@@ -24,9 +23,9 @@ export class RoleGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     return this.checkRole();
   }
-  
+
   checkRole() {
-    
+
     if(this.user_role === 0) {
       return this.router.parseUrl('no-permission');
     }

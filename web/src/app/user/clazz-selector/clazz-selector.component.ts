@@ -46,18 +46,14 @@ export class ClazzSelectorComponent implements OnInit, ControlValueAccessor {
 
   writeValue(obj: any): void {
     this.clazz_id.setValue(obj);
-    console.log('write');
   }
   registerOnChange(fn: (data: number) => void): void {
     this.clazz_id.valueChanges
       .subscribe(clazz_id => fn(clazz_id));
-    console.log(this.clazz_id);
   }
   registerOnTouched(fn: any): void {
-    console.log('touch');
   }
   setDisabledState?(isDisabled: boolean): void {
-    console.log('disable');
   }
 
   ngOnInit(): void {

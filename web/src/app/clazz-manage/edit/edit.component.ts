@@ -37,8 +37,7 @@ export class EditComponent implements OnInit {
       private clazzService: ClazzService,
       private schoolService: SchoolService
   ) {
-    this.originalData = {...this.data}; // 创建数据副本
-    console.log(data,3);
+    this.originalData = {...this.data};
     this.loadSchools(); // 加载学校列表
   }
 
@@ -53,7 +52,6 @@ export class EditComponent implements OnInit {
   loadSchools(): void {
     this.schoolService.getSchool().subscribe(
         (schoolsData) => {
-          console.log(schoolsData,1);
           this.schools = schoolsData;
           this.form.get('schoolId')?.setValue(this.data.clazz.schoolId, { emitEvent: false });
         },

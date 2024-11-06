@@ -53,7 +53,7 @@ class CourseController extends Controller
                 if ($course['end_week'] < $courses['start_week'] || $course['start_week'] > $courses['end_week']) {
                     continue;
                 }else{
-                    return json(['error' => '课程日期选择失败'], 401);
+                    return json(['error' => '课程设置重复，请甄别是否和已有课程时间冲突'], 401);
                 }
               }
         }
@@ -133,7 +133,7 @@ class CourseController extends Controller
                     }else if($course['id'] === $courses['id']){
                         continue;
                     }else{
-                        return json(['error' => '课程日期选择失败'], 401);
+                        return json(['error' => '课程设置重复，请甄别是否和已有课程时间冲突'], 401);
                     }
                 }
             }
