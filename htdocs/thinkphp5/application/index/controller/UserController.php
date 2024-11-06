@@ -56,9 +56,20 @@ class UserController extends Controller
         $user->delete();
     }
 
+    public function getCuurentUser() {
+        $parsedData = json_decode(Request::instance()->getContent(), true);
+        $user_id = $this->getUserId();
+        $user = User::find($user_id);
+        return json([
+            'username' => $user->username,
+            'name' => $user->name,
+            'clazz_id' => $user->clazz_id,
+            'role' => $user->role
+        ]);
+    }
     public function getUser() {
         $parsedData = json_decode(Request::instance()->getContent(), true);
-        $user_id = $parsedData['user_id'];
+        $user_id = $this->getUserId();
         $user = User::find($user_id);
         return json([
             'username' => $user->username,

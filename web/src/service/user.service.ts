@@ -22,6 +22,11 @@ export class UserService {
     return this.httpClient.get<any>('api/index/logout');
   }
 
+  
+  getCuurentUser(user_id: number): Observable<any> {
+    return this.httpClient.post('/api/user/getCuurentUser', {user_id})
+  }
+
   getUser(user_id: number): Observable<any> {
     return this.httpClient.post('/api/user/getUser', {user_id})
   }
