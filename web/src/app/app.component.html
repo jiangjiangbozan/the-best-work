@@ -4,7 +4,7 @@
     <p class="text-center" style="font-size: 30px; line-height: 2">这是一个为了方便管理课程表而设计的系统，它提供了一系列强大的功能，帮助您高效地组织和查看课程信息。</p>
 
     <!-- 主要功能模块展示 -->
-    <div class="row" style="margin-bottom: 600px">
+    <div class="row" style="margin-bottom: 670px">
       <div class="col-md-4">
         <div class="text-center">
           <i class="material-icons feature-icon" style="transform: scale(1.5);">book</i>
@@ -15,14 +15,14 @@
       <div class="col-md-4">
         <div class="text-center">
           <i class="material-icons feature-icon" style="transform: scale(1.5);">calendar_today</i>
-          <h3 style="font-size: 30px">课表查看</h3>
+          <a style="font-size: 30px; color: #050000;" [routerLink]="['/timeTable']">课表查看</a>
           <p class="feature-description" style="font-size: 30px;line-height: 1.5">以直观的方式查看每周的课表安排。支持不同的视图模式，如总视图、个人视图等。</p>
         </div>
       </div>
       <div class="col-md-4">
         <div class="text-center">
           <i class="material-icons feature-icon" style="transform: scale(1.5);">people</i>
-          <h3 style="font-size: 30px">学生/教师管理</h3>
+          <a style="font-size: 30px; color: #050000;" [routerLink]="['/user']">学生/教师管理</a>
           <p class="feature-description" style="font-size: 30px;line-height: 1.5">管理与课程相关的学生和教师信息。可以进行修改信息、权限设置等操作。</p>
         </div>
       </div>

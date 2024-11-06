@@ -164,20 +164,25 @@ class UserController extends Controller
     }
 
     public function resetPassword(Request $request)
-        {
-            // 验证用户ID
-            $userId = $request->param('id');
-            $user = User::where('id', $userId)->find();
-            if (!$user) {
-                return json(['error' => '用户不存在'], 404);
-            }
-
-            // 更新密码为123，实际应用中应使用更安全的密码处理方式
-            $user->password = '123';
-            if ($user->save()) {
-                return json(['success' => '密码重置成功']);
-            } else {
-                return json(['error' => '密码重置失败'], 500);
-            }
+    {
+        // 验证用户ID
+        $userId =$request->param('id');
+        $user = User::where('id',$userId)->find();
+        if (!$user) {
+            return json(['error' => '用户不存在'], 404);
         }
+
+        // 检查密码是否已经是 '123'
+        if ($user->password === '123') {
+            return json(['error' => '密码已经是默认密码，无需重置'], 400);
+        }
+
+        // 更新密码为123，实际应用中应使用更安全的密码处理方式
+        $user->password = '123';
+        if ($user->save()) {
+            return json(['success' => '密码重置成功']);
+        } else {
+            return json(['error' => '密码重置失败'], 500);
+        }
+    }
 }
