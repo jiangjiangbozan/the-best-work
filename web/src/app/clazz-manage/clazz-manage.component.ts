@@ -57,8 +57,9 @@ export class ClazzManageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) { // 检查是否有结果返回
+        console.log(result);
         Notiflix.Loading.standard('正在检查班级名称...');
-        this.clazzService.checkClazzNameExists(result.name).subscribe(
+        this.clazzService.checkClazzNameExists(result.name, result.schoolId).subscribe(
           (response) => {
             Notiflix.Loading.remove();
             if (response.exists) {
