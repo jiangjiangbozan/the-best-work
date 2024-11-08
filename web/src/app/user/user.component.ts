@@ -58,7 +58,7 @@ export class UserComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    Notiflix.Loading.standard('用户数据加载中，请稍候');
+    Notiflix.Loading.standard('用户的数据正在努力地加载中，请稍候');
     combineLatest([
       this.sharedDataService.currentId,
       this.userService.searchUsers({
