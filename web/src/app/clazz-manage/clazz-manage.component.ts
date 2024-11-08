@@ -170,15 +170,11 @@ export class ClazzManageComponent implements OnInit {
     if (this.clazzFilter) {
       params = params.append('clazz', this.clazzFilter);
     }
-    console.log(this.selectedSchoolId,1);
-    console.log(this.clazzFilter,2);
-    console.log(params,3);
 
     this.http.get<ClassroomResponse>(url, { params })
       .pipe(
         tap(response => {
           this.clazzes = response.data;
-          console.log(this.clazzes,4);
           this.totalItems = response.total;
           this.totalPages = Math.ceil(response.total / this.pageSize);
         }),
