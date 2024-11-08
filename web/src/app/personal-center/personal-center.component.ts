@@ -29,7 +29,7 @@ export class PersonalCenterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    Notiflix.Loading.standard('正在加载您的信息...');
+    Notiflix.Loading.standard('您的相关数据正在努力地加载中，请稍候');
     this.loadUserProfile();
     this.share.currentClazzName.subscribe((clazz_name) => {
       this.clazz_name = clazz_name;
