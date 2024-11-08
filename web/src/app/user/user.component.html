@@ -1,105 +1,102 @@
 <div class="main-content">
-    <div class="container mt-5">
-      <div class="container">
-        <div class="row justify-content-center my-5"> <!-- 添加垂直间距 -->
-          <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
-            <h2 class="display-4 special-heading" style="font-size: 50px;">用户管理</h2>
-          </div>
-        </div>
+    <div class="row justify-content-center my-5"> <!-- 添加垂直间距 -->
+      <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
+        <h2 class="display-4 special-heading" style="font-size: 50px;">用户管理</h2>
       </div>
-      <!-- 查询和增加按钮区域 -->
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <form class="d-flex align-items-center my-search-form" (ngSubmit)="onSubmit()">
-          <label for="clazz">学校班级：</label>
-          <select class="form-control" style="width:auto" name="clazz" id="clazz" [(ngModel)]="data.clazz_id">
-            <option value="0">所有学校班级</option>
-                <ng-container *ngFor="let school of schools">
-                    <optgroup label="{{school.name}}">
-                        <ng-container *ngFor="let clazz of clazzAndSchool">
-                            <ng-container *ngIf="clazz.school_name === school.name">
-                                 <option [value]="clazz.id">{{clazz.clazz_name}}</option>
-                            </ng-container>
-                        </ng-container>
-                    </optgroup>
+    </div>
+  <!-- 查询和增加按钮区域 -->
+    <form class="form-inline" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="clazz">学校班级：</label>
+        <select class="form-control" style="width:auto" name="clazz" id="clazz" [(ngModel)]="data.clazz_id">
+          <option value="0">所有学校班级</option>
+          <ng-container *ngFor="let school of schools">
+            <optgroup label="{{school.name}}">
+              <ng-container *ngFor="let clazz of clazzAndSchool">
+                <ng-container *ngIf="clazz.school_name === school.name">
+                  <option [value]="clazz.id">{{clazz.clazz_name}}</option>
                 </ng-container>
-          </select>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <label for="role">角色：</label>
-          <select class="form-control" style="width:auto" name="role" id="role" [(ngModel)]="data.role">
-            <option [value]="4">所有角色</option>
-            <option [value]="0">学生</option>
-            <option [value]="1">管理员</option>
-            <option [value]="2">超级管理员</option>
-          </select>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <label for="name">用户：</label>
-          <input name="name" style="width: 260px;" value="" class="form-control" type="search" placeholder="请输入您要搜索的用户的用户名" aria-label="Search" [(ngModel)]="data.name">
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <button type="submit" class="btn btn-outline-success">&nbsp;<i class="fas fa-search"></i>查询</button>
-        </form>
-            <a type="button" class="btn btn-primary" [routerLink]="'add'">
-              <i class="fas fa-plus"></i>增加
-            </a>
-          </div>
-          <!-- 用户列表表格 -->
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">序号</th>
-                <th scope="col">姓名</th>
-                <th scope="col">用户名</th>
-                <th scope="col">班级</th>
-                <th scope="col">学校</th>
-                <th scope="col">状态</th>
-                <th scope="col">角色</th>
-                <th scope="col">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let user of users; index as index">
-                    <td>{{index + 1}}</td>
-                    <td>{{user.name}}</td>
-                    <td>{{user.username}}</td>
-                    <td>{{user.clazz_name}}</td>
-                    <td>{{user.school_name}}</td>
-                    <td>
-                        <ng-container [ngSwitch]="user.status">
-                            <p *ngSwitchCase="0">冻结</p>
-                            <p *ngSwitchCase="1">活跃</p>
-                        </ng-container>
-                    </td>
-                    <td>
-                        <ng-container [ngSwitch]="user.role">
-                            <p *ngSwitchCase="0">学生</p>
-                            <p *ngSwitchCase="1">管理员</p>
-                            <p *ngSwitchCase="2">超级管理员</p>
-                        </ng-container>
-                    </td>
-                  <td>
-                    <ng-container *ngIf="user.role < user_role">
-                      <a class="btn btn-primary" [routerLink]="'edit/' + user.id"><i class="fas fa-pen"></i>编辑</a>
-                      <a class="btn btn-info" (click)="resetPassword(user.id)"><i class="fas fa-redo-alt"></i>重置密码</a>
-                      <ng-container [ngSwitch]="user.status">
-                        <a class="btn btn-secondary" *ngSwitchCase="1" (click)="changeStatus(user.id, 0)"><i class="fas fa-lock"></i>冻结</a>
-                        <a class="btn btn-success" *ngSwitchCase="0" (click)="changeStatus(user.id, 1)"><i class="fas fa-user-check"></i>活跃</a>
-                      </ng-container>
-                      <a class="btn btn-danger" (click)="onDelect(user.id)"><i class="far fa-trash-alt"></i>删除</a>
-                    </ng-container>
-                  </td>
-                </tr>
-            </tbody>
-          </table>
-          <!-- 分页组件开始 -->
-          <nav class="row justify-content-md-center" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
-            <ul class="pagination col-md-auto">
-              <li [ngClass]="{disabled: pageData.first}" class="page-item"><span class="page-link" (click)="frontPage()">上一页</span></li>
-              <li *ngFor="let p of pages" [ngClass]="{active: pageData.currentPage === p}" class="page-item">
-                <span class="page-link" (click)="onPage(p)">{{p}}</span>
-              </li>
-              <li [ngClass]="{disabled: pageData.last}" class="page-item"><span class="page-link" (click)="nextPage()">下一页</span></li>
-            </ul>
-          </nav>
-          <!-- 分页组件结束 -->
+              </ng-container>
+            </optgroup>
+          </ng-container>
+        </select>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <label for="role">角色：</label>
+        <select class="form-control" style="width:auto" name="role" id="role" [(ngModel)]="data.role">
+          <option [value]="4">所有角色</option>
+          <option [value]="0">学生</option>
+          <option [value]="1">管理员</option>
+          <option [value]="2">超级管理员</option>
+        </select>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <label for="name">用户：</label>
+        <input name="name" style="width: 260px;" value="" class="form-control" type="search" placeholder="请输入您要搜索的用户的用户名" aria-label="Search" [(ngModel)]="data.name">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button type="submit" class="btn btn-outline-success">&nbsp;<i class="fas fa-search"></i>查询</button>
+        <a type="button" class="btn btn-primary" [routerLink]="'add'">
+          <i class="fas fa-plus"></i>增加
+        </a>
       </div>
-  </div>
+    </form>
+    <br><br>
+      <!-- 用户列表表格 -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">序号</th>
+            <th scope="col">姓名</th>
+            <th scope="col">用户名</th>
+            <th scope="col">班级</th>
+            <th scope="col">学校</th>
+            <th scope="col">状态</th>
+            <th scope="col">角色</th>
+            <th scope="col">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let user of users; index as index">
+                <td>{{index + 1}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.clazz_name}}</td>
+                <td>{{user.school_name}}</td>
+                <td>
+                    <ng-container [ngSwitch]="user.status">
+                        <p *ngSwitchCase="0">冻结</p>
+                        <p *ngSwitchCase="1">活跃</p>
+                    </ng-container>
+                </td>
+                <td>
+                    <ng-container [ngSwitch]="user.role">
+                        <p *ngSwitchCase="0">学生</p>
+                        <p *ngSwitchCase="1">管理员</p>
+                        <p *ngSwitchCase="2">超级管理员</p>
+                    </ng-container>
+                </td>
+              <td>
+                <ng-container *ngIf="user.role < user_role">
+                  <a class="btn btn-primary" [routerLink]="'edit/' + user.id"><i class="fas fa-pen"></i>编辑</a>
+                  <a class="btn btn-info" (click)="resetPassword(user.id)"><i class="fas fa-redo-alt"></i>重置密码</a>
+                  <ng-container [ngSwitch]="user.status">
+                    <a class="btn btn-secondary" *ngSwitchCase="1" (click)="changeStatus(user.id, 0)"><i class="fas fa-lock"></i>冻结</a>
+                    <a class="btn btn-success" *ngSwitchCase="0" (click)="changeStatus(user.id, 1)"><i class="fas fa-user-check"></i>活跃</a>
+                  </ng-container>
+                  <a class="btn btn-danger" (click)="onDelect(user.id)"><i class="far fa-trash-alt"></i>删除</a>
+                </ng-container>
+              </td>
+            </tr>
+        </tbody>
+      </table>
+      <!-- 分页组件开始 -->
+      <nav aria-label="Page navigation example" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
+        <ul class="pagination col-md-auto">
+          <li [ngClass]="{disabled: pageData.first}" class="page-item"><span class="page-link" (click)="frontPage()">上一页</span></li>
+          <li *ngFor="let p of pages" [ngClass]="{active: pageData.currentPage === p}" class="page-item">
+            <span class="page-link" (click)="onPage(p)">{{p}}</span>
+          </li>
+          <li [ngClass]="{disabled: pageData.last}" class="page-item"><span class="page-link" (click)="nextPage()">下一页</span></li>
+        </ul>
+      </nav>
+      <!-- 分页组件结束 -->
+</div>
 
