@@ -18,7 +18,7 @@ export class TemplateUpComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private sharedDataService: SharedDataService,) { }
+    private sharedDataService: SharedDataService,) { window.addEventListener('beforeunload', this.onLogout.bind(this));}
 
   ngOnInit(): void {
     this.sharedDataService.currentId.subscribe((user_id) => {
@@ -29,13 +29,16 @@ export class TemplateUpComponent implements OnInit {
     });
     this.sharedDataService.currentRole.subscribe((user_role) => {
       this.user_role =user_role;
-    })
+    });
   }
   onLogout(): void {
+    const event: BeforeUnloadEvent = { preventDefault: () => {} } as BeforeUnloadEvent;
+    event.preventDefault();
     Notiflix.Loading.standard('请稍候');
     this.userService.logout().subscribe(() => {
       this.beLogout.emit();
       Notiflix.Loading.remove();
-    })
+    });
   }
+
 }
