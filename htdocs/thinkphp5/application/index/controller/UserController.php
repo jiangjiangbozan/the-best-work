@@ -69,7 +69,11 @@ class UserController extends Controller
     }
     public function getUser() {
         $parsedData = json_decode(Request::instance()->getContent(), true);
-        $user_id = $this->getUserId();
+        $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : 0;
+        if($user_id === 0) {
+            $user_id = $this->getUserId();
+        }
+      
         $user = User::find($user_id);
         return json([
             'username' => $user->username,
@@ -119,7 +123,7 @@ class UserController extends Controller
         $userData = isset($parsedData['user']) ? $parsedData['user'] : [];
         $user = User::get($userData['id']);
         $sameUsernameUsers = User::where('username', $userData['username'])->select();
-        if(count($sameUsernameUsers) !== 1) {
+        if(count($sameUsernameUsers) !== 0) {
             return json(['error' => '用户名重复'], 401);
         }else{
             $user->username = $userData['username'];

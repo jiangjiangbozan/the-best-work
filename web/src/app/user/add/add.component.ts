@@ -53,7 +53,7 @@ export class AddComponent implements OnInit {
         Notiflix.Loading.remove();
         Notiflix.Report.failure(
           '添加用户失败',
-          '抱歉，请重新尝试。',
+          '抱歉，' + error.error.error + ',请重新尝试。',
           '好的'
         );
       })

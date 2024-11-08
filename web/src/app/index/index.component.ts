@@ -22,14 +22,17 @@ export class IndexComponent implements OnInit {
     private semesterService: SemesterService,
     private clazzService: ClazzService,
     private schoolService: SchoolService,
-  ) { }
+  ) { 
+    this.sharedDataService.currentId.subscribe((user_id) => {
+      this.user_id = user_id;
+    })
+  }
 
   ngOnInit(): void {
-    this.userService.isLogin().subscribe((data) => {
+    this.userService.isLogin().subscribe((id) => {
       Notiflix.Loading.standard('数据加载中，请稍候');
       this.isLogin = true;
-      this.user_id = data.id;
-      this.sharedDataService.setId(this.user_id);
+      this.user_id = id;
       combineLatest([
         this.semesterService.getSemsters(this.user_id),
         this.semesterService.getCurrentSemesterId(this.user_id),
