@@ -66,7 +66,6 @@ class IndexController extends BaseController
     }
 
     public function logout(){
-      $this->getUserId();
       $user_session = UserSessions::where('user_id', $this->getUserId())->find();
       $user_session->delete();
       session('id', null);

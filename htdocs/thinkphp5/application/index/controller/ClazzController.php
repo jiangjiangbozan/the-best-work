@@ -42,8 +42,6 @@ class ClazzController extends Controller
             $clazzAndSchools[] = $clazzAndSchool;
         }
         return json($clazzAndSchools);
-    
-        
     }
 
     public function index(Request $request)
@@ -156,7 +154,11 @@ class ClazzController extends Controller
         }
 
         $name = $data['name'];
-        $exists = Db::name('clazz')->where('name', $name)->find();
+        $schoolId = $data['schoolId'];
+        $exists = Db::name('clazz')
+            ->where('name', $name)
+            ->where('school_id', $schoolId)
+            ->find();
 
         if ($exists) {
             return json(['exists' => true]);
