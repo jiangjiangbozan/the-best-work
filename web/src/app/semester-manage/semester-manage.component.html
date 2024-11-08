@@ -50,7 +50,7 @@
     </tbody>
   </table>
   <!-- 分页组件开始 -->
-  <nav class="row justify-content-md-center" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
+  <nav aria-label="Page navigation example" [ngStyle]="{'visibility': pageData.totalPages > 1 ? 'visible' : 'hidden'}">
     <ul class="pagination col-md-auto">
       <li [ngClass]="{disabled: pageData.first}" class="page-item"><span class="page-link" (click)="onPreviousPage()">上一页</span></li>
       <li *ngFor="let p of pages" [ngClass]="{active: pageData.currentPage === p}" class="page-item">
