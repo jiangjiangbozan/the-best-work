@@ -17,7 +17,7 @@ interface Classroom {
   id: number;
   name: string;
   schoolId: string;
-  schoolName?: string;
+  schoolName: string;
 }
 
 interface ClassroomResponse {
@@ -57,7 +57,6 @@ export class ClazzManageComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) { // 检查是否有结果返回
-        console.log(result);
         Notiflix.Loading.standard('正在检查班级名称...');
         this.clazzService.checkClazzNameExists(result.name, result.schoolId).subscribe(
           (response) => {
@@ -153,6 +152,7 @@ export class ClazzManageComponent implements OnInit {
 
   // 处理查询
   handleQuery(): void {
+    this.currentPage = 1;
     this.fetchClazzes();
   }
 
@@ -170,11 +170,15 @@ export class ClazzManageComponent implements OnInit {
     if (this.clazzFilter) {
       params = params.append('clazz', this.clazzFilter);
     }
+    console.log(this.selectedSchoolId,1);
+    console.log(this.clazzFilter,2);
+    console.log(params,3);
 
     this.http.get<ClassroomResponse>(url, { params })
       .pipe(
         tap(response => {
           this.clazzes = response.data;
+          console.log(this.clazzes,4);
           this.totalItems = response.total;
           this.totalPages = Math.ceil(response.total / this.pageSize);
         }),
@@ -190,7 +194,6 @@ export class ClazzManageComponent implements OnInit {
   onChangeSchool(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.selectedSchoolId = select.value;
-    // 清除班级名称过滤器，因为选择了新的学校
     this.clazzFilter = '';
     this.fetchClazzes();
   }
