@@ -1,8 +1,10 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../service/user.service';
+import { SharedDataService } from 'src/service/shared-data.service';
 import { User } from '../../entity/user';
 import * as Notiflix from 'notiflix';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -21,7 +23,11 @@ export class LoginComponent implements OnInit {
 
   formGroup!: FormGroup;
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private shareDataService: SharedDataService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.initFormGroup();
@@ -48,7 +54,14 @@ export class LoginComponent implements OnInit {
 
     this.userService.login(username, password).subscribe(
       (data) => {
+        //由于index组件无法在获取所有数据再渲染界面，只能在login获取
+        this.shareDataService.setRole(data.role);
+        this.shareDataService.setId(data.user_id);
         this.beLogin.emit();
+        //退出登录后不经过路由守卫，只能在登录时判断url
+        if(data.role === 0 && (this.router.url === '/user' || this.router.url === '/clazz_manage' || this.router.url === '/school_manage' ||this.router.url === '/semester_manage')) {
+          this.router.navigate(['no-permission']);
+        }
         this.token = data.token;
         window.sessionStorage.setItem('x-auth-token', data.token);
         localStorage.setItem('hasLoggedIn', 'true');

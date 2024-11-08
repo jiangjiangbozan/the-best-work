@@ -45,6 +45,8 @@ class IndexController extends BaseController
         $user_session->save();
         header('x-auth-token' . $user_session->token);
         return json([
+          'role' => $user->role,
+          'user_id' => $user->id,
           'message' => '成功登录',
           'token' => $user_session->token
         ]);
@@ -60,7 +62,7 @@ class IndexController extends BaseController
         $id = $user_session->user_id;
       }
       if($id !== null){
-        return json(['id' => $id]);
+        return $id;
       }
     
     }
@@ -75,9 +77,17 @@ class IndexController extends BaseController
     }
 
     public function getUser() {
-      $token = $this->request->header('x-auth-token');
-      $user_session = UserSessions::where('token', $token)->find();
-      $id = $user_session->user_id;
+      $parsedData = json_decode(Request::instance()->getContent(), true);
+      $user_id = isset($parsedData['user_id']) ? $parsedData['user_id'] : 0;
+
+      if($user_id === 0) {
+        $token = $this->request->header('x-auth-token');
+        $user_session = UserSessions::where('token', $token)->find();
+        $id = $user_session->user_id;
+      }else {
+        $id = $user_id;
+      }
+
       if ($id === null) {
           return json(['error' => '用户未登录'], 401);
       }

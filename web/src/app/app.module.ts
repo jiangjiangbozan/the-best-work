@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule , APP_INITIALIZER} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +17,11 @@ import { XAuthTokenInterceptor } from 'src/x-auth-token.interceptor';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { NoPermissionComponent } from './no-permission/no-permission.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { InitService } from './init.service';
+import { Observable } from 'rxjs';
+export function initializeApp(appInitService: InitService): () => Observable<any> {
+  return () => appInitService.loadAllAppData();
+}
 
 @NgModule({
   declarations: [
@@ -42,7 +47,16 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
     SchoolManageModule
   ],
   providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: XAuthTokenInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: XAuthTokenInterceptor, multi: true},
+    InitService,
+
+    {
+
+      provide: APP_INITIALIZER,
+      useFactory: initializeApp,
+      deps: [InitService],
+      multi: true
+    }
   ],
   bootstrap: [IndexComponent]
 })

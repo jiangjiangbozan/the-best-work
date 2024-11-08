@@ -14,7 +14,7 @@ export class UserService {
     return this.httpClient.post<any>('/api/index/login', {username, password})
   }
 
-  isLogin(): Observable<any> {
+  isLogin(): Observable<number> {
     return this.httpClient.get<any>('api/index/isLogin');
   }
 
@@ -27,7 +27,7 @@ export class UserService {
     return this.httpClient.post('/api/user/getCuurentUser', {user_id})
   }
 
-  getUser(user_id: number): Observable<any> {
+  getUser(user_id?: number): Observable<any> {
     return this.httpClient.post('/api/user/getUser', {user_id})
   }
 
