@@ -45,45 +45,45 @@ class ClazzController extends Controller
     }
 
     public function index(Request $request)
-        {
-            $page = $request->param('page', 1);
-            $size = $request->param('size', 10);
-            $schoolId = $request->param('school_id', '');
-            $clazz = $request->param('clazz', '');
+    {
+        $page = $request->param('page', 1);
+        $size = $request->param('size', 10);
+        $schoolId = $request->param('school_id', '');
+        $clazz = $request->param('clazz', '');
 
-            // 构建查询
-            $query = Clazz::with('school');
+        // 构建查询
+        $query = Clazz::with('school');
 
-            if (!empty($schoolId)) {
-                $query = $query->where('school_id', $schoolId);
-            }
-
-            if (!empty($clazz)) {
-                $query = $query->where('clazz.name', 'like', "%{$clazz}%");
-            }
-
-            // 分页查询
-            $result = $query->paginate($size, false, ['page' => $page]);
-
-            // 处理返回的数据格式
-            $data = [];
-            foreach ($result as $clazzInstance) {
-                $data[] = [
-                    'id' => $clazzInstance->id,
-                    'name' => $clazzInstance->name,
-                    'schoolId' => $clazzInstance->school_id,
-                    'schoolName' => $clazzInstance->school ? $clazzInstance->school->name : '',
-                ];
-            }
-
-            return json([
-                'data' => $data,
-                'total' => $result->total(),
-                'currentPage' => $result->currentPage(),
-                'lastPage' => $result->lastPage(),
-                'perPage' => $result->listRows(),
-            ]);
+        if (!empty($schoolId)) {
+            $query = $query->where('school_id', $schoolId);
         }
+
+        if (!empty($clazz)) {
+            $query = $query->where('clazz.name', 'like', "%{$clazz}%");
+        }
+
+        // 分页查询
+        $result = $query->paginate($size, false, ['page' => $page]);
+
+        // 处理返回的数据格式
+        $data = [];
+        foreach ($result as $clazzInstance) {
+            $data[] = [
+                'id' => $clazzInstance->id,
+                'name' => $clazzInstance->name,
+                'schoolId' => $clazzInstance->school_id,
+                'schoolName' => $clazzInstance->school ? $clazzInstance->school->name : '',
+            ];
+        }
+
+        return json([
+            'data' => $data,
+            'total' => $result->total(),
+            'currentPage' => $result->currentPage(),
+            'lastPage' => $result->lastPage(),
+            'perPage' => $result->listRows(),
+        ]);
+    }
 
     public function add(Request $request)
     {
