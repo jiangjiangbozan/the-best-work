@@ -71,10 +71,7 @@ export class LoginComponent implements OnInit {
       (error) => {
         Notiflix.Loading.remove();
           Notiflix.Notify.failure(error.error.error);
-
       }
     );
   }
-
-
 }

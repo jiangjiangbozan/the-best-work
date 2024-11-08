@@ -3,7 +3,7 @@
       <div class="container">
         <div class="row justify-content-center my-5"> <!-- 添加垂直间距 -->
           <div class="col-md-6 text-center"> <!-- 控制宽度并居中文本 -->
-            <h2 class="display-4 special-heading">用户管理</h2>
+            <h2 class="display-4 special-heading" style="font-size: 50px;">用户管理</h2>
           </div>
         </div>
       </div>
@@ -77,13 +77,13 @@
                     </td>
                   <td>
                     <ng-container *ngIf="user.role < user_role">
-                      <a class="btn btn-danger" (click)="onDelect(user.id)"><i class="far fa-trash-alt"></i>删除</a>
+                      <a class="btn btn-primary" [routerLink]="'edit/' + user.id"><i class="fas fa-pen"></i>编辑</a>
+                      <a class="btn btn-info" (click)="resetPassword(user.id)"><i class="fas fa-redo-alt"></i>重置密码</a>
                       <ng-container [ngSwitch]="user.status">
                         <a class="btn btn-secondary" *ngSwitchCase="1" (click)="changeStatus(user.id, 0)"><i class="fas fa-lock"></i>冻结</a>
                         <a class="btn btn-success" *ngSwitchCase="0" (click)="changeStatus(user.id, 1)"><i class="fas fa-user-check"></i>活跃</a>
                       </ng-container>
-                      <a class="btn btn-primary" [routerLink]="'edit/' + user.id"><i class="fas fa-pen"></i>编辑</a>
-                      <a class="btn btn-info" (click)="resetPassword(user.id)"><i class="fas fa-redo-alt"></i>重置密码</a>
+                      <a class="btn btn-danger" (click)="onDelect(user.id)"><i class="far fa-trash-alt"></i>删除</a>
                     </ng-container>
                   </td>
                 </tr>

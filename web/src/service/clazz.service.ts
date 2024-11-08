@@ -38,8 +38,8 @@ export class ClazzService {
     return this.httpClient.post('api/clazz/add', clazzData);
   }
 
-  checkClazzNameExists(name: string): Observable<CheckClazzResponse> {
-    const body = { name: name }; // 发送学校名称作为请求体
+  checkClazzNameExists(name: string, schoolId: number): Observable<CheckClazzResponse> {
+    const body = { name: name, schoolId: schoolId }; // 发送学校名称作为请求体
 
     return this.httpClient.post<CheckClazzResponse>('/api/clazz/checkNameExists', body)
       .pipe(map(response => response)); // 不需要额外转换
