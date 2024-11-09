@@ -74,6 +74,7 @@ class UserController extends Controller
             $user_id = $this->getUserId();
         }
       
+
         $user = User::find($user_id);
         return json([
             'username' => $user->username,

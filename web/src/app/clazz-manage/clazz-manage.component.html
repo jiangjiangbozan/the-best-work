@@ -51,7 +51,7 @@
     </tr>
     </tbody>
   </table>
-  <ng-container *ngIf="schools.length >= 5">
+  <ng-container *ngIf="totalItems > 5">
     <app-pagination [currentPage]="currentPage"
                     [pageSize]="pageSize"
                     [totalPages]="totalPages"
