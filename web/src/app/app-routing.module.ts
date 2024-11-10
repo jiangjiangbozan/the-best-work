@@ -10,7 +10,6 @@ const routes: Routes = [
   {
     path: 'course_manage',
     loadChildren: () => import('./course-manage/course-manage.module').then(m => m.CourseManageModule)
-    // component: CourseManageComponent
   },
   {
     path: 'profile',component: PersonalCenterComponent,
@@ -35,12 +34,13 @@ const routes: Routes = [
   },
   {
     path: 'clazz_manage', component: ClazzManageComponent,
-    canActivate: [RoleGuard]
-   
+    canActivate: [RoleGuard],
+    loadChildren: () => import('./clazz-manage/clazz-manage.module').then(m => m.ClazzManageModule)
   },
   {
     path: 'school_manage', component: SchoolManageComponent,
-    canActivate: [RoleGuard]
+    canActivate: [RoleGuard],
+    loadChildren: () => import('./school-manage/school-manage.module').then(m => m.SchoolManageModule)
   },
   {
     path: 'semester_manage',
