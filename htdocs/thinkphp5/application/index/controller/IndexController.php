@@ -105,5 +105,17 @@ class IndexController extends BaseController
       $role = $user->role;
       return json($role);
     }
+
+    public function dingTalkSchedule(Request $request)
+        {
+            // 获取请求中的令牌
+            $token =$request->param('token');
+
+            // 创建 PublicScheduleController 实例
+            $publicScheduleController = new PublicScheduleController();
+
+            // 调用 showScheduleWithToken 方法并返回结果
+            return $publicScheduleController->showScheduleWithToken($token);
+        }
 }
 
