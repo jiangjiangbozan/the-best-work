@@ -125,7 +125,12 @@ class UserController extends Controller
         $user = User::get($userData['id']);
         $sameUsernameUsers = User::where('username', $userData['username'])->select();
         if(count($sameUsernameUsers) !== 0) {
-            return json(['error' => '用户名重复'], 401);
+            foreach($sameUsernameUsers as $user ) {
+                if($user !== $userData['id']){
+                    return json(['error' => '用户名重复'], 401);
+                }
+            }
+           
         }else{
             $user->username = $userData['username'];
             $user->name = $userData['name'];
