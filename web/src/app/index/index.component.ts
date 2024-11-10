@@ -13,7 +13,7 @@ import * as Notiflix from 'notiflix';
 })
 export class IndexComponent implements OnInit {
 
-  isLogin = false;
+  isLogin = !!window.sessionStorage.getItem('hasLoggedIn');
   user_id = 0;
 
   constructor(
@@ -29,6 +29,7 @@ export class IndexComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.isLogin);
     this.userService.isLogin().subscribe((id) => {
       Notiflix.Loading.standard('数据加载中，请稍候');
       this.isLogin = true;

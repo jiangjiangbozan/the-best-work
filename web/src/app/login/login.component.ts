@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
         }
         this.token = data.token;
         window.sessionStorage.setItem('x-auth-token', data.token);
-        localStorage.setItem('hasLoggedIn', 'true');
+        sessionStorage.setItem('hasLoggedIn', 'true');
         Notiflix.Loading.remove();
         Notiflix.Notify.success('登录成功！');
       },
