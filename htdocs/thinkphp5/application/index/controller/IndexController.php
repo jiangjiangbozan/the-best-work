@@ -34,8 +34,6 @@ class IndexController extends BaseController
         return json(['error' => '用户名或密码不正确'], 401);
       }else if($user->status === 0) {
         return json(['error' => '您的账号已被冻结，请联系管理员'], 401);
-      }else if(UserSessions::where('user_id', $user->id)->find()) {
-        return json(['error' => '用户已在别处登录'], 401);
       }else{
         $user_session = new UserSessions();
         $user_session->user_id = $user->id;
