@@ -18,7 +18,9 @@ export class TemplateUpComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private sharedDataService: SharedDataService,) { window.addEventListener('beforeunload', this.onLogout.bind(this));}
+    private sharedDataService: SharedDataService) {;
+
+    }
 
   ngOnInit(): void {
     this.sharedDataService.currentId.subscribe((user_id) => {
