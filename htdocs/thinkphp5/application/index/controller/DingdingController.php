@@ -11,7 +11,7 @@ class DingdingController extends ScheduleController
 
         // 生成链接
         $token = (new PublicScheduleController())->generateToken();
-        $scheduleLink = "http://47.95.208.109:8111/thinkphp5/public/index/index/dingTalkSchedule?token=" . urlencode($token);
+        $scheduleLink = "http://localhost:8111/thinkphp5/public/index/index/dingTalkSchedule?token=" . urlencode($token);
         $message = "### 今日行程表\n点击链接查看具体行程表：[查看行程表]($scheduleLink)\n";
 
         // 钉钉 Webhook URL，请替换为你的实际 URL 和 access_token

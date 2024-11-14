@@ -118,4 +118,3 @@ class IndexController extends BaseController
             return $publicScheduleController->showScheduleWithToken($token);
         }
 }
-
